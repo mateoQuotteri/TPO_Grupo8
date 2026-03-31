@@ -15,7 +15,7 @@ def convertir_hora(hora, am_pm):
         return 0
     return hora
 
-#FUNCIONES DE PACIENTES
+#FUNCIONES DE PACIENTES DE LA CLINICA
 def agregar_paciente(matriz, contador):
     contador += 1
     
