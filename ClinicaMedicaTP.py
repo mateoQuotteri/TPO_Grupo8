@@ -453,14 +453,7 @@ def ordenar_matriz(matriz,encabezado):
             break
         else:
             print("Opcion invalida, seleccione una de las disponibles")
-    '''
-    for i in range(len(matriz)):
-        for j in range(len(matriz) - 1):
-            if matriz[j][columna_a_ordenar] > matriz[j + 1][columna_a_ordenar]:
-                aux = matriz[j]
-                matriz[j] = matriz[j + 1]
-                matriz[j + 1] = aux
-    '''
+    
     matriz.sort(key=lambda fila: fila[columna_a_ordenar])
 
     return matriz
