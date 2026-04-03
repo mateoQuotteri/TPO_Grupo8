@@ -441,8 +441,8 @@ def modificar_turno(matriz_turnos, matriz_doctores):
                 print("\nDatos modificados con exito\n")
 
 
-def ordenar_matriz(matriz):
-    opciones = matriz[0]
+def ordenar_matriz(matriz,encabezado):
+    opciones = encabezado
     print("Ingrese la opcion por la cual ordenar la matriz: ")
     for i in range(len(opciones)):
         print(i + 1, "-", opciones[i])
@@ -453,12 +453,16 @@ def ordenar_matriz(matriz):
             break
         else:
             print("Opcion invalida, seleccione una de las disponibles")
-    for i in range(1, len(matriz)):
-        for j in range(1, len(matriz) - 1):
+    '''
+    for i in range(len(matriz)):
+        for j in range(len(matriz) - 1):
             if matriz[j][columna_a_ordenar] > matriz[j + 1][columna_a_ordenar]:
                 aux = matriz[j]
                 matriz[j] = matriz[j + 1]
                 matriz[j + 1] = aux
+    '''
+    matriz.sort(key=lambda fila: fila[columna_a_ordenar])
+
     return matriz
 
 
@@ -470,84 +474,10 @@ def mostrar_matriz(matriz):
             print(matriz[fila][columna], end="\t")
         print()
 
-#----------------------------------------------------------------------------------------------
-# CUERPO PRINCIPAL
-#----------------------------------------------------------------------------------------------
-
-encabezados_pacientes = ['ID Paciente', 'DNI', 'Nombre', 'Apellido', 'Telefono', 'Correo']
-encabezados_doctores = ['ID Profesional', 'Matricula', 'Nombre', 'Apellido', 'Telefono', 'Especialidad']
-encabezados_disponibilidad = ['ID Disponibilidad', 'Matricula', 'Día', 'Hora Inicio', 'Hora Fin']
-encabezados_turnos = ['ID Turno', 'Fecha', 'Hora', 'DNI Paciente', 'Especialidad', 'Matricula Doctor']
-
-print("\n MATRIZ PACIENTES \n")
-matriz_pacientes = []
-matriz_pacientes.append(encabezados_pacientes)
-dni_paciente = ["12345678", "87654321", "56781234", "43215678"]
-nombre_paciente = ["Jose", "Ivana", "Mateo", "Evelyn"]
-apellido_paciente = ["Sanchez", "Cervera", "Lopez", "Sanchez"]
-telefono_paciente = ["1234567890", "0987654321", "1234509876", "6789012345"]
-correo_paciente = ["josesan@gmail.com", "ivanacer@gmail.com", "mateolo@gmail.com", "evelynsan@gmail.com"]
-id_contador_pacientes = 0
-for i in range(4):
-    id_contador_pacientes += 1
-    fila_pacientes = [id_contador_pacientes, dni_paciente[i], nombre_paciente[i], apellido_paciente[i], telefono_paciente[i], correo_paciente[i]]
-    matriz_pacientes.append(fila_pacientes)
-for fila in matriz_pacientes:
-    print(fila)
-
-print("\n MATRIZ DOCTORES \n")
-matriz_doctores = []
-matriz_doctores.append(encabezados_doctores)
-matricula_doctor = ["12345", "67890", "54321", "09876"]
-nombre_doctor = ["Bruno", "Carmen", "Nadia", "Guada"]
-apellido_doctor = ["Gonzales", "Rivera", "Correa", "Smith"]
-telefono_doctor = ["3478125690", "1256903478", "0965213478", "8743561290"]
-especialidad_doctor = ["Clinica", "Oftalmologia", "Cardiologia", "Oncologia"]
-id_contador_doctores = 0
-for i in range(4):
-    id_contador_doctores += 1
-    fila_doctores = [id_contador_doctores, matricula_doctor[i], nombre_doctor[i], apellido_doctor[i], telefono_doctor[i], especialidad_doctor[i]]
-    matriz_doctores.append(fila_doctores)
-for fila in matriz_doctores:
-    print(fila)
-
-print("\n MATRIZ DISPONIBILIDAD \n")
-matriz_disponibilidad = []
-matriz_disponibilidad.append(encabezados_disponibilidad)
- 
-dia_disponibilidad = ["23/03/2026", "23/03/2026", "24/03/2026", "25/03/2026"]
-hora_inicio = ["6 AM", "8 AM", "8 AM", "10 AM"]
-hora_fin = ["6 PM", "6 PM", "4 PM", "8 PM"]
-matricula_doctor = ["12345", "67890", "54321", "09876"]
-
-id_contador_disponibilidad = 1
-for i in range (len(dia_disponibilidad)):
-    fila = [id_contador_disponibilidad, matricula_doctor[i], dia_disponibilidad[i], hora_inicio[i], hora_fin[i]]
-    matriz_disponibilidad.append(fila)
-    id_contador_disponibilidad += 1
-
-for fila in matriz_disponibilidad:
-     print(fila)
-
-print("\n MATRIZ TURNOS \n")
-matriz_turnos = []
-matriz_turnos.append(encabezados_turnos)
-fecha_turno = ["3/4/2026", "3/4/2026", "5/4/2026", "7/4/2026"]
-hora_turno = ["10 AM", "11 AM", "9 AM", "1 PM"]
-id_contador_turnos = 0
-for i in range(4):
-    id_contador_turnos += 1
-    fila_turnos = [id_contador_turnos, fecha_turno[i], hora_turno[i], dni_paciente[i], especialidad_doctor[i], matricula_doctor[i]]
-    matriz_turnos.append(fila_turnos)
-for fila in matriz_turnos:
-    print(fila)
-
-#----------------------------------------------------------------------------------------------------------------------------
-# Bloque de menú
-#----------------------------------------------------------------------------------------------------------------------------
+def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos):
     while True:
         while True:
-            opciones = 4 
+            opciones = 5 
             print()
             print("---------------------------")
             print("MENÚ PRINCIPAL")
@@ -730,6 +660,124 @@ for fila in matriz_turnos:
                     mostrar_matriz(matriz_turnos)
 
         elif opcion == "5":
-            matriz_ordenada = ordenar_matriz(matriz_pacientes)
-            for fila in matriz_ordenada:
-                print(fila)
+            
+            while True:
+                while True:
+                    opciones = 4
+                    print()
+                    print("---------------------------")
+                    print("MENÚ PRINCIPAL > ORDENAMIENTO DE MATRICES")
+                    print("---------------------------")
+                    print("[1] Pacientes.")
+                    print("[2] Médicos.")
+                    print("[3] Disponibilidad.")
+                    print("[4] Turnos.")
+                    print("---------------------------")
+                    print("[0] Volver al menú anterior")
+                    print("---------------------------")
+                    print()
+                                                
+                    opcion = input("Seleccione una opción: ")
+                    if opcion in [str(i) for i in range(0, opciones + 1)]:
+                        break
+                    else:
+                        input("Opción inválida. Presione ENTER para volver a seleccionar.")
+                print()
+        
+                if opcion == "0": # Salir del submenú
+                    break
+        
+                elif opcion == "1":
+                    matriz_ordenada = ordenar_matriz(matriz_pacientes,encabezados_pacientes)
+                    print(encabezados_pacientes)
+                    mostrar_matriz(matriz_ordenada)
+                    break
+
+                elif opcion == "2":
+                    matriz_ordenada = ordenar_matriz(matriz_doctores,encabezados_doctores)
+                    mostrar_matriz(matriz_ordenada)
+                    break
+
+                elif opcion == "3":
+                    matriz_ordenada = ordenar_matriz(matriz_disponibilidad,encabezados_disponibilidad)
+                    mostrar_matriz(matriz_ordenada)
+                    break
+                
+                elif opcion == "4":
+                    matriz_ordenada = ordenar_matriz(matriz_turnos,encabezados_turnos)
+                    mostrar_matriz(matriz_ordenada)
+                    break
+    return
+
+#----------------------------------------------------------------------------------------------
+# CUERPO PRINCIPAL
+#----------------------------------------------------------------------------------------------
+
+encabezados_pacientes = ['ID Paciente', 'DNI', 'Nombre', 'Apellido', 'Telefono', 'Correo']
+encabezados_doctores = ['ID Profesional', 'Matricula', 'Nombre', 'Apellido', 'Telefono', 'Especialidad']
+encabezados_disponibilidad = ['ID Disponibilidad', 'Matricula', 'Día', 'Hora Inicio', 'Hora Fin']
+encabezados_turnos = ['ID Turno', 'Fecha', 'Hora', 'DNI Paciente', 'Especialidad', 'Matricula Doctor']
+
+print("\n MATRIZ PACIENTES \n")
+matriz_pacientes = []
+print(encabezados_pacientes)
+dni_paciente = ["12345678", "87654321", "56781234", "43215678"]
+nombre_paciente = ["Jose", "Ivana", "Mateo", "Evelyn"]
+apellido_paciente = ["Sanchez", "Cervera", "Lopez", "Sanchez"]
+telefono_paciente = ["1234567890", "0987654321", "1234509876", "6789012345"]
+correo_paciente = ["josesan@gmail.com", "ivanacer@gmail.com", "mateolo@gmail.com", "evelynsan@gmail.com"]
+id_contador_pacientes = 0
+for i in range(4):
+    id_contador_pacientes += 1
+    fila_pacientes = [id_contador_pacientes, dni_paciente[i], nombre_paciente[i], apellido_paciente[i], telefono_paciente[i], correo_paciente[i]]
+    matriz_pacientes.append(fila_pacientes)
+for fila in matriz_pacientes:
+    print(fila)
+
+print("\n MATRIZ DOCTORES \n")
+matriz_doctores = []
+print(encabezados_doctores)
+matricula_doctor = ["12345", "67890", "54321", "09876"]
+nombre_doctor = ["Bruno", "Carmen", "Nadia", "Guada"]
+apellido_doctor = ["Gonzales", "Rivera", "Correa", "Smith"]
+telefono_doctor = ["3478125690", "1256903478", "0965213478", "8743561290"]
+especialidad_doctor = ["Clinica", "Oftalmologia", "Cardiologia", "Oncologia"]
+id_contador_doctores = 0
+for i in range(4):
+    id_contador_doctores += 1
+    fila_doctores = [id_contador_doctores, matricula_doctor[i], nombre_doctor[i], apellido_doctor[i], telefono_doctor[i], especialidad_doctor[i]]
+    matriz_doctores.append(fila_doctores)
+for fila in matriz_doctores:
+    print(fila)
+
+print("\n MATRIZ DISPONIBILIDAD \n")
+matriz_disponibilidad = []
+print(encabezados_disponibilidad)
+dia_disponibilidad = ["23/03/2026", "23/03/2026", "24/03/2026", "25/03/2026"]
+hora_inicio = ["6 AM", "8 AM", "8 AM", "10 AM"]
+hora_fin = ["6 PM", "6 PM", "4 PM", "8 PM"]
+matricula_doctor = ["12345", "67890", "54321", "09876"]
+
+id_contador_disponibilidad = 1
+for i in range (len(dia_disponibilidad)):
+    fila = [id_contador_disponibilidad, matricula_doctor[i], dia_disponibilidad[i], hora_inicio[i], hora_fin[i]]
+    matriz_disponibilidad.append(fila)
+    id_contador_disponibilidad += 1
+
+for fila in matriz_disponibilidad:
+     print(fila)
+
+print("\n MATRIZ TURNOS \n")
+matriz_turnos = []
+print(encabezados_turnos)
+fecha_turno = ["3/4/2026", "3/4/2026", "5/4/2026", "7/4/2026"]
+hora_turno = ["10 AM", "11 AM", "9 AM", "1 PM"]
+id_contador_turnos = 0
+for i in range(4):
+    id_contador_turnos += 1
+    fila_turnos = [id_contador_turnos, fecha_turno[i], hora_turno[i], dni_paciente[i], especialidad_doctor[i], matricula_doctor[i]]
+    matriz_turnos.append(fila_turnos)
+for fila in matriz_turnos:
+    print(fila)
+
+menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos)
