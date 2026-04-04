@@ -440,7 +440,6 @@ def modificar_turno(matriz_turnos, matriz_doctores):
                 matriz_turnos[indice_modificado] = [contador - 1, fecha, hora, dni_buscado, opcion_elegida_doctores[5], doctor] #aca me falta arreglar que mantenga el indice del turno modificado
                 print("\nDatos modificados con exito\n")
 
-
 def ordenar_matriz(matriz,encabezado):
     opciones = encabezado
     print("Ingrese la opcion por la cual ordenar la matriz: ")
@@ -452,19 +451,16 @@ def ordenar_matriz(matriz,encabezado):
             columna_a_ordenar = opcion - 1
             break
         else:
-            print("Opcion invalida, seleccione una de las disponibles")
-    
+            print("Opcion invalida, seleccione una de las disponibles")   
     matriz.sort(key=lambda fila: fila[columna_a_ordenar])
-
     return matriz
-
 
 def mostrar_matriz(matriz):
     filas = len(matriz)
     columnas = len(matriz[0])
     for fila in range(filas):
         for columna in range(columnas):
-            print(matriz[fila][columna], end="\t")
+            print(f'{matriz[fila][columna]:^15}',end="\t")
         print()
 
 def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos):
@@ -524,14 +520,17 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                 elif opcion == "1": # Opción 1
                     agregar_paciente(matriz_pacientes, id_contador_pacientes)
                     id_contador_pacientes += 1
+                    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_matriz(matriz_pacientes)
                     
                 elif opcion == "2": #Opción 2
                     eliminar_paciente(matriz_pacientes)
+                    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_matriz(matriz_pacientes)
                     
                 elif opcion == "3": #Opción 3
                     modificar_paciente(matriz_pacientes)
+                    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_matriz(matriz_pacientes)
                     
         elif opcion == "2": #OPCIÓN 2
@@ -563,14 +562,17 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                 elif opcion == "1":
                     agregar_doctor(matriz_doctores, id_contador_doctores)
                     id_contador_doctores += 1
+                    print(f'{encabezados_doctores[0]:<15}{encabezados_doctores[1]:<10}{encabezados_doctores[2]:<10}{encabezados_doctores[3]:<10}{encabezados_doctores[4]:<10}{encabezados_doctores[5]:<15}')
                     mostrar_matriz(matriz_doctores)
             
                 elif opcion == "2":
                     eliminar_doctor(matriz_doctores)
+                    print(f'{encabezados_doctores[0]:<15}{encabezados_doctores[1]:<10}{encabezados_doctores[2]:<10}{encabezados_doctores[3]:<10}{encabezados_doctores[4]:<10}{encabezados_doctores[5]:<15}')
                     mostrar_matriz(matriz_doctores)
                     break
                 elif opcion == "3":
                     modificar_doctor(matriz_doctores)
+                    print(f'{encabezados_doctores[0]:<15}{encabezados_doctores[1]:<10}{encabezados_doctores[2]:<10}{encabezados_doctores[3]:<10}{encabezados_doctores[4]:<10}{encabezados_doctores[5]:<15}')
                     mostrar_matriz(matriz_doctores)
 
         elif opcion == "3": # OPCIÓN 3
@@ -602,15 +604,18 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                 elif opcion == "1":
                     agregar_disponibilidad(matriz_disponibilidad, id_contador_disponibilidad)
                     id_contador_disponibilidad += 1
+                    print(f'{encabezados_disponibilidad[0]:<15}{encabezados_disponibilidad[1]:<10}{encabezados_disponibilidad[2]:<10}{encabezados_disponibilidad[3]:<10}{encabezados_disponibilidad[4]:<10}')
                     mostrar_matriz(matriz_disponibilidad)
 
                 elif opcion == "2":
                     eliminar_disponibilidad(matriz_disponibilidad)
+                    print(f'{encabezados_disponibilidad[0]:<15}{encabezados_disponibilidad[1]:<10}{encabezados_disponibilidad[2]:<10}{encabezados_disponibilidad[3]:<10}{encabezados_disponibilidad[4]:<10}')
                     mostrar_matriz(matriz_disponibilidad)
                     break
 
                 elif opcion == "3":
                     modificar_disponibilidad(matriz_disponibilidad)
+                    print(f'{encabezados_disponibilidad[0]:<15}{encabezados_disponibilidad[1]:<10}{encabezados_disponibilidad[2]:<10}{encabezados_disponibilidad[3]:<10}{encabezados_disponibilidad[4]:<10}')
                     mostrar_matriz(matriz_disponibilidad)
 
         
@@ -642,14 +647,17 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                 
                 elif opcion == "1":
                     agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, id_contador_turnos)
+                    print(f'{encabezados_turnos[0]:<15}{encabezados_turnos[1]:<10}{encabezados_turnos[2]:<10}{encabezados_turnos[3]:<10}{encabezados_turnos[4]:<10}{encabezados_turnos[5]:<15}')
                     mostrar_matriz(matriz_turnos)
                     
                 elif opcion == "2":
                     eliminar_turno(matriz_turnos)
+                    print(f'{encabezados_turnos[0]:<15}{encabezados_turnos[1]:<10}{encabezados_turnos[2]:<10}{encabezados_turnos[3]:<10}{encabezados_turnos[4]:<10}{encabezados_turnos[5]:<15}')
                     mostrar_matriz(matriz_turnos)
 
                 elif opcion == "3":
                     modificar_turno(matriz_turnos, matriz_doctores)
+                    print(f'{encabezados_turnos[0]:<15}{encabezados_turnos[1]:<10}{encabezados_turnos[2]:<10}{encabezados_turnos[3]:<10}{encabezados_turnos[4]:<10}{encabezados_turnos[5]:<15}')
                     mostrar_matriz(matriz_turnos)
 
         elif opcion == "5":
@@ -682,22 +690,25 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
         
                 elif opcion == "1":
                     matriz_ordenada = ordenar_matriz(matriz_pacientes,encabezados_pacientes)
-                    print(encabezados_pacientes)
+                    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_matriz(matriz_ordenada)
                     break
 
                 elif opcion == "2":
                     matriz_ordenada = ordenar_matriz(matriz_doctores,encabezados_doctores)
+                    print(f'{encabezados_doctores[0]:<15}{encabezados_doctores[1]:<10}{encabezados_doctores[2]:<10}{encabezados_doctores[3]:<10}{encabezados_doctores[4]:<10}{encabezados_doctores[5]:<15}')
                     mostrar_matriz(matriz_ordenada)
                     break
 
                 elif opcion == "3":
                     matriz_ordenada = ordenar_matriz(matriz_disponibilidad,encabezados_disponibilidad)
+                    print(f'{encabezados_disponibilidad[0]:<15}{encabezados_disponibilidad[1]:<10}{encabezados_disponibilidad[2]:<10}{encabezados_disponibilidad[3]:<10}{encabezados_disponibilidad[4]:<10}')
                     mostrar_matriz(matriz_ordenada)
                     break
                 
                 elif opcion == "4":
                     matriz_ordenada = ordenar_matriz(matriz_turnos,encabezados_turnos)
+                    print(f'{encabezados_turnos[0]:<15}{encabezados_turnos[1]:<10}{encabezados_turnos[2]:<10}{encabezados_turnos[3]:<10}{encabezados_turnos[4]:<10}{encabezados_turnos[5]:<15}')
                     mostrar_matriz(matriz_ordenada)
                     break
     return
@@ -713,7 +724,6 @@ encabezados_turnos = ['ID Turno', 'Fecha', 'Hora', 'DNI Paciente', 'Especialidad
 
 print("\n MATRIZ PACIENTES \n")
 matriz_pacientes = []
-print(encabezados_pacientes)
 dni_paciente = ["12345678", "87654321", "56781234", "43215678"]
 nombre_paciente = ["Jose", "Ivana", "Mateo", "Evelyn"]
 apellido_paciente = ["Sanchez", "Cervera", "Lopez", "Sanchez"]
@@ -724,12 +734,12 @@ for i in range(4):
     id_contador_pacientes += 1
     fila_pacientes = [id_contador_pacientes, dni_paciente[i], nombre_paciente[i], apellido_paciente[i], telefono_paciente[i], correo_paciente[i]]
     matriz_pacientes.append(fila_pacientes)
-for fila in matriz_pacientes:
-    print(fila)
+print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^18}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^20}')
+mostrar_matriz(matriz_pacientes)
+
 
 print("\n MATRIZ DOCTORES \n")
 matriz_doctores = []
-print(encabezados_doctores)
 matricula_doctor = ["12345", "67890", "54321", "09876"]
 nombre_doctor = ["Bruno", "Carmen", "Nadia", "Guada"]
 apellido_doctor = ["Gonzales", "Rivera", "Correa", "Smith"]
@@ -740,12 +750,11 @@ for i in range(4):
     id_contador_doctores += 1
     fila_doctores = [id_contador_doctores, matricula_doctor[i], nombre_doctor[i], apellido_doctor[i], telefono_doctor[i], especialidad_doctor[i]]
     matriz_doctores.append(fila_doctores)
-for fila in matriz_doctores:
-    print(fila)
+print(f'{encabezados_doctores[0]:^15}{encabezados_doctores[1]:^10}{encabezados_doctores[2]:^10}{encabezados_doctores[3]:^10}{encabezados_doctores[4]:^10}{encabezados_doctores[5]:^15}')
+mostrar_matriz(matriz_doctores)
 
 print("\n MATRIZ DISPONIBILIDAD \n")
 matriz_disponibilidad = []
-print(encabezados_disponibilidad)
 dia_disponibilidad = ["23/03/2026", "23/03/2026", "24/03/2026", "25/03/2026"]
 hora_inicio = ["6 AM", "8 AM", "8 AM", "10 AM"]
 hora_fin = ["6 PM", "6 PM", "4 PM", "8 PM"]
@@ -756,13 +765,11 @@ for i in range (len(dia_disponibilidad)):
     fila = [id_contador_disponibilidad, matricula_doctor[i], dia_disponibilidad[i], hora_inicio[i], hora_fin[i]]
     matriz_disponibilidad.append(fila)
     id_contador_disponibilidad += 1
-
-for fila in matriz_disponibilidad:
-     print(fila)
+print(f'{encabezados_disponibilidad[0]:<15}{encabezados_disponibilidad[1]:<10}{encabezados_disponibilidad[2]:<10}{encabezados_disponibilidad[3]:<10}{encabezados_disponibilidad[4]:<10}')
+mostrar_matriz(matriz_disponibilidad)
 
 print("\n MATRIZ TURNOS \n")
 matriz_turnos = []
-print(encabezados_turnos)
 fecha_turno = ["3/4/2026", "3/4/2026", "5/4/2026", "7/4/2026"]
 hora_turno = ["10 AM", "11 AM", "9 AM", "1 PM"]
 id_contador_turnos = 0
@@ -770,7 +777,7 @@ for i in range(4):
     id_contador_turnos += 1
     fila_turnos = [id_contador_turnos, fecha_turno[i], hora_turno[i], dni_paciente[i], especialidad_doctor[i], matricula_doctor[i]]
     matriz_turnos.append(fila_turnos)
-for fila in matriz_turnos:
-    print(fila)
+print(f'{encabezados_turnos[0]:<15}{encabezados_turnos[1]:<10}{encabezados_turnos[2]:<10}{encabezados_turnos[3]:<10}{encabezados_turnos[4]:<10}{encabezados_turnos[5]:<15}')
+mostrar_matriz(matriz_turnos)
 
 menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos)
