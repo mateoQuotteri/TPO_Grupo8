@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------------------------------
 
 import random
+import pacientes
 
 #----------------------------------------------------------------------------------------------
 # FUNCIONES
@@ -14,57 +15,6 @@ def convertir_hora(hora, am_pm):
     elif am_pm == "AM" and hora == 12:
         return 0
     return hora
-
-#FUNCIONES DE PACIENTES DE LA CLINICA
-def agregar_paciente(matriz, contador):
-    contador += 1
-    
-    dni = int(input("Ingrese el DNI: "))
-    while dni < 10000000 or dni > 99999999:
-        print("Dato incorrecto")
-        dni = int(input("DNI: "))
-    
-    nombre = input("Ingrese el nombre: ").upper()
-    apellido = input("Ingrese el apellido: ").upper()
-    telefono = int(input("Ingrese el telefono: "))
-    while telefono < 1000000000 or telefono > 9999999999:
-        print("Dato incorrecto")
-        telefono = int(input("Telefono: "))
-    
-    correo = input("Ingrese el correo: ").upper()
-    nueva_fila = [contador, dni, nombre, apellido, telefono, correo]
-    matriz.append(nueva_fila)
-    print("\nDatos agregados con éxito!\n")
-
-def eliminar_paciente(matriz):
-    dni_buscador = int(input("Ingrese el DNI a eliminar: "))
-    for i in range(1, len(matriz)):
-        if int(matriz[i][1]) == dni_buscador:
-            matriz.pop(i)
-            print("\nPaciente eliminado correctamente.\n")
-            return
-    print("\nNo se encontró el DNI\n")
-
-def modificar_paciente(matriz):
-    dni_buscador = int(input("Ingrese el DNI del paciente que desea modificar datos: "))
-    while dni_buscador < 10000000 or dni_buscador > 99999999:
-        print("Dato incorrecto")
-        dni_buscador = int(input("DNI: "))
-    
-    for i in range(1, len(matriz)):
-        if int(matriz[i][1]) == dni_buscador:
-            nombre = input("Ingrese el nombre: ").upper()
-            apellido = input("Ingrese el apellido: ").upper()
-            telefono = int(input("Ingrese el número de teléfono: "))
-            while telefono < 1000000000 or telefono > 9999999999:
-                print("Dato incorrecto")
-                telefono = int(input("Telefono: "))
-            
-            correo = input("Ingrese el correo: ").upper()
-            matriz[i] = [matriz[i][0], matriz[i][1], nombre, apellido, telefono, correo]
-            print("\nPaciente modificado correctamente!\n")
-            return
-    print("El paciente no fue encontrado.")
 
 
 # FUNCIONES DE DOCTORES
@@ -463,7 +413,7 @@ def mostrar_matriz(matriz):
             print(f'{matriz[fila][columna]:^15}',end="\t")
         print()
 
-def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos):
+def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos,id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos):
     while True:
         while True:
             opciones = 5 
@@ -518,18 +468,18 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                     break # No sale del programa, vuelve al menú anterior
                     
                 elif opcion == "1": # Opción 1
-                    agregar_paciente(matriz_pacientes, id_contador_pacientes)
+                    pacientes.agregar_paciente(matriz_pacientes, id_contador_pacientes)
                     id_contador_pacientes += 1
                     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_matriz(matriz_pacientes)
                     
                 elif opcion == "2": #Opción 2
-                    eliminar_paciente(matriz_pacientes)
+                    pacientes.eliminar_paciente(matriz_pacientes)
                     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_matriz(matriz_pacientes)
                     
                 elif opcion == "3": #Opción 3
-                    modificar_paciente(matriz_pacientes)
+                    pacientes.modificar_paciente(matriz_pacientes)
                     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_matriz(matriz_pacientes)
                     
@@ -780,4 +730,4 @@ for i in range(4):
 print(f'{encabezados_turnos[0]:<15}{encabezados_turnos[1]:<10}{encabezados_turnos[2]:<10}{encabezados_turnos[3]:<10}{encabezados_turnos[4]:<10}{encabezados_turnos[5]:<15}')
 mostrar_matriz(matriz_turnos)
 
-menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos)
+menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos, id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos)
