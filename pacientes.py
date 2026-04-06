@@ -1,3 +1,4 @@
+#Módulo
 #pacientes.py
 
 def agregar_paciente(matriz, contador):
@@ -22,7 +23,7 @@ def agregar_paciente(matriz, contador):
 
 def eliminar_paciente(matriz):
     dni_buscador = int(input("Ingrese el DNI a eliminar: "))
-    for i in range(1, len(matriz)):
+    for i in range(len(matriz)):
         if int(matriz[i][1]) == dni_buscador:
             matriz.pop(i)
             print("\nPaciente eliminado correctamente.\n")
