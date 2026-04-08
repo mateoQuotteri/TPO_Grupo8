@@ -35,8 +35,14 @@ def agregar_doctor(matriz, contador):
             opcion = int(input("Ingrese el número de su especialidad: "))
         
         especialidad = especialidades[opcion - 1]
+
+        activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
+        while activo != "S" and activo != "N":
+            print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
+            activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
         
-        nueva_fila = [contador, matricula, nombre, apellido, telefono, especialidad]
+        
+        nueva_fila = [contador, matricula, nombre, apellido, telefono, especialidad, activo]
         matriz.append(nueva_fila)
         print("\nDatos agregados con éxito!\n")
     return contador
@@ -66,6 +72,7 @@ def modificar_doctor(matriz):
                 print("[2] Apellido")
                 print("[3] Teléfono")
                 print("[4] Especialidad")
+                print("[5] Activo/Inactivo")
                 print("[0] Terminar edición")
                 
                 opcion = input("Ingrese una opción: ")
@@ -98,7 +105,12 @@ def modificar_doctor(matriz):
                         print("Opcion invalida, seleccione una de las disponibles")
                         opcion_esp = int(input("Ingrese el número de su especialidad: "))
                     matriz[i][5] = especialidades[opcion_esp - 1]
-                
+                elif opcion == "5": #Modifica matriz activo/inactivo
+                    activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
+                    while activo != "S" and activo != "N":
+                        print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
+                        activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
+                    matriz[i][6] = activo
                 else:
                     print("Opción inválida, intente nuevamente.")
     print("\nNo se encontró la matricula\n")  
