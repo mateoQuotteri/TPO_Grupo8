@@ -24,7 +24,7 @@ def agregar_doctor(matriz, contador):
             print("Dato incorrecto.")
             telefono = int(input("Ingrese el número de teléfono: "))
         
-        especialidades = ["Clínica Médica", "Pediatría", "Ginecología y Obstetricia", "Cardiología", "Oftalmología","Odontología","Dermatología","Traumatología"]
+        especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
         print("Seleccione una especialidad: ")
         for i in range(len(especialidades)):
             print(i + 1, "-", especialidades[i])
@@ -95,7 +95,7 @@ def modificar_doctor(matriz):
                     matriz[i][4] = telefono
                 
                 elif opcion == "4": #Modifica matriz especialidad
-                    especialidades = ["Clínica Médica", "Pediatría", "Ginecología y Obstetricia", "Cardiología", "Oftalmología","Odontología","Dermatología","Traumatología"]
+                    especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
                     print("Seleccione una especialidad: ")
                     for j in range(len(especialidades)):
                         print(j + 1, "-", especialidades[j])

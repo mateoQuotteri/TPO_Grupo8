@@ -327,11 +327,33 @@ mostrar_matriz(matriz_pacientes)
 
 print("\n MATRIZ DOCTORES \n")
 matriz_doctores = []
-matricula_doctor = ["12345", "67890", "54321", "09876"]
-nombre_doctor = ["Bruno", "Carmen", "Nadia", "Guada"]
-apellido_doctor = ["Gonzales", "Rivera", "Correa", "Smith"]
-telefono_doctor = ["3478125690", "1256903478", "0965213478", "8743561290"]
-especialidad_doctor = ["Clinica", "Oftalmologia", "Cardiologia", "Oncologia"]
+matricula_doctor = ["12345", "67890", "54321", "09876",
+                    "11223", "22334", "33445", "44556", "55667", "66778",
+                    "77889", "88990", "99001", "10112", "12123",
+                    "13134", "14145", "15156", "16167", "17178"]
+
+nombre_doctor = ["Bruno", "Carmen", "Nadia", "Guada",
+                 "Lucas", "Martina", "Juan", "Sofia", "Diego", "Valentina",
+                 "Tomas", "Paula", "Agustin", "Florencia", "Mateo",
+                 "Camila", "Franco", "Lara", "Nicolas", "Julieta"]
+
+apellido_doctor = ["Gonzales", "Rivera", "Correa", "Smith",
+                   "Perez", "Lopez", "Gomez", "Fernandez", "Martinez", "Rodriguez",
+                   "Sanchez", "Ramirez", "Torres", "Acosta", "Benitez",
+                   "Herrera", "Castro", "Ortiz", "Vega", "Morales"]
+
+telefono_doctor = ["3478125690", "1256903478", "0965213478", "8743561290",
+                   "3512345678", "3419876543", "3814567890", "2991234567", "2619876543", "3517654321",
+                   "2234567890", "1167894321", "3794561230", "2611237894", "3519998888",
+                   "2239871234", "2998887777", "2614445555", "3512223333", "1165554444"]
+
+especialidad_doctor = ["Clinica", "Oftalmologia", "Cardiologia", "Oncologia",
+                       "Pediatria", "Dermatologia", "Traumatologia", "Odontologia", "Cardiologia", "Ginecologia",
+                       "Clinica", "Pediatria", "Oftalmologia", "Dermatologia", "Traumatologia",
+                       "Odontologia", "Cardiologia", "Ginecologia", "Clinica", "Pediatria"]
+# Usamos mayúsculas para que el formato de las especialidades sea uniforme, ya que al modificar un doctor se le pide al usuario que ingrese la especialidad en mayúscula, y así evitamos que haya especialidades repetidas por el mismo nombre pero con diferente formato (
+# USAMOS LAMBDA PARA ESTO
+especialidad_doctor = list(map(lambda e: e.upper(), especialidad_doctor))
 activo_inactivo = ["S", "N", "S", "N"]
 id_contador_doctores = 0
 for i in range(4):

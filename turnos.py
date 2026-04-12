@@ -2,98 +2,40 @@
 #turnos.py
 def agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, contador):
     contador += 1
+
+    def buscarDni(matriz, dni_buscado):
+
+        for fila in matriz[0:]:
+            if int(fila[1]) == dni_buscado:
+                return True
+        return False
+
+    dni = int(input("Ingrese el DNI del paciente: "))
+    print(buscarDni(matriz_pacientes, dni))
+    while not buscarDni(matriz_pacientes, dni):
+        print("Dato incorrecto o DNI no registrado.")
+        dni = int(input("Ingrese el DNI del paciente: "))
     
-    dia = int(input("Ingrese el día (1 al 31): "))
-    while dia > 31 or dia < 1:
-        print("Ingrese un dia válido.")
-        dia = int(input("Ingrese el día (1 al 31): "))
+    especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
+    print("Seleccione una especialidad: ")
+    for i in range(len(especialidades)):
+        print(i + 1, "-", especialidades[i])
+    opcion = int(input("Ingrese la especialidad del turno con el que quiere atenderse: "))
+    print("La especialidad con la que quiere atenderse es: " + especialidades[opcion - 1])
+    especialidad = especialidades[opcion - 1]
     
-    mes = int(input("Ingrese el mes (1 al 12): "))
-    while mes > 12 or mes < 1:
-        print("Ingrese un mes válido: ")
-        mes = int(input("Ingrese el mes (1 al 12): "))
+    # Habria que buscar doctores por especialidad y mostrar solo los que correspondan a la seleccion del usuario
+    # Funcion a desarrollar
+    def buscarDoctorPorEspecialidad(matriz_doctores, especialidades, especialidad_seleccionada):
+        doctores_encontrados = []
+        for fila in matriz_doctores[1:]:
+            if fila[5] == especialidad_seleccionada and fila[6] == "S":
+                doctores_encontrados.append(fila)
+        return doctores_encontrados
+
     
-    anio = int(input("Ingrese el año: "))
-    while anio < 2026:
-        print("Ingrese un año válido.")
-        anio = int(input("Ingrese el año: "))
     
-    hora_turno = int(input("Ingrese la hora del turno: "))
-    while hora_turno < 1 or hora_turno > 12:
-        print("Dato incorrecto.")
-        hora_turno = int(input("Ingrese la hora del turno: "))
-    
-    am_pm_turno = input("Ingrese AM o PM: ").upper()
-    while am_pm_turno != 'AM' and am_pm_turno != 'PM':
-        print("Dato incorrecto.")
-        am_pm_turno = input("Ingrese AM o PM: ").upper()
-    hora_turno_num = convertir_hora(hora_turno, am_pm_turno)
-    
-    contador_pacientes = 1
-    print("\n\nSeleccione al paciente\n\n")
-    for fila in matriz_pacientes[1:]:
-        print(f"{contador_pacientes}. DNI: {fila[1]} - Nombre: {fila[2]} - Apellido: {fila[3]}")
-        contador_pacientes += 1
-    
-    opcion_pacientes = int(input("\n\nSeleccione al paciente:\n"))
-    while opcion_pacientes < 1 or opcion_pacientes > len(matriz_pacientes)-1:
-        print("Opcion inválida.")
-        opcion_pacientes = int(input("\n\nSeleccione al paciente\n"))
-    opcion_elegida_pacientes = matriz_pacientes[opcion_pacientes]
-    
-    contador_doctores = 1
-    print("\n\nSeleccione al doctor\n\n")
-    for fila in matriz_doctores[1:]:
-        print(f"{contador_doctores}. Matricula: {fila[1]} - Especialidad: {fila[5]}")
-        contador_doctores += 1
    
-    opcion_doctores = int(input("\n\nSeleccione al doctor:\n"))
-    while opcion_doctores < 1 or opcion_doctores > len(matriz_doctores)-1:
-        print("Opcion inválida")
-        opcion_doctores = int(input("\n\nSeleccione al doctor\n"))
-    opcion_elegida_doctores = matriz_doctores[opcion_doctores]
-
-    fecha = str(dia) + '/' + str(mes) + '/' + str(anio)
-    hora = str(hora_turno) + ' ' + am_pm_turno
-    doctor = opcion_elegida_doctores[1]
-    
-    # VALIDAR DISPONIBILIDAD
-    # Bandera
-    disponible = False
-
-    #Recorre la matriz buscando coincidencias 
-    for fila in matriz_disponibilidad[1:]:
-        matricula_disp = fila[1]
-        fecha_disp = fila[2]
-    
-    # convertir horas de disponibilidad
-        hora_inicio_str = fila[3].split()
-        hora_fin_str = fila[4].split()
-    
-        hora_inicio = convertir_hora(int(hora_inicio_str[0]), hora_inicio_str[1])
-        hora_fin = convertir_hora(int(hora_fin_str[0]), hora_fin_str[1])
-
-        #compara matricula, dia y horario 
-        if matricula_disp == doctor and fecha_disp == fecha:
-            if hora_inicio <= hora_turno_num <= hora_fin:
-                disponible = True
-                break
-
-    if not disponible:
-        print("Error: El doctor no atiende en ese día y horario.")
-        return
-    
-    duplicado = False
-    for fila in matriz_turnos[1:]:
-        if fila[1] == fecha and fila[2] == hora and fila[5] == doctor:
-            duplicado = True
-            break
-    if duplicado:
-        print("Error: El doctor no está disponible en ese día y horario.")
-    else:
-        nueva_fila = [contador, fecha, hora, opcion_elegida_pacientes[1], opcion_elegida_doctores[5], doctor]
-        matriz_turnos.append(nueva_fila)
-        print("\nDatos agregados con éxito!\n")
 
 def eliminar_turno(matriz):
     dni_buscado = int(input("Ingrese el DNI asociado al turno a eliminar: "))
