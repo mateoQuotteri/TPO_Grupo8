@@ -1,41 +1,94 @@
 #Módulo
 #turnos.py
-def agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, contador):
-    contador += 1
 
-    def buscarDni(matriz, dni_buscado):
 
+def buscarDni(matriz, dni_buscado):
         for fila in matriz[0:]:
             if int(fila[1]) == dni_buscado:
                 return True
         return False
 
+def buscarDoctorPorEspecialidad(matriz_doctores, especialidad_seleccionada):
+    doctores_encontrados = []
+    for fila in matriz_doctores:
+        if fila[5] == especialidad_seleccionada and fila[6] == "S":
+            doctores_encontrados.append(fila)
+    print(f"Médicos disponibles en:  {especialidad_seleccionada}\t")
+    print("0 - Mostrar todos los turnos disponibles.")
+    for i in range(len(doctores_encontrados)):
+        print(f"{i+1} - {doctores_encontrados[i][2]} {doctores_encontrados[i][3]}")
+    return doctores_encontrados
+
+def doctor_seleccionado(especialistas, seleccion):
+    matricula=[]
+    if seleccion == 0:
+        for i in range(len(especialistas)):
+            matricula.append=especialistas[seleccion][1]
+    else: 
+        matricula=especialistas[seleccion][1]
+    return matricula
+
+#Falta desarrollar
+def turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos,especialidad):
+    turnos=[]
+    dispo=[]
+    if matricula ==0:
+        print("a")
+       # for fila in (len(matriz_disponibilidad)):
+        #    if matriz_disponibilidad[fila][2] == 0
+
+        #mostrar todos los turnos disponibles para la especialidad seleccionada
+
+    else: 
+        print("b")
+        for fila in range (len(matriz_disponibilidad)):
+            if matriz_disponibilidad[fila][2] == matricula:
+                dispo.append(matriz_disponibilidad[fila])
+                #REVISARRRRRR
+                
+        print(dispo)
+
+
+        #mostrar todos los turnos disponibles para el médico seleccionado
+    
+
+
+def agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, contador, matriz_disponibilidad):
+    contador += 1
+
+    
     dni = int(input("Ingrese el DNI del paciente: "))
+    
     print(buscarDni(matriz_pacientes, dni))
     while not buscarDni(matriz_pacientes, dni):
         print("Dato incorrecto o DNI no registrado.")
-        dni = int(input("Ingrese el DNI del paciente: "))
-    
-    especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
-    print("Seleccione una especialidad: ")
-    for i in range(len(especialidades)):
-        print(i + 1, "-", especialidades[i])
-    opcion = int(input("Ingrese la especialidad del turno con el que quiere atenderse: "))
-    print("La especialidad con la que quiere atenderse es: " + especialidades[opcion - 1])
-    especialidad = especialidades[opcion - 1]
-    
-    # Habria que buscar doctores por especialidad y mostrar solo los que correspondan a la seleccion del usuario
-    # Funcion a desarrollar
-    def buscarDoctorPorEspecialidad(matriz_doctores, especialidades, especialidad_seleccionada):
-        doctores_encontrados = []
-        for fila in matriz_doctores[1:]:
-            if fila[5] == especialidad_seleccionada and fila[6] == "S":
-                doctores_encontrados.append(fila)
-        return doctores_encontrados
+        dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
 
     
     
-   
+    especialidades=["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
+    print("Seleccione una especialidad: ")
+    for i in range(len(especialidades)):
+        print(i + 1, "-", especialidades[i])
+    opcion = int(input(f"Ingrese la especialidad del turno con el que quiere atenderse: \t"))
+    
+    print(f"La especialidad con la que quiere atenderse es: {especialidades[opcion - 1]}\t")
+    especialidad = especialidades[opcion - 1]
+    especialistas=buscarDoctorPorEspecialidad(matriz_doctores,especialidad)
+    
+    seleccion=int(input("Seleccione una opción: "))
+    matricula=doctor_seleccionado(especialistas,seleccion)
+    turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos,especialidad)
+    
+
+
+
+
+
+
+    return
+
+
 
 def eliminar_turno(matriz):
     dni_buscado = int(input("Ingrese el DNI asociado al turno a eliminar: "))

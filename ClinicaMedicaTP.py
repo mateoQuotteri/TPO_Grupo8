@@ -11,21 +11,6 @@ import turnos
 #----------------------------------------------------------------------------------------------
 # FUNCIONES
 #----------------------------------------------------------------------------------------------
-# convierte hora de formato 12hs AM/PM a formato 24hs
-def convertir_hora(hora, am_pm):
-    if am_pm == "PM" and hora != 12:
-        return hora + 12
-    elif am_pm == "AM" and hora == 12:
-        return 0
-    return hora
-
-
-#FUNCIONES DE DISPONIBILIDAD
-
-
-
-# FUNCIONES DE TURNOS
-
 
 def ordenar_matriz(matriz,encabezado):
     opciones = encabezado
@@ -45,6 +30,7 @@ def ordenar_matriz(matriz,encabezado):
 def mostrar_matriz(matriz):
     filas = len(matriz)
     columnas = len(matriz[0])
+    print('-'*115)
     for fila in range(filas):
         for columna in range(columnas):
             print(f'{matriz[fila][columna]:^15}',end="\t")
@@ -202,7 +188,7 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
 
                 elif opcion == "3":
                     disponibilidad.modificar_disponibilidad(matriz_disponibilidad)
-                    print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
+                    print(f'{encabezados_disponibilidad[0]:^5}\t{encabezados_disponibilidad[1]:^5}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
                     mostrar_matriz(matriz_disponibilidad)
 
         
@@ -233,7 +219,7 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                     break # No salimos del programa, volvemos al menú anterior
                 
                 elif opcion == "1":
-                    turnos.agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, id_contador_turnos)
+                    turnos.agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, id_contador_turnos,matriz_disponibilidad)
                     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
                     mostrar_matriz(matriz_turnos)
                     
@@ -304,90 +290,93 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
 # CUERPO PRINCIPAL
 #----------------------------------------------------------------------------------------------
 
-encabezados_pacientes = ['ID Paciente', 'DNI', 'Nombre', 'Apellido', 'Telefono', 'Correo']
-encabezados_doctores = ['ID Profesional', 'Matricula', 'Nombre', 'Apellido', 'Telefono', 'Especialidad', 'Activo/Inactivo']
-encabezados_disponibilidad = ['ID Disponibilidad', 'Matricula', 'Día', 'Hora Inicio', 'Hora Fin']
-encabezados_turnos = ['ID Turno', 'Fecha', 'Hora', 'DNI Paciente', 'Especialidad', 'Matricula Doctor']
+def main():
+    encabezados_pacientes = ['ID Paciente', 'DNI', 'Nombre', 'Apellido', 'Telefono', 'Correo']
+    encabezados_doctores = ['ID Profesional', 'Matricula', 'Nombre', 'Apellido', 'Telefono', 'Especialidad', 'Activo/Inactivo']
+    encabezados_disponibilidad = ['ID Dispo.', 'Matricula', 'Día', 'Hora Inicio', 'Hora Fin']
+    encabezados_turnos = ['ID Turno', 'Fecha', 'Hora', 'DNI Paciente', 'Especialidad', 'Matricula Doctor']
 
-print("\n MATRIZ PACIENTES \n")
-matriz_pacientes = []
-dni_paciente = ["12345678", "87654321", "56781234", "43215678"]
-nombre_paciente = ["Jose", "Ivana", "Mateo", "Evelyn"]
-apellido_paciente = ["Sanchez", "Cervera", "Lopez", "Sanchez"]
-telefono_paciente = ["1234567890", "0987654321", "1234509876", "6789012345"]
-correo_paciente = ["josesan@gmail.com", "ivanacer@gmail.com", "mateolo@gmail.com", "evelynsan@gmail.com"]
-id_contador_pacientes = 0
-for i in range(4):
-    id_contador_pacientes += 1
-    fila_pacientes = [id_contador_pacientes, dni_paciente[i], nombre_paciente[i], apellido_paciente[i], telefono_paciente[i], correo_paciente[i]]
-    matriz_pacientes.append(fila_pacientes)
-print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^18}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^20}')
-mostrar_matriz(matriz_pacientes)
+    print("\n MATRIZ PACIENTES \n")
+    matriz_pacientes = []
+    dni_paciente = ["12345678", "87654321", "56781234", "43215678"]
+    nombre_paciente = ["Jose", "Ivana", "Mateo", "Evelyn"]
+    apellido_paciente = ["Sanchez", "Cervera", "Lopez", "Sanchez"]
+    telefono_paciente = ["1234567890", "0987654321", "1234509876", "6789012345"]
+    correo_paciente = ["josesan@gmail.com", "ivanacer@gmail.com", "mateolo@gmail.com", "evelynsan@gmail.com"]
+    id_contador_pacientes = 0
+    for i in range(4):
+        id_contador_pacientes += 1
+        fila_pacientes = [id_contador_pacientes, dni_paciente[i], nombre_paciente[i], apellido_paciente[i], telefono_paciente[i], correo_paciente[i]]
+        matriz_pacientes.append(fila_pacientes)
+    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^18}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^20}')
+    mostrar_matriz(matriz_pacientes)
 
 
-print("\n MATRIZ DOCTORES \n")
-matriz_doctores = []
-matricula_doctor = ["12345", "67890", "54321", "09876",
-                    "11223", "22334", "33445", "44556", "55667", "66778",
-                    "77889", "88990", "99001", "10112", "12123",
-                    "13134", "14145", "15156", "16167", "17178"]
+    print("\n MATRIZ DOCTORES \n")
+    matriz_doctores = []
+    matricula_doctor = ["12345", "67890", "54321", "09876",
+                        "11223", "22334", "33445", "44556", "55667", "66778",
+                        "77889", "88990", "99001", "10112", "12123",
+                        "13134", "14145", "15156", "16167", "17178"]
 
-nombre_doctor = ["Bruno", "Carmen", "Nadia", "Guada",
-                 "Lucas", "Martina", "Juan", "Sofia", "Diego", "Valentina",
-                 "Tomas", "Paula", "Agustin", "Florencia", "Mateo",
-                 "Camila", "Franco", "Lara", "Nicolas", "Julieta"]
+    nombre_doctor = ["Bruno", "Carmen", "Nadia", "Guada",
+                    "Lucas", "Martina", "Juan", "Sofia", "Diego", "Valentina",
+                    "Tomas", "Paula", "Agustin", "Florencia", "Mateo",
+                    "Camila", "Franco", "Lara", "Nicolas", "Julieta"]
 
-apellido_doctor = ["Gonzales", "Rivera", "Correa", "Smith",
-                   "Perez", "Lopez", "Gomez", "Fernandez", "Martinez", "Rodriguez",
-                   "Sanchez", "Ramirez", "Torres", "Acosta", "Benitez",
-                   "Herrera", "Castro", "Ortiz", "Vega", "Morales"]
+    apellido_doctor = ["Gonzales", "Rivera", "Correa", "Smith",
+                    "Perez", "Lopez", "Gomez", "Fernandez", "Martinez", "Rodriguez",
+                    "Sanchez", "Ramirez", "Torres", "Acosta", "Benitez",
+                    "Herrera", "Castro", "Ortiz", "Vega", "Morales"]
 
-telefono_doctor = ["3478125690", "1256903478", "0965213478", "8743561290",
-                   "3512345678", "3419876543", "3814567890", "2991234567", "2619876543", "3517654321",
-                   "2234567890", "1167894321", "3794561230", "2611237894", "3519998888",
-                   "2239871234", "2998887777", "2614445555", "3512223333", "1165554444"]
+    telefono_doctor = ["3478125690", "1256903478", "0965213478", "8743561290",
+                    "3512345678", "3419876543", "3814567890", "2991234567", "2619876543", "3517654321",
+                    "2234567890", "1167894321", "3794561230", "2611237894", "3519998888",
+                    "2239871234", "2998887777", "2614445555", "3512223333", "1165554444"]
 
-especialidad_doctor = ["Clinica", "Oftalmologia", "Cardiologia", "Oncologia",
-                       "Pediatria", "Dermatologia", "Traumatologia", "Odontologia", "Cardiologia", "Ginecologia",
-                       "Clinica", "Pediatria", "Oftalmologia", "Dermatologia", "Traumatologia",
-                       "Odontologia", "Cardiologia", "Ginecologia", "Clinica", "Pediatria"]
-# Usamos mayúsculas para que el formato de las especialidades sea uniforme, ya que al modificar un doctor se le pide al usuario que ingrese la especialidad en mayúscula, y así evitamos que haya especialidades repetidas por el mismo nombre pero con diferente formato (
-# USAMOS LAMBDA PARA ESTO
-especialidad_doctor = list(map(lambda e: e.upper(), especialidad_doctor))
-activo_inactivo = ["S", "N", "S", "N"]
-id_contador_doctores = 0
-for i in range(4):
-    id_contador_doctores += 1
-    fila_doctores = [id_contador_doctores, matricula_doctor[i], nombre_doctor[i], apellido_doctor[i], telefono_doctor[i], especialidad_doctor[i], activo_inactivo[i]]
-    matriz_doctores.append(fila_doctores)
-print(f'{encabezados_doctores[0]:^15}\t{encabezados_doctores[1]:^15}\t{encabezados_doctores[2]:^15}\t{encabezados_doctores[3]:^15}\t{encabezados_doctores[4]:^15}\t{encabezados_doctores[5]:^15}\t{encabezados_doctores[6]:^15}')
-mostrar_matriz(matriz_doctores)
+    especialidad_doctor = ["Clínica Médica", "Oftalmología", "Cardiología", "Oncología",
+                        "Pediatría", "Dermatología", "Traumatología", "Odontología", "Cardiología", "Ginecología",
+                        "Clínica Médica", "Pediatría", "Oftalmología", "Dermatología", "Traumatología",
+                        "Odontología", "Cardiología", "Ginecología", "Clínica Médica", "Pediatría"]
+    # Usamos mayúsculas para que el formato de las especialidades sea uniforme, ya que al modificar un doctor se le pide al usuario que ingrese la especialidad en mayúscula, y así evitamos que haya especialidades repetidas por el mismo nombre pero con diferente formato (
+    # USAMOS LAMBDA PARA ESTO
+    especialidad_doctor = list(map(lambda e: e.upper(), especialidad_doctor))
+    activo_inactivo = ["S", "S", "S", "N","S", "N", "S", "S","S", "S", "S", "N","S", "S", "S", "S","S", "N", "S", "S",]
+    id_contador_doctores = 0
+    for i in range(20):
+        id_contador_doctores += 1
+        fila_doctores = [id_contador_doctores, matricula_doctor[i], nombre_doctor[i], apellido_doctor[i], telefono_doctor[i], especialidad_doctor[i], activo_inactivo[i]]
+        matriz_doctores.append(fila_doctores)
+    print(f'{encabezados_doctores[0]:^15}\t{encabezados_doctores[1]:^15}\t{encabezados_doctores[2]:^15}\t{encabezados_doctores[3]:^15}\t{encabezados_doctores[4]:^15}\t{encabezados_doctores[5]:^15}\t{encabezados_doctores[6]:^15}')
+    mostrar_matriz(matriz_doctores)
 
-print("\n MATRIZ DISPONIBILIDAD \n")
-matriz_disponibilidad = []
-dia_disponibilidad = ["23/03/2026", "23/03/2026", "24/03/2026", "25/03/2026"]
-hora_inicio = ["6 AM", "8 AM", "8 AM", "10 AM"]
-hora_fin = ["6 PM", "6 PM", "4 PM", "8 PM"]
-matricula_doctor = ["12345", "67890", "54321", "09876"]
+    print("\n MATRIZ DISPONIBILIDAD \n")
+    matriz_disponibilidad = []
+    dia_disponibilidad = ["LUNES", "LUNES", "JUEVES", "MIÉRCOLES"]
+    hora_inicio = ["8", "8", "8", "10"]
+    hora_fin = ["15", "17", "12", "19"]
+    matricula_doctor = ["12345", "67890", "54321", "09876"]
 
-id_contador_disponibilidad = 1
-for i in range (len(dia_disponibilidad)):
-    fila = [id_contador_disponibilidad, matricula_doctor[i], dia_disponibilidad[i], hora_inicio[i], hora_fin[i]]
-    matriz_disponibilidad.append(fila)
-    id_contador_disponibilidad += 1
-print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
-mostrar_matriz(matriz_disponibilidad)
+    id_contador_disponibilidad = 1
+    for i in range (len(dia_disponibilidad)):
+        fila = [id_contador_disponibilidad, matricula_doctor[i], dia_disponibilidad[i], hora_inicio[i], hora_fin[i]]
+        matriz_disponibilidad.append(fila)
+        id_contador_disponibilidad += 1
+    print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
+    mostrar_matriz(matriz_disponibilidad)
 
-print("\n MATRIZ TURNOS \n")
-matriz_turnos = []
-fecha_turno = ["3/4/2026", "3/4/2026", "5/4/2026", "7/4/2026"]
-hora_turno = ["10 AM", "11 AM", "9 AM", "1 PM"]
-id_contador_turnos = 0
-for i in range(4):
-    id_contador_turnos += 1
-    fila_turnos = [id_contador_turnos, fecha_turno[i], hora_turno[i], dni_paciente[i], especialidad_doctor[i], matricula_doctor[i]]
-    matriz_turnos.append(fila_turnos)
-print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
-mostrar_matriz(matriz_turnos)
+    print("\n MATRIZ TURNOS \n")
+    matriz_turnos = []
+    fecha_turno = ["3/4/2026", "3/4/2026", "5/4/2026", "7/4/2026"]
+    hora_turno = ["10", "11", "9", "13"]
+    id_contador_turnos = 0
+    for i in range(4):
+        id_contador_turnos += 1
+        fila_turnos = [id_contador_turnos, fecha_turno[i], hora_turno[i], dni_paciente[i], especialidad_doctor[i], matricula_doctor[i]]
+        matriz_turnos.append(fila_turnos)
+    print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
+    mostrar_matriz(matriz_turnos)
 
-menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos, id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos)
+    menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos, id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos)
+
+main()
