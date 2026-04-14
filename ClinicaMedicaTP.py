@@ -17,7 +17,7 @@ def ordenar_matriz(matriz,encabezado):
     print("Ingrese la opcion por la cual ordenar la matriz: ")
     for i in range(len(opciones)):
         print(i + 1, "-", opciones[i])
-    while True:
+    while True: #modificarlo es mala práctica revisarlo en todos y cambiarlos a banderas
         opcion = int(input("Ingrese la opcion por la cual desea ordenar la matriz: "))
         if 1 <= opcion <= len(opciones):
             columna_a_ordenar = opcion - 1

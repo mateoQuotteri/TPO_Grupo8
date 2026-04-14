@@ -10,11 +10,11 @@ def agregar_doctor(matriz, contador):
             matricula = int(input("Ingrese el número de matricula: "))
     
     encontrado = False
-    for fila in matriz[1:]:
+    for fila in matriz[1:]: #cambiar las busquedas con for
         if fila[1] == matricula:
             print("La matricula ya esta asociada a un doctor.")
             encontrado = True
-            break
+            break #sacar esto de todo el codigo
     
     if not encontrado:
         nombre = input("Ingrese el nombre: ").upper()
