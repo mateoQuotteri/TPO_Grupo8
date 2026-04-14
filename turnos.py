@@ -20,37 +20,55 @@ def buscarDoctorPorEspecialidad(matriz_doctores, especialidad_seleccionada):
     return doctores_encontrados
 
 def doctor_seleccionado(especialistas, seleccion):
-    matricula=[]
     if seleccion == 0:
-        for i in range(len(especialistas)):
-            matricula.append=especialistas[seleccion][1]
-    else: 
-        matricula=especialistas[seleccion][1]
+        # map con lambda - extrae la matrícula de cada especialista de la especialidad elegida por usuario
+        matricula = list(map(lambda e: e[1], especialistas))
+    else:
+        matricula = especialistas[seleccion - 1][1]
     return matricula
 
-#Falta desarrollar
-def turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos,especialidad):
-    turnos=[]
-    dispo=[]
-    if matricula ==0:
-        print("a")
-       # for fila in (len(matriz_disponibilidad)):
-        #    if matriz_disponibilidad[fila][2] == 0
+def turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos, especialidad):
+    # filter con lambda: filtra disponibilidades del doctor puntual o de todos los de la especialidad que selecciono el usuario por consola
+    if isinstance(matricula, list):
+        dispo = list(filter(lambda fila: fila[1] in matricula, matriz_disponibilidad))
+    else:
+        dispo = list(filter(lambda fila: fila[1] == matricula, matriz_disponibilidad))
 
-        #mostrar todos los turnos disponibles para la especialidad seleccionada
+    if not dispo:
+        print("No hay disponibilidades registradas para el médico seleccionado.")
+        return None
 
-    else: 
-        print("b")
-        for fila in range (len(matriz_disponibilidad)):
-            if matriz_disponibilidad[fila][2] == matricula:
-                dispo.append(matriz_disponibilidad[fila])
-                #REVISARRRRRR
-                
-        print(dispo)
+    # Expandir cada disponibilidad en slots hora a hora y filtrar los ya ocupados
+    slots = []
+    for fila in dispo:
+        print("La fila mostrada es: " + str(fila)) 
+        mat = fila[1]
+        dia = fila[2]
+        hora_inicio = int(fila[3])
+        hora_fin = int(fila[4])
+        for hora in range(hora_inicio, hora_fin):
+            # filter con lambda: verifica si ese slot ya está ocupado en matriz_turnos
+            tomado = list(filter(lambda t: t[5] == mat and t[2] == str(hora) and t[1] == dia, matriz_turnos))
+            if not tomado:
+                slots.append([mat, dia, hora])
 
+    if not slots:
+        print("No hay turnos disponibles para el medico o la especialidad seleccionad.")
+        return False
 
-        #mostrar todos los turnos disponibles para el médico seleccionado
-    
+    print("\nTurnos disponibles:")
+    for i in range(len(slots)):
+        slot = slots[i]
+        print(f"  {i+1} - Matrícula: {slot[0]} | Día: {slot[1]} | Hora: {slot[2]}:00 hs")
+
+    seleccion = int(input("Seleccione un turno (número): "))
+    while seleccion < 1 or seleccion > len(slots):
+        print("Opción inválida.")
+        seleccion = int(input("Seleccione un turno (número): "))
+
+    slot_elegido = slots[seleccion - 1]
+    return [slot_elegido[1], str(slot_elegido[2]), slot_elegido[0], especialidad]
+
 
 
 def agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, contador, matriz_disponibilidad):
@@ -58,8 +76,7 @@ def agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, contador, ma
 
     
     dni = int(input("Ingrese el DNI del paciente: "))
-    
-    print(buscarDni(matriz_pacientes, dni))
+
     while not buscarDni(matriz_pacientes, dni):
         print("Dato incorrecto o DNI no registrado.")
         dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
@@ -78,7 +95,13 @@ def agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, contador, ma
     
     seleccion=int(input("Seleccione una opción: "))
     matricula=doctor_seleccionado(especialistas,seleccion)
-    turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos,especialidad)
+    turno = turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos, especialidad)
+
+    if turno is not None:
+        nuevo_id = len(matriz_turnos) + 1
+        nueva_fila = [nuevo_id, turno[0], turno[1], str(dni), turno[3], turno[2]]
+        matriz_turnos.append(nueva_fila)
+        print("\nTurno agregado con éxito.\n")
     
 
 
