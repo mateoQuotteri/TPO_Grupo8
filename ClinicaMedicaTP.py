@@ -2,7 +2,7 @@
 # MÓDULOS
 #----------------------------------------------------------------------------------------------
 
-import random
+import datetime
 import pacientes
 import doctores
 import disponibilidad

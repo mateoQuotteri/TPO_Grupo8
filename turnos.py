@@ -179,10 +179,6 @@ def modificar_turno(matriz_turnos, matriz_doctores):
             while hora_turno < 1 or hora_turno > 12:
                 print("Dato incorrecto")
                 hora_turno = int(input("Ingrese la hora del turno: "))
-            am_pm_turno = input("Ingrese AM o PM: ").upper()
-            while am_pm_turno != 'AM' and am_pm_turno != 'PM':
-                print("Dato incorrecto")
-                am_pm_turno = input("Ingrese AM o PM: ").upper()
             contador_doctores = 1
             print("\nLISTA DE DOCTORES\n")
             for fila in matriz_doctores[1:]:
@@ -194,7 +190,7 @@ def modificar_turno(matriz_turnos, matriz_doctores):
                 opcion_doctores = int(input("\n\nSeleccione al doctor\n"))
             opcion_elegida_doctores = matriz_doctores[opcion_doctores]
             fecha = str(dia) + '/' + str(mes) + '/' + str(anio)
-            hora = str(hora_turno) + ' ' + am_pm_turno
+            hora = str(hora_turno)
             doctor = opcion_elegida_doctores[1]
             duplicado = False
             for fila in matriz_turnos[1:]:
