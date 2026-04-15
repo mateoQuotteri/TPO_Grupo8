@@ -1,8 +1,17 @@
-#Módulo
+# Modulo
 #doctores.py
 
+"""
+FUNCIÓN AGREGAR DOCTOR
+Agrega un médico a la lista realizando las siguientes validaciones:
+1. Matrícula: Debe ser de 5 dígitos y no estar repetida.
+2. Teléfono: Debe tener exactamente 10 dígitos.
+3. Especialidad: Se elige mediante un menú numérico predefinido.
+4. Estado: Solo acepta 'S' (Activo) o 'N' (Inactivo).
+Al finalizar, guarda los datos en la matriz y actualiza el contador.
+"""
+
 def agregar_doctor(matriz, contador):
-    contador += 1
     
     matricula = int(input("Ingrese el número de matricula: "))
     while matricula < 10000 or matricula > 99999:
@@ -10,13 +19,17 @@ def agregar_doctor(matriz, contador):
             matricula = int(input("Ingrese el número de matricula: "))
     
     encontrado = False
-    for fila in matriz[1:]: #cambiar las busquedas con for
-        if fila[1] == matricula:
-            print("La matricula ya esta asociada a un doctor.")
+    indice = 1
+
+    while indice < len(matriz) and not encontrado:
+        if matriz[indice][1] == matricula:
+            print("La matrícula ya está asociada a un doctor.")
             encontrado = True
-            break #sacar esto de todo el codigo
+        else:
+            indice += 1
     
     if not encontrado:
+        contador += 1
         nombre = input("Ingrese el nombre: ").upper()
         apellido = input("Ingrese el apellido: ").upper()
         telefono = int(input("Ingrese el telefono: "))
@@ -47,6 +60,13 @@ def agregar_doctor(matriz, contador):
         print("\nDatos agregados con éxito!\n")
     return contador
 
+"""
+FUNCIÓN ELIMINAR DOCTOR
+Busca un doctor por su matrícula y lo borra de la lista.
+Si encuentra el número, elimina la fila completa de la matriz.
+Si no lo encuentra, avisa que la matrícula no existe.
+"""
+
 def eliminar_doctor(matriz):
     matricula_buscada = int(input("Ingrese la matricula a eliminar: "))
     
@@ -57,16 +77,30 @@ def eliminar_doctor(matriz):
             return
     print("\nNo se encontró la matricula\n")
 
+"""
+FUNCIÓN MODIFICAR DOCTOR
+Permite editar los datos de un doctor ya registrado:
+1. Localiza al doctor mediante su matrícula (5 dígitos).
+2. Abre un menú interactivo para elegir qué cambiar: Nombre, Apellido, Teléfono, Especialidad o Estado (Activo/Inactivo).
+3. Valida que los nuevos datos ingresados sean correctos.
+4. Permite realizar múltiples cambios hasta que se elige "Terminar edición".
+"""
+
 def modificar_doctor(matriz):
     matricula_buscada = int(input("Ingrese la matricula del doctor que desea modificar: "))
     while matricula_buscada < 10000 or matricula_buscada > 99999:
         print("Dato incorrecto")
         matricula_buscada = int(input("Ingrese la matricula del doctor que desea modificar: "))
     
-    for i in range(1, len(matriz)):
+    encontrado = False
+    i = 1
+
+    while i < len(matriz) and not encontrado:
         if int(matriz[i][1]) == matricula_buscada:
-        
-         while True:
+            encontrado = True
+
+            editando = True
+            while editando:
                 print("\nSeleccione el dato que desea modificar:")
                 print("[1] Nombre")
                 print("[2] Apellido")
@@ -79,7 +113,7 @@ def modificar_doctor(matriz):
                 
                 if opcion == "0":
                     print("\nEdición terminada.\n")
-                    return # Termina la función
+                    editando = False
                 
                 if opcion == "1": #Modifica matriz nombre
                     matriz[i][2] = input("Ingrese el nuevo nombre: ").upper()
@@ -88,7 +122,7 @@ def modificar_doctor(matriz):
                     matriz[i][3] = input("Ingrese el nuevo apellido: ").upper()
                 
                 elif opcion == "3": #Modifica matriz telefono
-                    telefono = input("Ingrese el nuevo teléfono: ").upper()
+                    telefono = int(input("Ingrese el nuevo teléfono: "))
                     while telefono < 1000000000 or telefono > 9999999999:
                         print("Dato incorrecto")
                         telefono = int(input("Ingrese el nuevo teléfono: "))
@@ -105,12 +139,14 @@ def modificar_doctor(matriz):
                         print("Opcion invalida, seleccione una de las disponibles")
                         opcion_esp = int(input("Ingrese el número de su especialidad: "))
                     matriz[i][5] = especialidades[opcion_esp - 1]
+                
                 elif opcion == "5": #Modifica matriz activo/inactivo
                     activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
                     while activo != "S" and activo != "N":
                         print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
                         activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
-                    matriz[i][6] = activo
-                else:
-                    print("Opción inválida, intente nuevamente.")
-    print("\nNo se encontró la matricula\n")  
+                    matriz[i][6] = activo    
+        else:
+            i += 1
+    if not encontrado:
+        print("\nNo se encontró la matricula\n")  
