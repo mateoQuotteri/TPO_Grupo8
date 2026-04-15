@@ -7,6 +7,7 @@ import pacientes
 import doctores
 import disponibilidad
 import turnos
+import usuarios
 
 #----------------------------------------------------------------------------------------------
 # FUNCIONES
@@ -291,10 +292,13 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
 #----------------------------------------------------------------------------------------------
 
 def main():
+    encabezados_usuarios = ['Contraseña', 'Nombre de Usuario', 'Rol']
     encabezados_pacientes = ['ID Paciente', 'DNI', 'Nombre', 'Apellido', 'Telefono', 'Correo']
     encabezados_doctores = ['ID Profesional', 'Matricula', 'Nombre', 'Apellido', 'Telefono', 'Especialidad', 'Activo/Inactivo']
     encabezados_disponibilidad = ['ID Dispo.', 'Matricula', 'Día', 'Hora Inicio', 'Hora Fin']
     encabezados_turnos = ['ID Turno', 'Fecha', 'Hora', 'DNI Paciente', 'Especialidad', 'Matricula Doctor']
+
+
 
     print("\n MATRIZ PACIENTES \n")
     matriz_pacientes = []
