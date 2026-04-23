@@ -57,6 +57,28 @@ def ordenar_pacientes_dic(lista, encabezado):
     lista.sort(key=lambda p: p[clave_elegida])
     return lista
 
+def pedir_especialidad():
+    return input("Ingrese especialidad: ").strip().upper()
+
+def filtrar_por_especialidad(matriz, encabezados, especialidad):
+    i = encabezados.index("Especialidad")
+
+    datos = list(filter(lambda fila: especialidad in fila[i],matriz))
+
+    return datos
+
+def mostrar_reporte(encabezados, datos):
+    print("\n--- REPORTE ---\n")
+    ancho = 18
+    for col in encabezados:
+        print(f"{str(col):<{ancho}}", end="")
+    print()
+    print("-" * (ancho * len(encabezados)))
+    for fila in datos:
+        for valor in fila:
+            print(f"{str(valor):<{ancho}}", end="")
+        print()
+
 # Recorre y muestra en consola cualquier matriz de datos con un formato de columnas alineadas.
 def mostrar_matriz(matriz):
     filas = len(matriz)
@@ -77,7 +99,7 @@ def mostrar_pacientes(lista_pacientes):
 def menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos,id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos):
     while True:
         while True:
-            opciones = 5 
+            opciones = 6
             print()
             print("---------------------------")
             print("MENÚ PRINCIPAL")
@@ -87,12 +109,13 @@ def menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_
             print("[3] ABM Disponibilidad de Doctores.")
             print("[4] ABM Turnos Médicos.")
             print("[5] Ordenar Matrices.")
+            print("[6] Reporte de Especialidad y Disponibilidad Doctores")
             print("---------------------------")
             print("[0] Salir del programa")
             print("---------------------------")
             print()
             
-            opcion = input("Seleccione una opción: ")
+            opcion = input("Seleccione una opción: ").strip()
             if opcion in [str(i) for i in range(0, opciones + 1)]:
                 break
             else:
@@ -322,6 +345,36 @@ def menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_
                     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
                     mostrar_matriz(matriz_ordenada)
                     break
+
+        elif opcion == "6":
+
+            while True:
+                while True:
+                    opciones = 1
+                    print()
+                    print("---------------------------")
+                    print("MENÚ DE REPORTES MÉDICOS")
+                    print("---------------------------")
+                    print("[1] Reporte de Especialidades.")
+                    print("---------------------------")
+                    print("[0] Volver al menú anterior")
+                    print("---------------------------")
+                    print()
+                    opcion = input("Seleccione una opción: ")
+                    if opcion in [str(i) for i in range(0, opciones + 1)]:
+                        break
+                    else:
+                        input("Opción inválida. Presione ENTER para volver a seleccionar.")
+                print()
+
+                if opcion == "0": # Salir del submenú
+                    break
+
+                elif opcion == "1":
+                    esp = pedir_especialidad()
+                    datos = filtrar_por_especialidad(matriz_doctores, encabezados_doctores, esp)
+                    mostrar_reporte(encabezados_doctores, datos)
+
     return
 
 #----------------------------------------------------------------------------------------------
@@ -394,7 +447,7 @@ def main():
     # Usamos mayúsculas para que el formato de las especialidades sea uniforme, ya que al modificar un doctor se le pide al usuario que ingrese la especialidad en mayúscula, y así evitamos que haya especialidades repetidas por el mismo nombre pero con diferente formato (
     # USAMOS LAMBDA PARA ESTO
     especialidad_doctor = list(map(lambda e: e.upper(), especialidad_doctor))
-    activo_inactivo = ["S", "S", "S", "N","S", "N", "S", "S","S", "S", "S", "N","S", "S", "S", "S","S", "N", "S", "S",]
+    activo_inactivo = ["S", "S", "S", "N","S","N","S","S","S","S","S","N","S","S","S","S","S","N","S","S"]
     id_contador_doctores = 0
     for i in range(20):
         id_contador_doctores += 1
