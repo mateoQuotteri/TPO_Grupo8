@@ -109,7 +109,7 @@ def menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_
             print("[3] ABM Disponibilidad de Doctores.")
             print("[4] ABM Turnos Médicos.")
             print("[5] Ordenar Matrices.")
-            print("[6] Reporte de Especialidad y Disponibilidad Doctores")
+            print("[6] Reporte de Especialidad.")
             print("---------------------------")
             print("[0] Salir del programa")
             print("---------------------------")
