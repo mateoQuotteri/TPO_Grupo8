@@ -225,12 +225,12 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                     mostrar_matriz(matriz_turnos)
                     
                 elif opcion == "2":
-                    turnos.eliminar_turno(matriz_turnos)
+                    turnos.eliminar_turno(matriz_pacientes, matriz_turnos)
                     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
                     mostrar_matriz(matriz_turnos)
 
                 elif opcion == "3":
-                    turnos.modificar_turno(matriz_turnos, matriz_doctores)
+                    turnos.modificar_turno(matriz_turnos, matriz_doctores, matriz_pacientes, matriz_disponibilidad)
                     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
                     mostrar_matriz(matriz_turnos)
 
