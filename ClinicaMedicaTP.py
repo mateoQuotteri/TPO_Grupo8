@@ -18,15 +18,43 @@ def ordenar_matriz(matriz,encabezado):
     print("Ingrese la opcion por la cual ordenar la matriz: ")
     for i in range(len(opciones)):
         print(i + 1, "-", opciones[i])
-    while True: #modificarlo es mala práctica revisarlo en todos y cambiarlos a banderas
-        opcion = int(input("Ingrese la opcion por la cual desea ordenar la matriz: "))
+    
+    continuar = False
+    columna_a_ordenar = 0
+    while continuar == False:
+        opcion = int(input("Ingrese la opcion: "))
         if 1 <= opcion <= len(opciones):
             columna_a_ordenar = opcion - 1
-            break
+            continuar = True
         else:
-            print("Opcion invalida, seleccione una de las disponibles")   
+            print("Opcion invalida.")
+            
     matriz.sort(key=lambda fila: fila[columna_a_ordenar])
     return matriz
+
+#Función para ordenar la lista de diccionarios de pacientes
+def ordenar_pacientes_dic(lista, encabezado):
+    claves = ["id", "dni", "nombre", "apellido", "telefono", "correo"]
+    
+    print("Ingrese la opcion por la cual ordenar los pacientes: ")
+    for i in range(len(encabezado)):
+        print(f"{i + 1} - {encabezado[i]}")
+    
+    # Bandera para no utilizar break
+    opcion_valida = False
+    clave_elegida = ""
+    
+    while opcion_valida == False:
+        opcion = int(input("Seleccione una opción: "))
+        
+        if 1 <= opcion <= len(claves):
+            clave_elegida = claves[opcion - 1]
+            opcion_valida = True
+        else:
+            print("Opción inválida. Intente nuevamente.")
+
+    lista.sort(key=lambda p: p[clave_elegida])
+    return lista
 
 def mostrar_matriz(matriz):
     filas = len(matriz)
@@ -37,7 +65,14 @@ def mostrar_matriz(matriz):
             print(f'{matriz[fila][columna]:^15}',end="\t")
         print()
 
-def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos,id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos):
+#Función para mostrar la lista de diccionarios de Pacientes
+def mostrar_pacientes(lista):
+        print('-'*115)
+        for p in lista:
+            print(f"{p['id']:^15}\t{p['dni']:^15}\t{p['nombre']:^15}\t{p['apellido']:^15}\t{p['telefono']:^15}\t{p['correo']:^15}")
+
+
+def menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos,id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos):
     while True:
         while True:
             opciones = 5 
@@ -92,20 +127,20 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                     break # No sale del programa, vuelve al menú anterior
                     
                 elif opcion == "1": # Opción 1
-                    pacientes.agregar_paciente(matriz_pacientes, id_contador_pacientes)
+                    pacientes.agregar_paciente(lista_pacientes, id_contador_pacientes)
                     id_contador_pacientes += 1
                     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
-                    mostrar_matriz(matriz_pacientes)
+                    mostrar_pacientes(lista_pacientes)
                     
                 elif opcion == "2": #Opción 2
-                    pacientes.eliminar_paciente(matriz_pacientes)
+                    pacientes.eliminar_paciente(lista_pacientes)
                     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
-                    mostrar_matriz(matriz_pacientes)
+                    mostrar_pacientes(lista_pacientes)
                     
                 elif opcion == "3": #Opción 3
-                    pacientes.modificar_paciente(matriz_pacientes)
+                    pacientes.modificar_paciente(lista_pacientes)
                     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
-                    mostrar_matriz(matriz_pacientes)
+                    mostrar_pacientes(lista_pacientes)
                     
         elif opcion == "2": #OPCIÓN 2
             while True:
@@ -220,17 +255,17 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                     break # No salimos del programa, volvemos al menú anterior
                 
                 elif opcion == "1":
-                    turnos.agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, id_contador_turnos,matriz_disponibilidad)
+                    turnos.agregar_turno(matriz_turnos, lista_pacientes, matriz_doctores, id_contador_turnos,matriz_disponibilidad)
                     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
                     mostrar_matriz(matriz_turnos)
                     
                 elif opcion == "2":
-                    turnos.eliminar_turno(matriz_pacientes, matriz_turnos)
+                    turnos.eliminar_turno(lista_pacientes, matriz_turnos)
                     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
                     mostrar_matriz(matriz_turnos)
 
                 elif opcion == "3":
-                    turnos.modificar_turno(matriz_turnos, matriz_doctores, matriz_pacientes, matriz_disponibilidad)
+                    turnos.modificar_turno(matriz_turnos, matriz_doctores, lista_pacientes, matriz_disponibilidad)
                     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
                     mostrar_matriz(matriz_turnos)
 
@@ -263,9 +298,9 @@ def menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz
                     break
         
                 elif opcion == "1":
-                    matriz_ordenada = ordenar_matriz(matriz_pacientes,encabezados_pacientes)
+                    lista_ordenada = ordenar_pacientes_dic(lista_pacientes, encabezados_pacientes)
                     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
-                    mostrar_matriz(matriz_ordenada)
+                    mostrar_pacientes(lista_ordenada)
                     break
 
                 elif opcion == "2":
@@ -301,25 +336,32 @@ def main():
 
 
     print("\n LISTA DE DICCIONARIOS: PACIENTES \n")
+    
     lista_pacientes = []
-    dni_paciente = ["12345678", "87654321", "56781234", "43215678"]
+    dni_paciente = [12345678, 87654321, 56781234, 43215678]
     nombre_paciente = ["Jose", "Ivana", "Mateo", "Evelyn"]
     apellido_paciente = ["Sanchez", "Cervera", "Lopez", "Sanchez"]
     telefono_paciente = ["1234567890", "0987654321", "1234509876", "6789012345"]
     correo_paciente = ["josesan@gmail.com", "ivanacer@gmail.com", "mateolo@gmail.com", "evelynsan@gmail.com"]
+
     id_contador_pacientes = 0
     for i in range(4):
+        id_contador_pacientes += 1
+
+        # Todo este bloque ahora está DENTRO del for
         paciente = {
-        "id": id_contador_pacientes,
-        "dni": dni_paciente[i],
-        "nombre": nombre_paciente[i],
-        "apellido": apellido_paciente[i],
-        "telefono": telefono_paciente[i],
-        "correo": correo_paciente[i]
-    }
-    lista_pacientes.append(paciente)
-    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^18}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^20}')
-    mostrar_matriz(matriz_pacientes)
+            "id": id_contador_pacientes,
+            "dni": dni_paciente[i],
+            "nombre": nombre_paciente[i],
+            "apellido": apellido_paciente[i],
+            "telefono": telefono_paciente[i],
+            "correo": correo_paciente[i]
+        }
+        # El append también debe estar adentro para guardar cada ficha
+        lista_pacientes.append(paciente)
+
+    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
+    mostrar_pacientes(lista_pacientes)
 
 
     print("\n MATRIZ DOCTORES \n")
@@ -388,6 +430,6 @@ def main():
     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
     mostrar_matriz(matriz_turnos)
 
-    menu_principal(matriz_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos, id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos)
+    menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos, id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos)
 
 main()

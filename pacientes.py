@@ -30,21 +30,28 @@ def agregar_paciente(lista, contador):
 
 def eliminar_paciente(lista):
     dni_buscador = int(input("Ingrese el DNI a eliminar: "))
+
+    indice_encontrado = -1
     for i in range(len(lista)):
-        if lista[i]["dni"] == dni_buscador:
-            lista.pop(i)
-            print("\nPaciente eliminado correctamente.\n")
-            return
-    print("\nNo se encontró el DNI\n")
+        if int(lista[i]["dni"]) == dni_buscador:
+            indice_encontrado = i
+
+    if indice_encontrado != -1:
+        lista.pop(indice_encontrado)
+        print("Paciente eliminado correctamente.")
+    else:
+        print("No se encontró ningún paciente con ese DNI.")
 
 def modificar_paciente(lista):
     dni_buscador = int(input("Ingrese el DNI del paciente que desea modificar datos: "))
     while dni_buscador < 10000000 or dni_buscador > 99999999:
         print("Dato incorrecto")
         dni_buscador = int(input("DNI: "))
-    
+
+    encontrado = False
     for paciente in lista:
-        if paciente["dni"] == dni_buscador:
+        if int(paciente["dni"]) == dni_buscador:
+            encontrado = True
             print(f"Modificando a: {paciente['nombre']} {paciente['apellido']}")
 
             nuevo_nombre = input("Ingrese el nuevo nombre: ").upper()
@@ -52,7 +59,7 @@ def modificar_paciente(lista):
             nuevo_telefono = int(input("Ingrese el nuevo número de teléfono: "))
             while nuevo_telefono < 1000000000 or nuevo_telefono > 9999999999:
                 print("Dato incorrecto")
-                nuevo_telefono = int(input("Telefono: "))
+                nuevo_telefono = int(input("Ingrese el nuevo teléfono (10 dígitos): "))
             
             nuevo_correo = input("Ingrese el correo: ").upper()
             
@@ -62,6 +69,7 @@ def modificar_paciente(lista):
             paciente["telefono"] = nuevo_telefono
             paciente["correo"] = nuevo_correo
 
-            print("\nPaciente modificado correctamente!\n")
-            return
-    print("El paciente no fue encontrado.")
+            print("\nPaciente modificado correctamente.\n")
+
+    if encontrado == False:
+        print("El paciente no fue encontrado.")
