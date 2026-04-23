@@ -13,9 +13,10 @@ import usuarios
 # FUNCIONES
 #----------------------------------------------------------------------------------------------
 
+# Permite al usuario elegir una columna de una matriz y la ordena de forma ascendente usando una función lambda.
 def ordenar_matriz(matriz,encabezado):
     opciones = encabezado
-    print("Ingrese la opcion por la cual ordenar la matriz: ")
+    print("Ingrese la opción por la cual ordenar la matriz: ")
     for i in range(len(opciones)):
         print(i + 1, "-", opciones[i])
     
@@ -27,16 +28,16 @@ def ordenar_matriz(matriz,encabezado):
             columna_a_ordenar = opcion - 1
             continuar = True
         else:
-            print("Opcion invalida.")
+            print("Opcion inválida.")
             
     matriz.sort(key=lambda fila: fila[columna_a_ordenar])
     return matriz
 
-#Función para ordenar la lista de diccionarios de pacientes
+# Ordena la lista de diccionarios de pacientes según la clave elegida (ID, DNI, Nombre, etc.) por el usuario.
 def ordenar_pacientes_dic(lista, encabezado):
     claves = ["id", "dni", "nombre", "apellido", "telefono", "correo"]
     
-    print("Ingrese la opcion por la cual ordenar los pacientes: ")
+    print("Ingrese la opción por la cual ordenar los pacientes: ")
     for i in range(len(encabezado)):
         print(f"{i + 1} - {encabezado[i]}")
     
@@ -56,6 +57,7 @@ def ordenar_pacientes_dic(lista, encabezado):
     lista.sort(key=lambda p: p[clave_elegida])
     return lista
 
+# Recorre y muestra en consola cualquier matriz de datos con un formato de columnas alineadas.
 def mostrar_matriz(matriz):
     filas = len(matriz)
     columnas = len(matriz[0])
@@ -65,13 +67,13 @@ def mostrar_matriz(matriz):
             print(f'{matriz[fila][columna]:^15}',end="\t")
         print()
 
-#Función para mostrar la lista de diccionarios de Pacientes
-def mostrar_pacientes(lista):
+# Muestra la lista de diccionarios de pacientes con un formato tabular específico, accediendo a cada campo por su clave.
+def mostrar_pacientes(lista_pacientes):
         print('-'*115)
-        for p in lista:
+        for p in lista_pacientes:
             print(f"{p['id']:^15}\t{p['dni']:^15}\t{p['nombre']:^15}\t{p['apellido']:^15}\t{p['telefono']:^15}\t{p['correo']:^15}")
 
-
+# Punto central del programa que gestiona la navegación entre los submenús de Pacientes, Doctores, Disponibilidad, Turnos y Ordenamiento.
 def menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos,id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos):
     while True:
         while True:
@@ -325,7 +327,7 @@ def menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_
 #----------------------------------------------------------------------------------------------
 # CUERPO PRINCIPAL
 #----------------------------------------------------------------------------------------------
-
+# Función principal que inicializa los datos de ejemplo, configura los encabezados y lanza la ejecución del programa.
 def main():
     encabezados_usuarios = ['Contraseña', 'Nombre de Usuario', 'Rol']
     encabezados_pacientes = ['ID Paciente', 'DNI', 'Nombre', 'Apellido', 'Telefono', 'Correo']
@@ -348,7 +350,6 @@ def main():
     for i in range(4):
         id_contador_pacientes += 1
 
-        # Todo este bloque ahora está DENTRO del for
         paciente = {
             "id": id_contador_pacientes,
             "dni": dni_paciente[i],
@@ -357,7 +358,6 @@ def main():
             "telefono": telefono_paciente[i],
             "correo": correo_paciente[i]
         }
-        # El append también debe estar adentro para guardar cada ficha
         lista_pacientes.append(paciente)
 
     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')

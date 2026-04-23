@@ -1,16 +1,7 @@
 # Modulo
 #doctores.py
 
-"""
-FUNCIÓN AGREGAR DOCTOR
-Agrega un médico a la lista realizando las siguientes validaciones:
-1. Matrícula: Debe ser de 5 dígitos y no estar repetida.
-2. Teléfono: Debe tener exactamente 10 dígitos.
-3. Especialidad: Se elige mediante un menú numérico predefinido.
-4. Estado: Solo acepta 'S' (Activo) o 'N' (Inactivo).
-Al finalizar, guarda los datos en la matriz y actualiza el contador.
-"""
-
+# Valida matrícula única, datos de contacto y especialidad para sumar un nuevo doctor.
 def agregar_doctor(matriz, contador):
     
     matricula = int(input("Ingrese el número de matricula: "))
@@ -60,13 +51,7 @@ def agregar_doctor(matriz, contador):
         print("\nDatos agregados con éxito!\n")
     return contador
 
-"""
-FUNCIÓN ELIMINAR DOCTOR
-Busca un doctor por su matrícula y lo borra de la lista.
-Si encuentra el número, elimina la fila completa de la matriz.
-Si no lo encuentra, avisa que la matrícula no existe.
-"""
-
+# Elimina la fila correspondiente al doctor tras verificar su número de matrícula.
 def eliminar_doctor(matriz):
     matricula_buscada = int(input("Ingrese la matricula a eliminar: "))
     
@@ -77,15 +62,7 @@ def eliminar_doctor(matriz):
             return
     print("\nNo se encontró la matricula\n")
 
-"""
-FUNCIÓN MODIFICAR DOCTOR
-Permite editar los datos de un doctor ya registrado:
-1. Localiza al doctor mediante su matrícula (5 dígitos).
-2. Abre un menú interactivo para elegir qué cambiar: Nombre, Apellido, Teléfono, Especialidad o Estado (Activo/Inactivo).
-3. Valida que los nuevos datos ingresados sean correctos.
-4. Permite realizar múltiples cambios hasta que se elige "Terminar edición".
-"""
-
+# Permite editar campos individuales de un doctor mediante un menú de opciones.
 def modificar_doctor(matriz):
     matricula_buscada = int(input("Ingrese la matricula del doctor que desea modificar: "))
     while matricula_buscada < 10000 or matricula_buscada > 99999:

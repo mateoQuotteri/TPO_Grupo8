@@ -1,6 +1,7 @@
 #Módulo
 #pacientes.py
 
+# Solicita datos, valida el formato y añade un nuevo paciente a la lista
 def agregar_paciente(lista, contador):
     dni = int(input("Ingrese el DNI: "))
     while dni < 10000000 or dni > 99999999:
@@ -28,6 +29,7 @@ def agregar_paciente(lista, contador):
     lista.append(nuevo_paciente)
     print("\nDatos agregados con éxito!\n")
 
+# Busca un paciente por DNI y lo elimina de la lista si es encontrado
 def eliminar_paciente(lista):
     dni_buscador = int(input("Ingrese el DNI a eliminar: "))
 
@@ -42,6 +44,7 @@ def eliminar_paciente(lista):
     else:
         print("No se encontró ningún paciente con ese DNI.")
 
+# Busca un paciente por DNI y permite actualizar sus datos personales
 def modificar_paciente(lista):
     dni_buscador = int(input("Ingrese el DNI del paciente que desea modificar datos: "))
     while dni_buscador < 10000000 or dni_buscador > 99999999:

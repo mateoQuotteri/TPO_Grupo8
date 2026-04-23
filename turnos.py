@@ -4,13 +4,12 @@
 # Usamos datetime para convertir días de la semana a fechas concretas al mostrar disponibilidades
 from datetime import date, timedelta
 
-
-def buscarDni(matriz, dni_buscado):
-    for fila in matriz[0:]:
-        if int(fila[1]) == dni_buscado:
+# Verifica si un DNI existe dentro de la matriz de pacientes.
+def buscarDni(lista_pacientes, dni_buscado):
+    for paciente in lista_pacientes:
+        if int(paciente["dni"]) == dni_buscado:
             return True
     return False
-
 
 # Convierte un nombre de día de la semana (ej: "LUNES") a la próxima fecha concreta (ej: "21/04/2026")
 # Usa la librería datetime para calcular cuántos días faltan hasta ese día de la semana
@@ -28,9 +27,9 @@ def proximo_dia_semana(nombre_dia):
     if dias_hasta == 0:
         dias_hasta = 7  
     proxima = hoy + timedelta(days=dias_hasta)
-    return proxima.strftime("%d/%m/%Y")  # Devolvemos la fecha en formato correcot
+    return proxima.strftime("%d/%m/%Y")  # Devolvemos la fecha en formato correcto.
 
-
+# Busca y devuelve el nombre completo de un médico utilizando su número de matrícula.
 def buscarNombreDoctor(matriz_doctores, matricula):
 
     for fila in matriz_doctores:
@@ -38,20 +37,22 @@ def buscarNombreDoctor(matriz_doctores, matricula):
             return f"{fila[2]} {fila[3]}"
     return "Dr. o Dra. desconocid@"  
 
-
+# Filtra y muestra los médicos activos que pertenecen a una especialidad específica.
 def buscarDoctorPorEspecialidad(matriz_doctores, especialidad_seleccionada):
     doctores_encontrados = []
     for fila in matriz_doctores:
         if fila[5] == especialidad_seleccionada and fila[6] == "S":
             doctores_encontrados.append(fila)
+
+    # sorted con lambda: doctores ordenados alfabeticamente por apellido
+    doctores_ordenados = sorted(doctores_encontrados, key=lambda doc: doc[3])
+    
     print(f"Médicos disponibles en:  {especialidad_seleccionada}")
-    print("0 - Mostrar todos los turnos disponibles.")
-    for i in range(len(doctores_encontrados)):
-        
-        print(f"{i+1} - Matrícula: {doctores_encontrados[i][1]} | {doctores_encontrados[i][2]} {doctores_encontrados[i][3]}")
-    return doctores_encontrados
+    for i in range(len(doctores_ordenados)):
+        print(f"{i+1} - Matrícula: {doctores_ordenados[i][1]} | {doctores_ordenados[i][2]} {doctores_ordenados[i][3]}")
+    return doctores_ordenados
 
-
+# Retorna la matrícula del médico elegido o una lista de matrículas si se seleccionan todos los de la especialidad.
 def doctor_seleccionado(especialistas, seleccion):
     if seleccion == 0:
         # map con lambda - extrae la matrícula de cada especialista de la especialidad elegida por usuario
@@ -60,7 +61,7 @@ def doctor_seleccionado(especialistas, seleccion):
         matricula = especialistas[seleccion - 1][1]
     return matricula
 
-
+# Genera, filtra y muestra los horarios libres de un médico comparando su disponibilidad con los turnos ya reservados.
 def turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos, especialidad, matriz_doctores):
     # filter con lambda: filtra disponibilidades del doctor puntual o de todos los de la especialidad seleccionada
     if isinstance(matricula, list):
@@ -110,15 +111,15 @@ def turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos, especial
     slot_elegido = slots[seleccion - 1]
     return [slot_elegido[1], str(slot_elegido[2]), slot_elegido[0], especialidad]
 
-
-def agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, contador, matriz_disponibilidad):
+# Gestiona el flujo completo para registrar un nuevo turno: valida el paciente, elige especialidad, médico y horario.
+def agregar_turno(matriz_turnos, lista_pacientes, matriz_doctores, contador, matriz_disponibilidad):
     contador += 1
 
     dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
     if dni == 0:
         return
 
-    while not buscarDni(matriz_pacientes, dni):
+    while not buscarDni(lista_pacientes, dni):
         print("Dato incorrecto o DNI no registrado.")
         dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
         if dni == 0:
@@ -161,15 +162,13 @@ def agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, contador, ma
 
         break  
 
+# Permite al usuario visualizar los turnos de un paciente por DNI y dar de baja el que seleccione del listado.
+def eliminar_turno(lista_pacientes,matriz_turnos):
 
-def eliminar_turno(matriz_pacientes,matriz_turnos):
-    '''
-    Busca los turnos asociados a un DNI indicado por el usuario y permite seleccionar de un listado el turno a eliminar.
-    '''
     dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
     if dni == 0:
         return
-    while not buscarDni(matriz_pacientes, dni):
+    while not buscarDni(lista_pacientes, dni):
         print("Dato incorrecto o DNI no registrado.")
         dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
         if dni == 0:
@@ -201,14 +200,13 @@ def eliminar_turno(matriz_pacientes,matriz_turnos):
     matriz_turnos.pop(indice_eliminado)
     print("\nTurno eliminado con éxito.\n")
 
-def modificar_turno(matriz_turnos, matriz_doctores,matriz_pacientes, matriz_disponibilidad):
-    '''
-    Busca los turnos asociados a DNI ingresado por el usuario y permite seleccionar del listado un turno a modificar, permite la selección de otro turno dentro de la misma especialidad.
-    '''
+# Permite cambiar la fecha, hora o médico de un turno ya existente manteniendo la misma especialidad original.
+def modificar_turno(matriz_turnos, matriz_doctores, lista_pacientes, matriz_disponibilidad):
+
     dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
     if dni == 0:
         return
-    while not buscarDni(matriz_pacientes, dni):
+    while not buscarDni(lista_pacientes, dni):
         print("Dato incorrecto o DNI no registrado.")
         dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
         if dni == 0:
