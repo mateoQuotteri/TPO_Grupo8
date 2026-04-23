@@ -300,8 +300,8 @@ def main():
 
 
 
-    print("\n MATRIZ PACIENTES \n")
-    matriz_pacientes = []
+    print("\n LISTA DE DICCIONARIOS: PACIENTES \n")
+    lista_pacientes = []
     dni_paciente = ["12345678", "87654321", "56781234", "43215678"]
     nombre_paciente = ["Jose", "Ivana", "Mateo", "Evelyn"]
     apellido_paciente = ["Sanchez", "Cervera", "Lopez", "Sanchez"]
@@ -309,9 +309,15 @@ def main():
     correo_paciente = ["josesan@gmail.com", "ivanacer@gmail.com", "mateolo@gmail.com", "evelynsan@gmail.com"]
     id_contador_pacientes = 0
     for i in range(4):
-        id_contador_pacientes += 1
-        fila_pacientes = [id_contador_pacientes, dni_paciente[i], nombre_paciente[i], apellido_paciente[i], telefono_paciente[i], correo_paciente[i]]
-        matriz_pacientes.append(fila_pacientes)
+        paciente = {
+        "id": id_contador_pacientes,
+        "dni": dni_paciente[i],
+        "nombre": nombre_paciente[i],
+        "apellido": apellido_paciente[i],
+        "telefono": telefono_paciente[i],
+        "correo": correo_paciente[i]
+    }
+    lista_pacientes.append(paciente)
     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^18}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^20}')
     mostrar_matriz(matriz_pacientes)
 
@@ -342,6 +348,7 @@ def main():
                         "Pediatría", "Dermatología", "Traumatología", "Odontología", "Cardiología", "Ginecología",
                         "Clínica Médica", "Pediatría", "Oftalmología", "Dermatología", "Traumatología",
                         "Odontología", "Cardiología", "Ginecología", "Clínica Médica", "Pediatría"]
+    
     # Usamos mayúsculas para que el formato de las especialidades sea uniforme, ya que al modificar un doctor se le pide al usuario que ingrese la especialidad en mayúscula, y así evitamos que haya especialidades repetidas por el mismo nombre pero con diferente formato (
     # USAMOS LAMBDA PARA ESTO
     especialidad_doctor = list(map(lambda e: e.upper(), especialidad_doctor))
