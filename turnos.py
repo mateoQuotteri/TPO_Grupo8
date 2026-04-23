@@ -18,7 +18,7 @@ def proximo_dia_semana(nombre_dia):
     dias = {
         "LUNES": 0, 
         "MARTES": 1, "MIÉRCOLES": 2, "MIERCOLES": 2,
-        "JUEVES": 3, "VIERNES": 4,  "SABADO": 5, "DOMINGO": 6
+        "JUEVES": 3, "VIERNES": 4,  "SABADO": 5, "SÁBADO": 5, "DOMINGO": 6
     }
     hoy = date.today()
     objetivo = dias.get(nombre_dia.upper())
@@ -162,92 +162,101 @@ def agregar_turno(matriz_turnos, matriz_pacientes, matriz_doctores, contador, ma
         break  
 
 
-def eliminar_turno(matriz):
-    dni_buscado = int(input("Ingrese el DNI asociado al turno a eliminar: "))
-    while dni_buscado < 10000000 or dni_buscado > 99999999:
-        print("Dato incorrecto")
-        dni_buscado = int(input("Ingrese el DNI asociado al turno a eliminar: "))
-
-    cantidad_turnos = []
-    contador = 1
-
-    for i in range(1, len(matriz)):
-        if int(matriz[i][3]) == dni_buscado:
-            print(contador, "-", matriz[i])
-            cantidad_turnos.append(i)
-            contador += 1
-
-    if len(cantidad_turnos) == 0:
-        print("El DNI no tiene turnos asociados")
+def eliminar_turno(matriz_pacientes,matriz_turnos):
+    '''
+    Busca los turnos asociados a un DNI indicado por el usuario y permite seleccionar de un listado el turno a eliminar.
+    '''
+    dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
+    if dni == 0:
         return
+    while not buscarDni(matriz_pacientes, dni):
+        print("Dato incorrecto o DNI no registrado.")
+        dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
+        if dni == 0:
+            return
 
-    turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar: "))
-    while turno_para_eliminar < 1 or turno_para_eliminar > len(cantidad_turnos):
-        print("Opcion Invalida")
-        turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar: "))
-
-    indice_eliminado = cantidad_turnos[turno_para_eliminar - 1]
-    matriz.pop(indice_eliminado)
-    print("\nTurno eliminado con éxito!\n")
-
-def modificar_turno(matriz_turnos, matriz_doctores):
-    dni_buscado = int(input("Ingrese el DNI asociado al turno a modificar: "))
-    while dni_buscado < 10000000 or dni_buscado > 99999999:
-        print("Dato incorrecto")
-        dni_buscado = int(input("Ingrese el DNI asociado al turno a modificar: "))
     cantidad_turnos = []
     contador = 1
-    for i in range(1, len(matriz_turnos)):
-        if int(matriz_turnos[i][3]) == dni_buscado:
+
+    for i in range(len(matriz_turnos)):
+        if int(matriz_turnos[i][3]) == dni:
             print(contador, "-", matriz_turnos[i])
             cantidad_turnos.append(i)
             contador += 1
+
     if len(cantidad_turnos) == 0:
-        print("El DNI no tiene turnos asociados")
+        print("El DNI no tiene turnos asociados.")
         return
-    turno_para_modificar = int(input("Ingrese el numero de turno a modificar: "))
-    while turno_para_modificar < 1 or turno_para_modificar > len(cantidad_turnos):
+
+    turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar o 0 para salir: "))
+    if turno_para_eliminar == 0:
+        return
+    while turno_para_eliminar > len(cantidad_turnos):
         print("Opcion Invalida")
-        turno_para_modificar = int(input("Ingrese el numero de turno a modificar: "))
-    indice_modificado = cantidad_turnos[turno_para_modificar - 1]
-    for i in range(1, len(matriz_turnos)):
-        if int(matriz_turnos[i][3]) == dni_buscado:
-            dia = int(input("Ingrese el dia (1 al 31): "))
-            while dia > 31 or dia < 1:
-                print("Ingrese un dia valido")
-                dia = int(input("Ingrese el dia (1 al 31): "))
-            mes = int(input("Ingrese el mes (1 al 12): "))
-            while mes > 12 or mes < 1:
-                print("Ingrese un mes valido: ")
-                mes = int(input("Ingrese el mes (1 al 12): "))
-            anio = int(input("Ingrese el año: "))
-            while anio < 2026:
-                print("Ingrese un año valido")
-                anio = int(input("Ingrese el año: "))
-            hora_turno = int(input("Ingrese la hora del turno: "))
-            while hora_turno < 1 or hora_turno > 12:
-                print("Dato incorrecto")
-                hora_turno = int(input("Ingrese la hora del turno: "))
-            contador_doctores = 1
-            print("\nLISTA DE DOCTORES\n")
-            for fila in matriz_doctores[1:]:
-                print(f"{contador_doctores}. Matricula: {fila[1]} - Especialidad: {fila[5]}")
-                contador_doctores += 1
-            opcion_doctores = int(input("\n\nSeleccione al doctor\n"))
-            while opcion_doctores < 1 or opcion_doctores > len(matriz_doctores)-1:
-                print("Opcion Invalida")
-                opcion_doctores = int(input("\n\nSeleccione al doctor\n"))
-            opcion_elegida_doctores = matriz_doctores[opcion_doctores]
-            fecha = str(dia) + '/' + str(mes) + '/' + str(anio)
-            hora = str(hora_turno)
-            doctor = opcion_elegida_doctores[1]
-            duplicado = False
-            for fila in matriz_turnos[1:]:
-                if fila[1] == fecha and fila[2] == hora and fila[5] == doctor:
-                    duplicado = True
-                    break
-            if duplicado:
-                print("Error: el doctor ya tiene un turno en esa fecha y hora")
-            else:
-                matriz_turnos[indice_modificado] = [contador - 1, fecha, hora, dni_buscado, opcion_elegida_doctores[5], doctor] #aca me falta arreglar que mantenga el indice del turno modificado
-                print("\nDatos modificados con exito\n")
+        turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar o 0 para salir: "))
+        if turno_para_eliminar ==0 :
+            return
+
+    indice_eliminado = cantidad_turnos[turno_para_eliminar - 1]
+    matriz_turnos.pop(indice_eliminado)
+    print("\nTurno eliminado con éxito.\n")
+
+def modificar_turno(matriz_turnos, matriz_doctores,matriz_pacientes, matriz_disponibilidad):
+    '''
+    Busca los turnos asociados a DNI ingresado por el usuario y permite seleccionar del listado un turno a modificar, permite la selección de otro turno dentro de la misma especialidad.
+    '''
+    dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
+    if dni == 0:
+        return
+    while not buscarDni(matriz_pacientes, dni):
+        print("Dato incorrecto o DNI no registrado.")
+        dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
+        if dni == 0:
+            return
+
+    turnos_reservados = []
+    for i in range(len(matriz_turnos)):
+        if int(matriz_turnos[i][3]) == dni:
+            print(matriz_turnos[i])
+            turnos_reservados.append(matriz_turnos[i])
+    if len(turnos_reservados) == 0:
+        print("El DNI no tiene turnos asociados.")
+        return
+    print(f"LISTA TURONS RESERVADOS",turnos_reservados)
+    id_turno_a_modificar = int(input("Ingrese el numero de turno a modificar o 0 para volver: "))
+    if id_turno_a_modificar == 0:
+        return
+    while id_turno_a_modificar not in turnos_reservados[0]:
+        print("Opcion Invalida")
+        id_turno_a_modificar = int(input("Ingrese el numero de turno a modificar o 0 para volver: "))
+        if id_turno_a_modificar == 0:
+            return
+        
+    for x in range(len(turnos_reservados)):
+        if id_turno_a_modificar == turnos_reservados[x][0]:
+            print(turnos_reservados[x][0])
+            id_turno = turnos_reservados[x][0] -1 
+            print("ID TURNO ",id_turno)
+            especialidad=turnos_reservados[x][4]
+            turno_a_modificar=turnos_reservados[x]
+
+    especialistas = buscarDoctorPorEspecialidad(matriz_doctores, especialidad)
+
+    seleccion = int(input("Seleccione una opción: "))
+    while seleccion < 0 or seleccion > len(especialistas):
+        print("Opción inválida.")
+        seleccion = int(input("Seleccione una opción: "))
+
+    matricula = doctor_seleccionado(especialistas, seleccion)
+    
+    turno = turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos, turno_a_modificar[4], matriz_doctores)
+
+    if turno is not None and turno is not False:
+        matriz_turnos[id_turno][1] = turno[0]
+        matriz_turnos[id_turno][2] = turno[1]
+        matriz_turnos[id_turno][4] = turno[3]
+        print("\nTurno modificado con éxito.\n")
+    
+    return
+    
+    
