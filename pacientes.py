@@ -1,21 +1,57 @@
 #Módulo
 #pacientes.py
 
+import re
+
+# Valida que el nombre solo contenga letras y espacios NO permite números ni caracteres especiales
+def validar_nombre(nombre):
+    return bool(re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$', nombre)) and nombre.strip() != ""
+
+# Valida que el apellido solo permita letras y espacios
+def validar_apellido(apellido):
+    return bool(re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$', apellido)) and apellido.strip() != ""
+
+# El DNI debe tener exactamente 8 dígitos y no contenga letras
+def validar_dni(dni):
+    return bool(re.match(r'^\d{8}$', dni))
+
+# Telefono tenga exactamente 10 dígitos y no contenga letras
+def validar_telefono(telefono):
+    return bool(re.match(r'^\d{10}$', telefono))
+
+# Valida que el correo tenga formato válido La validacion : usuario@dominio.ext
+def validar_correo(correo):
+    return bool(re.match(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$', correo))
+
 # Solicita datos, valida el formato y añade un nuevo paciente a la lista
 def agregar_paciente(lista, contador):
-    dni = int(input("Ingrese el DNI: "))
-    while dni < 10000000 or dni > 99999999:
+    dni_str = input("Ingrese el DNI: ")
+    while not validar_dni(dni_str):
         print("Dato incorrecto")
-        dni = int(input("DNI: "))
-    
+        dni_str = input("DNI: ")
+    dni = int(dni_str)
+
     nombre = input("Ingrese el nombre: ").upper()
-    apellido = input("Ingrese el apellido: ").upper()
-    telefono = int(input("Ingrese el telefono: "))
-    while telefono < 1000000000 or telefono > 9999999999:
+    while not validar_nombre(nombre):
         print("Dato incorrecto")
-        telefono = int(input("Telefono: "))
-    
-    correo = input("Ingrese el correo: ").upper()
+        nombre = input("Nombre: ").upper()
+
+    apellido = input("Ingrese el apellido: ").upper()
+    while not validar_apellido(apellido):
+        print("Dato incorrecto")
+        apellido = input("Apellido: ").upper()
+
+    telefono_str = input("Ingrese el telefono: ")
+    while not validar_telefono(telefono_str):
+        print("Dato incorrecto")
+        telefono_str = input("Telefono: ")
+    telefono = int(telefono_str)
+
+    correo = input("Ingrese el correo: ")
+    while not validar_correo(correo):
+        print("Dato incorrecto")
+        correo = input("Correo: ")
+    correo = correo.upper()
     
     nuevo_paciente = {
         "id": contador,
