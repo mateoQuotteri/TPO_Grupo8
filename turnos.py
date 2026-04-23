@@ -220,7 +220,7 @@ def modificar_turno(matriz_turnos, matriz_doctores, lista_pacientes, matriz_disp
     if len(turnos_reservados) == 0:
         print("El DNI no tiene turnos asociados.")
         return
-    print(f"LISTA TURONS RESERVADOS",turnos_reservados)
+    print(f"LISTA TURNOS RESERVADOS",turnos_reservados)
     id_turno_a_modificar = int(input("Ingrese el numero de turno a modificar o 0 para volver: "))
     if id_turno_a_modificar == 0:
         return
