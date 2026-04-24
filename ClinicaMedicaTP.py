@@ -95,37 +95,74 @@ def mostrar_pacientes(lista_pacientes):
         for p in lista_pacientes:
             print(f"{p['id']:^15}\t{p['dni']:^15}\t{p['nombre']:^15}\t{p['apellido']:^15}\t{p['telefono']:^15}\t{p['correo']:^15}")
 
-# Punto central del programa que gestiona la navegación entre los submenús de Pacientes, Doctores, Disponibilidad, Turnos y Ordenamiento.
-def menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos,id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos):
+# Punto central del programa que gestiona la navegación entre los submenús de Pacientes, Doctores, Disponibilidad, Turnos, Roles de Usuarios, Matricula del Medico y Ordenamiento.
+def menu_principal(rol, matricula_sesion, lista_pacientes, matriz_doctores, matriz_disponibilidad, matriz_turnos, encabezados_pacientes, encabezados_doctores, encabezados_disponibilidad, encabezados_turnos, id_contador_pacientes, id_contador_doctores, id_contador_disponibilidad, id_contador_turnos):
     while True:
         while True:
-            opciones = 6
             print()
             print("---------------------------")
-            print("MENÚ PRINCIPAL")
+            print(f"MENÚ PRINCIPAL - ROL: {rol}")
             print("---------------------------")
-            print("[1] ABM Pacientes.")
-            print("[2] ABM Doctores.")
-            print("[3] ABM Disponibilidad de Doctores.")
-            print("[4] ABM Turnos Médicos.")
-            print("[5] Ordenar Matrices.")
-            print("[6] Reporte de Especialidad.")
+            
+            # Opciones a mostrar y cuales son validas segun el ROL
+            if rol == "ADMINISTRATIVO":
+                print("[1] ABM Pacientes.")
+                print("[2] ABM Doctores.")
+                print("[3] ABM Disponibilidad de Doctores.")
+                print("[4] ABM Turnos Médicos.")
+                print("[5] Ordenar Matrices.")
+                print("[6] Reporte de Especialidad.")
+                opciones_validas = [str(i) for i in range(0, 7)] # 0 al 6
+            
+            elif rol == "RECEPCIONISTA":
+                print("[1] ABM Pacientes.")
+                print("[4] ABM Turnos Médicos.")
+                opciones_validas = ["0", "1", "4"]
+            
+            elif rol == "DOCTOR":
+                print("[3] Ver Disponibilidad de Doctores.")
+                print("[4] Ver mis Turnos Ocupados.")
+                opciones_validas = ["0", "3", "4"]
+
             print("---------------------------")
             print("[0] Salir del programa")
             print("---------------------------")
             print()
             
             opcion = input("Seleccione una opción: ").strip()
-            if opcion in [str(i) for i in range(0, opciones + 1)]:
+            
+            # Se valida que el usuario tenga permiso para esa opcion
+            if opcion in opciones_validas:
                 break
             else:
-                input("Opción inválida. Presione ENTER para volver a seleccionar.")
+                input("Opción inválida o no permitida para su rol. Presione ENTER.")
         print()
 
-        if opcion == "0": # Opción salir del programa
+        if opcion == "0": 
             exit()
             
-        elif opcion == "1": #OPCIÓN 1
+        # MEDICO (Solo lectura y filtrado)
+        if rol == "DOCTOR":
+            if opcion == "3":
+                print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
+                mostrar_matriz(matriz_disponibilidad)
+            elif opcion == "4":
+                print(f"\nTURNOS DE LA MATRÍCULA: {matricula_sesion}")
+                print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
+                encontrado = False
+                for fila in matriz_turnos:
+                    # Filtra la Matricula Doctor
+                    if str(fila[5]) == str(matricula_sesion):
+                        for valor in fila:
+                            print(f'{str(valor):^15}', end="\t")
+                        print()
+                        encontrado = True
+                if not encontrado:
+                    print("No posee turnos asignados.")
+            continue # El medico no puede entrar a los submenus de edicion
+
+        # ADMINISTRATIVO Y RECEPCIONISTA (Menu original)
+        if opcion == "1":
             while True:
                 while True:
                     opciones = 3
@@ -483,6 +520,31 @@ def main():
     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
     mostrar_matriz(matriz_turnos)
 
-    menu_principal(lista_pacientes,matriz_doctores,matriz_disponibilidad,matriz_turnos,encabezados_pacientes,encabezados_doctores,encabezados_disponibilidad,encabezados_turnos, id_contador_pacientes, id_contador_doctores,id_contador_disponibilidad,id_contador_turnos)
+    # --- LOGIN ---
+    print("\n" + "="*35)
+    print("  INICIO DE SESIÓN - CLÍNICA")
+    print("="*35)
+    
+    usuario_ingresado = input("Usuario: ").lower()
+    clave_ingresada = input("Contraseña: ")
 
+    if usuario_ingresado in usuarios.usuarios:
+        datos_user = usuarios.usuarios[usuario_ingresado]
+        if datos_user[0] == clave_ingresada:
+            rol = datos_user[2] # "ADMINISTRATIVO", "RECEPCIONISTA" o "DOCTOR"
+            
+            matricula_sesion = None
+            
+            # Se ingresa la matricula manualmente
+            if rol == "DOCTOR":
+                print("\n--- VALIDACIÓN DE IDENTIDAD MÉDICA ---")
+                matricula_sesion = input("Por favor, ingrese su número de matrícula: ")
+            
+            print(f"\nBienvenido/a {datos_user[1]}")
+            
+            menu_principal(rol, matricula_sesion, lista_pacientes, matriz_doctores, matriz_disponibilidad, matriz_turnos, encabezados_pacientes, encabezados_doctores, encabezados_disponibilidad, encabezados_turnos, id_contador_pacientes, id_contador_doctores, id_contador_disponibilidad, id_contador_turnos)
+        else:
+            print("\nError: Contraseña incorrecta.")
+    else:
+        print("\nError: El usuario no existe.")
 main()
