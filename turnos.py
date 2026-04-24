@@ -111,6 +111,13 @@ def turnos_disponibles(matricula, matriz_disponibilidad, matriz_turnos, especial
     slot_elegido = slots[seleccion - 1]
     return [slot_elegido[1], str(slot_elegido[2]), slot_elegido[0], especialidad]
 
+# Verifica si un turno para esa fecha, hora y médico ya está tomado.
+def turno_ocupado(matriz_turnos, fecha, hora, matricula):
+    for turno in matriz_turnos:
+        if turno[1] == fecha and turno[2] == str(hora) and turno[5] == matricula:
+            return True
+    return False
+
 # Gestiona el flujo completo para registrar un nuevo turno: valida el paciente, elige especialidad, médico y horario.
 def agregar_turno(matriz_turnos, lista_pacientes, matriz_doctores, contador, matriz_disponibilidad):
     contador += 1
@@ -155,10 +162,13 @@ def agregar_turno(matriz_turnos, lista_pacientes, matriz_doctores, contador, mat
             continue
 
         if turno is not None and turno is not False:
-            nuevo_id = len(matriz_turnos) + 1
-            nueva_fila = [nuevo_id, turno[0], turno[1], str(dni), turno[3], turno[2]]
-            matriz_turnos.append(nueva_fila)
-            print("\nTurno agregado con éxito.\n")
+            if turno_ocupado(matriz_turnos, turno[0], turno[1], turno[2]):
+                print("Que pena :( Este turno ya fue tomado por otro paciente.")
+            else:
+                nuevo_id = len(matriz_turnos) + 1
+                nueva_fila = [nuevo_id, turno[0], turno[1], str(dni), turno[3], turno[2]]
+                matriz_turnos.append(nueva_fila)
+                print("\nTurno agregado con éxito.\n")
 
         break  
 
