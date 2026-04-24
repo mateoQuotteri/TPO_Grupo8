@@ -430,14 +430,22 @@ def main():
     print("\n LISTA DE DICCIONARIOS: PACIENTES \n")
     
     lista_pacientes = []
-    dni_paciente = [12345678, 87654321, 56781234, 43215678]
-    nombre_paciente = ["Jose", "Ivana", "Mateo", "Evelyn"]
-    apellido_paciente = ["Sanchez", "Cervera", "Lopez", "Sanchez"]
-    telefono_paciente = ["1234567890", "0987654321", "1234509876", "6789012345"]
-    correo_paciente = ["josesan@gmail.com", "ivanacer@gmail.com", "mateolo@gmail.com", "evelynsan@gmail.com"]
-
+    dni_paciente = ["26486592","35874126","41256987","28974135","33659874","40123789","27894561","38965412","34561278","29876543",
+                    "36781245","42315678","31245789","27654389","39871256","42135698","30547891","28765412","36412578","40987612"]
+    nombre_paciente = ["Miguel","Laura","Carlos","Ana","Diego","Sofia","Javier","Lucia","Martin","Valentina","Andres",
+                       "Camila","Fernando","Paula","Ricardo","Marina","Gabriel","Florencia","Nicolas","Julieta"]
+    apellido_paciente = ["Martinez","Gomez","Lopez","Fernandez","Perez","Ramirez","Torres","Flores","Diaz","Castro",
+                         "Rojas","Silva","Ortiz","Morales","Suarez","Vega","Herrera","Mendez","Cabrera","Reyes"]
+    telefono_paciente = ["1146329878","1189456721","1178345620","1167234598","1156123479","1145012367","1134901256",
+                         "1123890145","1112789034","1191678923","1180567812","1169456701","1158345690","1147234589",
+                         "1136123478","1125012367","1114901256","1193890145","1182789034","1171678923"]
+    correo_paciente = ["mmartinez24@gmail.com","lauragomez@gmail.com","carloslopez@gmail.com","anafernandez@gmail.com",
+                       "diegoperez@gmail.com","sofiaramirez@gmail.com","javiertorres@gmail.com","luciaflores@gmail.com",
+                       "martindiaz@gmail.com","valentinacastro@gmail.com","andresrojas@gmail.com","camilasilva@gmail.com",
+                       "fernandoortiz@gmail.com","paulamorales@gmail.com","ricardosuarez@gmail.com","marinavega@gmail.com",
+                       "gabrielherrera@gmail.com","florenciamendez@gmail.com","nicolascabrera@gmail.com","julietareyes@gmail.com"]
     id_contador_pacientes = 0
-    for i in range(4):
+    for i in range(len(dni_paciente)):
         id_contador_pacientes += 1
 
         paciente = {
@@ -456,37 +464,33 @@ def main():
 
     print("\n MATRIZ DOCTORES \n")
     matriz_doctores = []
-    matricula_doctor = ["12345", "67890", "54321", "09876",
-                        "11223", "22334", "33445", "44556", "55667", "66778",
-                        "77889", "88990", "99001", "10112", "12123",
-                        "13134", "14145", "15156", "16167", "17178"]
+    matricula_doctor = ["58321","67234","74512","83456","91234","67891","54321","45678","78901","89012","90123","81234",
+                        "72345","63456","54567","45679","36789","27890","18901","29012"]
 
-    nombre_doctor = ["Bruno", "Carmen", "Nadia", "Guada",
-                    "Lucas", "Martina", "Juan", "Sofia", "Diego", "Valentina",
-                    "Tomas", "Paula", "Agustin", "Florencia", "Mateo",
-                    "Camila", "Franco", "Lara", "Nicolas", "Julieta"]
+    nombre_doctor = ["Laura","Carlos","Ana","Diego","Sofia","Javier","Lucia","Martin","Valentina","Andres",
+                     "Camila","Fernando","Paula","Ricardo","Marina","Gabriel","Florencia","Nicolas","Julieta","Bruno"]
 
-    apellido_doctor = ["Gonzales", "Rivera", "Correa", "Smith",
-                    "Perez", "Lopez", "Gomez", "Fernandez", "Martinez", "Rodriguez",
-                    "Sanchez", "Ramirez", "Torres", "Acosta", "Benitez",
-                    "Herrera", "Castro", "Ortiz", "Vega", "Morales"]
 
-    telefono_doctor = ["3478125690", "1256903478", "0965213478", "8743561290",
-                    "3512345678", "3419876543", "3814567890", "2991234567", "2619876543", "3517654321",
-                    "2234567890", "1167894321", "3794561230", "2611237894", "3519998888",
-                    "2239871234", "2998887777", "2614445555", "3512223333", "1165554444"]
+    apellido_doctor = ["Gomez","Lopez","Fernandez","Perez","Ramirez","Torres","Flores","Diaz","Castro","Rojas",
+                       "Silva","Ortiz","Morales","Suarez","Vega","Herrera","Mendez","Cabrera","Reyes","Acosta"]
 
-    especialidad_doctor = ["Clínica Médica", "Oftalmología", "Cardiología", "Oncología",
-                        "Pediatría", "Dermatología", "Traumatología", "Odontología", "Cardiología", "Ginecología",
-                        "Clínica Médica", "Pediatría", "Oftalmología", "Dermatología", "Traumatología",
-                        "Odontología", "Cardiología", "Ginecología", "Clínica Médica", "Pediatría"]
+    telefono_doctor = ["1145678901","1156789012","1167890123","1178901234","1189012345","1190123456","1111234567",
+                       "1122345678","1133456789","1144567890","1155678901","1166789012","1177890123","1188901234",
+                       "1199012345","1110123456","1121234567","1132345678","1143456789","1154567890"]
+
+
+    especialidad_doctor = ["CLÍNICA MÉDICA","PEDIATRÍA","GINECOLOGÍA","CARDIOLOGÍA","OFTALMOLOGÍA","ODONTOLOGÍA",
+                           "DERMATOLOGÍA","TRAUMATOLOGÍA","CLÍNICA MÉDICA","PEDIATRÍA","GINECOLOGÍA","CARDIOLOGÍA",
+                           "OFTALMOLOGÍA","ODONTOLOGÍA","DERMATOLOGÍA","TRAUMATOLOGÍA","CLÍNICA MÉDICA","PEDIATRÍA","CARDIOLOGÍA","ODONTOLOGÍA"]
+
     
     # Usamos mayúsculas para que el formato de las especialidades sea uniforme, ya que al modificar un doctor se le pide al usuario que ingrese la especialidad en mayúscula, y así evitamos que haya especialidades repetidas por el mismo nombre pero con diferente formato (
     # USAMOS LAMBDA PARA ESTO
     especialidad_doctor = list(map(lambda e: e.upper(), especialidad_doctor))
-    activo_inactivo = ["S", "S", "S", "N","S","N","S","S","S","S","S","N","S","S","S","S","S","N","S","S"]
+    activo_inactivo = ["S","S","N","S","N","S","S","N","S","S","N","S","N","S","S","N","S","S","N","S"]
+
     id_contador_doctores = 0
-    for i in range(20):
+    for i in range(len(matricula_doctor)):
         id_contador_doctores += 1
         fila_doctores = [id_contador_doctores, matricula_doctor[i], nombre_doctor[i], apellido_doctor[i], telefono_doctor[i], especialidad_doctor[i], activo_inactivo[i]]
         matriz_doctores.append(fila_doctores)
@@ -495,10 +499,20 @@ def main():
 
     print("\n MATRIZ DISPONIBILIDAD \n")
     matriz_disponibilidad = []
-    dia_disponibilidad = ["LUNES", "LUNES", "JUEVES", "MIÉRCOLES"]
-    hora_inicio = ["8", "8", "8", "10"]
-    hora_fin = ["15", "17", "12", "19"]
-    matricula_doctor = ["12345", "67890", "54321", "09876"]
+    dia_disponibilidad = ["LUNES","MIERCOLES","MARTES","JUEVES","LUNES","VIERNES","MIERCOLES","JUEVES",
+                          "MARTES","VIERNES","LUNES","MIERCOLES","MARTES","JUEVES","LUNES","VIERNES",
+                          "MIERCOLES","JUEVES","MARTES","VIERNES","LUNES","MIERCOLES","MARTES","JUEVES",
+                          "LUNES","VIERNES","MARTES","MIERCOLES","JUEVES","VIERNES","LUNES","MIERCOLES",
+                          "MARTES","JUEVES","MIERCOLES","VIERNES","LUNES","JUEVES","MARTES","VIERNES"]
+    hora_inicio = ["8","13","9","10","8","12","9","14","10","8","13","8","9","13","8","14","10","8","9","13",
+                   "8","14","10","9","11","8","13","9","8","13","9","14","8","12","9","10","8","13","9","14"]
+    hora_fin = ["12","17","14","15","13","16","13","18","14","12","18","12","12","17","11","19","15","12","13",
+                "18","12","18","16","13","15","12","18","13","14","17","12","18","13","16","14","15","12","17","13","18"]
+    matricula_doctor =  ["58321","58321","67234","67234","74512","74512","83456","83456","91234","91234",
+                         "67891","67891","54321","54321","45678","45678","78901","78901","89012","89012",
+                         "90123","90123","81234","81234","72345","72345","63456","63456","54567","54567",
+                         "45679","45679","36789","36789","27890","27890","18901","18901","29012","29012"]
+
 
     id_contador_disponibilidad = 1
     for i in range (len(dia_disponibilidad)):
@@ -510,10 +524,15 @@ def main():
 
     print("\n MATRIZ TURNOS \n")
     matriz_turnos = []
-    fecha_turno = ["3/4/2026", "3/4/2026", "5/4/2026", "7/4/2026"]
-    hora_turno = ["10", "11", "9", "13"]
+    fecha_turno = ["27/04/2026","28/04/2026","29/04/2026","30/04/2026","02/05/2026",
+                   "04/05/2026","05/05/2026","06/05/2026","27/04/2026","28/04/2026",
+                   "29/04/2026","30/04/2026","02/05/2026","04/05/2026","05/05/2026",
+                   "06/05/2026","27/04/2026","28/04/2026","29/04/2026","30/04/2026"
+]
+    hora_turno = ["9","11","10","15","9","14","10","16","11","12","15","11","12","15","9","15","10","14","11","16"]
+
     id_contador_turnos = 0
-    for i in range(4):
+    for i in range(len(fecha_turno)):
         id_contador_turnos += 1
         fila_turnos = [id_contador_turnos, fecha_turno[i], hora_turno[i], dni_paciente[i], especialidad_doctor[i], matricula_doctor[i]]
         matriz_turnos.append(fila_turnos)
