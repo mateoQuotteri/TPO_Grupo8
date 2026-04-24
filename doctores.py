@@ -1,13 +1,6 @@
 # Modulo
 #doctores.py
 
-# Aplicación de conjuntos(sets)
-ESPECIALIDADES_PERMITIDAS = {
-    "CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA", 
-    "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", 
-    "DERMATOLOGÍA", "TRAUMATOLOGÍA"
-}
-
 # Valida matrícula única, datos de contacto y especialidad para sumar un nuevo doctor.
 def agregar_doctor(matriz, contador):
     
@@ -134,3 +127,28 @@ def modificar_doctor(matriz):
             i += 1
     if not encontrado:
         print("\nNo se encontró la matricula\n")  
+
+# Genera un reporte que compara la lista de doctores registrados con la lista de disponibilidad para identificar doctores sin horarios asignados. 
+# Utiliza conjuntos para realizar la comparación y presenta un resumen de la cobertura médica.
+def reporte_cobertura_medica(matriz_doctores, matriz_disponibilidad):
+    todos_los_doctores = set()
+    for doc in matriz_doctores[1:]:
+        todos_los_doctores.add(str(doc[1]))
+
+    # Matrículas que aparecen en la tabla de disponibilidad
+    doctores_con_horario = set()
+    for disp in matriz_disponibilidad[1:]:
+        doctores_con_horario.add(str(disp[1]))
+
+    # Diferencia (-) Doctores que están registrados pero NO tienen horarios cargados
+    doctores_sin_horario = todos_los_doctores - doctores_con_horario
+
+    print(f"Total de doctores registrados: {len(todos_los_doctores)}")
+    print(f"Doctores con disponibilidad: {len(doctores_con_horario)}")
+    
+    if len(doctores_sin_horario) > 0:
+        print(f"Alerta: Hay {len(doctores_sin_horario)} doctores sin disponibilidad cargada.")
+        # Para que el usuario vea las matriculas ordenadas usamos sorted
+        print(f"Matrículas a revisar: {sorted(list(doctores_sin_horario))}")
+    else:
+        print("Todos los doctores tienen sus horarios al día.")

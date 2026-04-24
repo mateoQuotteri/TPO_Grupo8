@@ -111,7 +111,7 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, matriz_doctores, matr
                 print("[3] ABM Disponibilidad de Doctores.")
                 print("[4] ABM Turnos Médicos.")
                 print("[5] Ordenar Matrices.")
-                print("[6] Reporte de Especialidad.")
+                print("[6] Reportes.")
                 opciones_validas = [str(i) for i in range(0, 7)] # 0 al 6
             
             elif rol == "RECEPCIONISTA":
@@ -387,18 +387,20 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, matriz_doctores, matr
 
             while True:
                 while True:
-                    opciones = 1
+                    opciones = 2
                     print()
                     print("---------------------------")
-                    print("MENÚ DE REPORTES MÉDICOS")
+                    print("MENÚ PRINCIPAL > MENÚ DE REPORTES MÉDICOS")
                     print("---------------------------")
                     print("[1] Reporte de Especialidades.")
+                    print("---------------------------")
+                    print("[2] Reporte de Disponibilidad horaria de Doctores.")
                     print("---------------------------")
                     print("[0] Volver al menú anterior")
                     print("---------------------------")
                     print()
                     opcion = input("Seleccione una opción: ")
-                    if opcion in [str(i) for i in range(0, opciones + 1)]:
+                    if opcion in [str(i) for i in range(0, 3)]:
                         break
                     else:
                         input("Opción inválida. Presione ENTER para volver a seleccionar.")
@@ -411,6 +413,10 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, matriz_doctores, matr
                     esp = pedir_especialidad()
                     datos = filtrar_por_especialidad(matriz_doctores, encabezados_doctores, esp)
                     mostrar_reporte(encabezados_doctores, datos)
+
+                elif opcion == "2":
+                    doctores.reporte_cobertura_medica(matriz_doctores, matriz_disponibilidad)
+                    input("\nPresione ENTER para continuar...")
 
     return
 
