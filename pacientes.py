@@ -93,16 +93,28 @@ def modificar_paciente(lista):
             encontrado = True
             print(f"Modificando a: {paciente['nombre']} {paciente['apellido']}")
 
-            nuevo_nombre = input("Ingrese el nuevo nombre: ").upper()
-            nuevo_apellido = input("Ingrese el nuevo apellido: ").upper()
-            nuevo_telefono = int(input("Ingrese el nuevo número de teléfono: "))
-            while nuevo_telefono < 1000000000 or nuevo_telefono > 9999999999:
+            nuevo_nombre = input("Ingrese el nombre: ").upper()
+            while not validar_nombre(nuevo_nombre):
                 print("Dato incorrecto")
-                nuevo_telefono = int(input("Ingrese el nuevo teléfono (10 dígitos): "))
-            
-            nuevo_correo = input("Ingrese el correo: ").upper()
-            
+                nuevo_nombre = input("Nombre: ").upper()
 
+            nuevo_apellido = input("Ingrese el apellido: ").upper()
+            while not validar_apellido(nuevo_apellido):
+                print("Dato incorrecto")
+                nuevo_apellido = input("Apellido: ").upper()
+
+            nuevo_telefono = input("Ingrese el telefono: ")
+            while not validar_telefono(nuevo_telefono):
+                print("Dato incorrecto")
+                nuevo_telefono = input("Telefono: ")
+            nuevo_telefono = int(nuevo_telefono)
+            
+            nuevo_correo = input("Ingrese el correo: ")
+            while not validar_correo(nuevo_correo):
+                print("Dato incorrecto")
+                nuevo_correo = input("Correo: ")
+            nuevo_correo = nuevo_correo.upper()
+            
             paciente["nombre"] = nuevo_nombre
             paciente["apellido"] = nuevo_apellido
             paciente["telefono"] = nuevo_telefono

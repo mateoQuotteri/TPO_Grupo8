@@ -112,7 +112,8 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, matriz_doctores, matr
                 print("[4] ABM Turnos Médicos.")
                 print("[5] Ordenar Matrices.")
                 print("[6] Reportes.")
-                opciones_validas = [str(i) for i in range(0, 7)] # 0 al 6
+                print("[7] Usuarios.")
+                opciones_validas = [str(i) for i in range(0, 8)] # 0 al 6
             
             elif rol == "RECEPCIONISTA":
                 print("[1] ABM Pacientes.")
@@ -417,6 +418,38 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, matriz_doctores, matr
                 elif opcion == "2":
                     doctores.reporte_cobertura_medica(matriz_doctores, matriz_disponibilidad)
                     input("\nPresione ENTER para continuar...")
+       
+        elif opcion == "7":
+            
+            while True:
+                while True:
+                    opciones = 2
+                    print()
+                    print("---------------------------")
+                    print("MENÚ PRINCIPAL > USUARIOS")
+                    print("---------------------------")
+                    print("[1] Agregar usuario.")
+                    print("[2] Eliminar usuario.")
+                    print("---------------------------")
+                    print("[0] Volver al menú anterior")
+                    print("---------------------------")
+                    print()
+                                                
+                    opcion = input("Seleccione una opción: ")
+                    if opcion in [str(i) for i in range(0, opciones + 1)]:
+                        break
+                    else:
+                        input("Opción inválida. Presione ENTER para volver a seleccionar.")
+                print()
+        
+                if opcion == "0": # Salir del submenú
+                    break
+
+                elif opcion == "1":
+                    usuarios.agregar_usuario(usuarios.usuarios)
+                
+                elif opcion == "2":
+                    usuarios.eliminar_usuario(usuarios.usuarios)
 
     return
 

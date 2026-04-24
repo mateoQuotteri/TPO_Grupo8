@@ -132,12 +132,12 @@ def modificar_doctor(matriz):
 # Utiliza conjuntos para realizar la comparación y presenta un resumen de la cobertura médica.
 def reporte_cobertura_medica(matriz_doctores, matriz_disponibilidad):
     todos_los_doctores = set()
-    for doc in matriz_doctores[1:]:
+    for doc in matriz_doctores[:]:
         todos_los_doctores.add(str(doc[1]))
 
     # Matrículas que aparecen en la tabla de disponibilidad
     doctores_con_horario = set()
-    for disp in matriz_disponibilidad[1:]:
+    for disp in matriz_disponibilidad[:]:
         doctores_con_horario.add(str(disp[1]))
 
     # Diferencia (-) Doctores que están registrados pero NO tienen horarios cargados
