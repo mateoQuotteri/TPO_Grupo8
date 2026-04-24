@@ -1,6 +1,13 @@
 # Modulo
 #doctores.py
 
+# Aplicación de conjuntos(sets)
+ESPECIALIDADES_PERMITIDAS = {
+    "CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", 
+    "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", 
+    "DERMATOLOGÍA", "TRAUMATOLOGÍA"
+}
+
 # Valida matrícula única, datos de contacto y especialidad para sumar un nuevo doctor.
 def agregar_doctor(matriz, contador):
     
