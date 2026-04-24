@@ -531,16 +531,22 @@ def main():
     if usuario_ingresado in usuarios.usuarios:
         datos_user = usuarios.usuarios[usuario_ingresado]
         if datos_user[0] == clave_ingresada:
-            rol = datos_user[2] # "ADMINISTRATIVO", "RECEPCIONISTA" o "DOCTOR"
-            
+            rol = datos_user[2]
             matricula_sesion = None
             
-            # Se ingresa la matricula manualmente
             if rol == "DOCTOR":
                 print("\n--- VALIDACIÓN DE IDENTIDAD MÉDICA ---")
                 matricula_sesion = input("Por favor, ingrese su número de matrícula: ")
-            
-            print(f"\nBienvenido/a {datos_user[1]}")
+                
+                # BUSCA EL NOMBRE DEL MEDICO
+                nombre_bienvenida = datos_user[1]
+                for doc in matriz_doctores:
+                    if str(doc[1]) == str(matricula_sesion):
+                        nombre_bienvenida = f"{doc[2]} {doc[3]}"
+                        break
+                print(f"\nBienvenido/a Dr/a. {nombre_bienvenida}")
+            else:
+                print(f"\nBienvenido/a {datos_user[1]}")
             
             menu_principal(rol, matricula_sesion, lista_pacientes, matriz_doctores, matriz_disponibilidad, matriz_turnos, encabezados_pacientes, encabezados_doctores, encabezados_disponibilidad, encabezados_turnos, id_contador_pacientes, id_contador_doctores, id_contador_disponibilidad, id_contador_turnos)
         else:
