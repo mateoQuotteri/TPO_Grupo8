@@ -132,7 +132,7 @@ def agregar_turno(matriz_turnos, lista_pacientes, matriz_doctores, contador, mat
         if dni == 0:
             return
 
-    especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
+    especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
 
    
     while True:

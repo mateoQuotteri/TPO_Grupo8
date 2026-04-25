@@ -570,10 +570,19 @@ def main():
 ]
     hora_turno = ["9","11","10","15","9","14","10","16","11","12","15","11","12","15","9","15","10","14","11","16"]
 
+    dni_turno = ["26486592","35874126","41256987","28974135","33659874","40123789","27894561","38965412","34561278",
+                  "29876543","36781245","42315678","31245789","27654389","39871256","42135698","30547891","28765412","36412578","40987612"]
+
+    especialidad_turno = ["CLÍNICA MÉDICA","PEDIATRÍA","GINECOLOGÍA Y OBSTETRICIA","CARDIOLOGÍA","OFTALMOLOGÍA","ODONTOLOGÍA",
+                          "DERMATOLOGÍA","TRAUMATOLOGÍA","CLÍNICA MÉDICA","PEDIATRÍA","GINECOLOGÍA","CARDIOLOGÍA",
+                          "OFTALMOLOGÍA","ODONTOLOGÍA","DERMATOLOGÍA","TRAUMATOLOGÍA","CLÍNICA MÉDICA","PEDIATRÍA","CARDIOLOGÍA","ODONTOLOGÍA"]
+    matricula_turno = ["58321","67234","74512","83456","91234","67891","54321","45678","78901","89012","90123",
+                       "81234","72345","63456","54567","45679","36789","27890","18901","29012"]
+
     id_contador_turnos = 0
     for i in range(len(fecha_turno)):
         id_contador_turnos += 1
-        fila_turnos = [id_contador_turnos, fecha_turno[i], hora_turno[i], dni_paciente[i], especialidad_doctor[i], matricula_doctor[i]]
+        fila_turnos = [id_contador_turnos, fecha_turno[i], hora_turno[i], dni_turno[i], especialidad_turno[i], matricula_turno[i]]
         matriz_turnos.append(fila_turnos)
     print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
     mostrar_matriz(matriz_turnos)
