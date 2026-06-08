@@ -1,81 +1,78 @@
 # Modulo
-#doctores.py
+# doctores.py
 
 # Valida matrícula única, datos de contacto y especialidad para sumar un nuevo doctor.
-def agregar_doctor(matriz, contador):
-    
-    matricula = int(input("Ingrese el número de matricula: "))
-    while matricula < 10000 or matricula > 99999:
-            print("Dato incorrecto")
-            matricula = int(input("Ingrese el número de matricula: "))
-    
-    encontrado = False
-    indice = 1
+def agregar_doctor(lista, contador):
 
-    while indice < len(matriz) and not encontrado:
-        if matriz[indice][1] == matricula:
+    matricula = input("Ingrese el número de matricula: ")
+    while not matricula.isdigit() or not (10000 <= int(matricula) <= 99999):
+        print("Dato incorrecto")
+        matricula = input("Ingrese el número de matricula: ")
+
+    for doctor in lista:
+        if doctor["matricula"] == matricula:
             print("La matrícula ya está asociada a un doctor.")
-            encontrado = True
-        else:
-            indice += 1
-    
-    if not encontrado:
-        contador += 1
-        nombre = input("Ingrese el nombre: ").upper()
-        apellido = input("Ingrese el apellido: ").upper()
-        telefono = int(input("Ingrese el telefono: "))
-        while telefono < 1000000000 or telefono > 9999999999:
-            print("Dato incorrecto.")
-            telefono = int(input("Ingrese el número de teléfono: "))
-        
-        especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
-        print("Seleccione una especialidad: ")
-        for i in range(len(especialidades)):
-            print(i + 1, "-", especialidades[i])
-        
-        opcion = int(input("Ingrese el número de su especialidad: "))
-        while opcion < 1 or opcion > len(especialidades):
-            print("Opcion invalida, seleccione una de las disponibles")
-            opcion = int(input("Ingrese el número de su especialidad: "))
-        
-        especialidad = especialidades[opcion - 1]
+            return contador
 
+    contador += 1
+    nombre = input("Ingrese el nombre: ").upper()
+    apellido = input("Ingrese el apellido: ").upper()
+
+    telefono = input("Ingrese el telefono: ")
+    while not telefono.isdigit() or not (1000000000 <= int(telefono) <= 9999999999):
+        print("Dato incorrecto.")
+        telefono = input("Ingrese el número de teléfono: ")
+
+    especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
+    print("Seleccione una especialidad: ")
+    for i in range(len(especialidades)):
+        print(i + 1, "-", especialidades[i])
+
+    opcion = int(input("Ingrese el número de su especialidad: "))
+    while opcion < 1 or opcion > len(especialidades):
+        print("Opcion invalida, seleccione una de las disponibles")
+        opcion = int(input("Ingrese el número de su especialidad: "))
+
+    especialidad = especialidades[opcion - 1]
+
+    activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
+    while activo != "S" and activo != "N":
+        print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
         activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
-        while activo != "S" and activo != "N":
-            print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
-            activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
-        
-        
-        nueva_fila = [contador, matricula, nombre, apellido, telefono, especialidad, activo]
-        matriz.append(nueva_fila)
-        print("\nDatos agregados con éxito!\n")
+
+    nuevo_doctor = {
+        "id": contador,
+        "matricula": matricula,
+        "nombre": nombre,
+        "apellido": apellido,
+        "telefono": telefono,
+        "especialidad": especialidad,
+        "activo": activo
+    }
+    lista.append(nuevo_doctor)
+    print("\nDatos agregados con éxito!\n")
     return contador
 
-# Elimina la fila correspondiente al doctor tras verificar su número de matrícula.
-def eliminar_doctor(matriz):
-    matricula_buscada = int(input("Ingrese la matricula a eliminar: "))
-    
-    for i in range(len(matriz)):
-        if int(matriz[i][1]) == matricula_buscada:
-            matriz.pop(i)
+# Elimina el doctor correspondiente a la matrícula ingresada.
+def eliminar_doctor(lista):
+    matricula_buscada = input("Ingrese la matricula a eliminar: ")
+
+    for i in range(len(lista)):
+        if lista[i]["matricula"] == matricula_buscada:
+            lista.pop(i)
             print("\nDoctor eliminado correctamente.\n")
             return
     print("\nNo se encontró la matricula\n")
 
 # Permite editar campos individuales de un doctor mediante un menú de opciones.
-def modificar_doctor(matriz):
-    matricula_buscada = int(input("Ingrese la matricula del doctor que desea modificar: "))
-    while matricula_buscada < 10000 or matricula_buscada > 99999:
+def modificar_doctor(lista):
+    matricula_buscada = input("Ingrese la matricula del doctor que desea modificar: ")
+    while not matricula_buscada.isdigit() or not (10000 <= int(matricula_buscada) <= 99999):
         print("Dato incorrecto")
-        matricula_buscada = int(input("Ingrese la matricula del doctor que desea modificar: "))
-    
-    encontrado = False
-    i = 1
+        matricula_buscada = input("Ingrese la matricula del doctor que desea modificar: ")
 
-    while i < len(matriz) and not encontrado:
-        if int(matriz[i][1]) == matricula_buscada:
-            encontrado = True
-
+    for doctor in lista:
+        if doctor["matricula"] == matricula_buscada:
             editando = True
             while editando:
                 print("\nSeleccione el dato que desea modificar:")
@@ -85,67 +82,64 @@ def modificar_doctor(matriz):
                 print("[4] Especialidad")
                 print("[5] Activo/Inactivo")
                 print("[0] Terminar edición")
-                
+
                 opcion = input("Ingrese una opción: ")
-                
+
                 if opcion == "0":
                     print("\nEdición terminada.\n")
                     editando = False
-                
-                if opcion == "1": #Modifica matriz nombre
-                    matriz[i][2] = input("Ingrese el nuevo nombre: ").upper()
-                
-                elif opcion == "2": # Modifica matriz apellido
-                    matriz[i][3] = input("Ingrese el nuevo apellido: ").upper()
-                
-                elif opcion == "3": #Modifica matriz telefono
-                    telefono = int(input("Ingrese el nuevo teléfono: "))
-                    while telefono < 1000000000 or telefono > 9999999999:
+
+                elif opcion == "1":
+                    doctor["nombre"] = input("Ingrese el nuevo nombre: ").upper()
+
+                elif opcion == "2":
+                    doctor["apellido"] = input("Ingrese el nuevo apellido: ").upper()
+
+                elif opcion == "3":
+                    telefono = input("Ingrese el nuevo teléfono: ")
+                    while not telefono.isdigit() or not (1000000000 <= int(telefono) <= 9999999999):
                         print("Dato incorrecto")
-                        telefono = int(input("Ingrese el nuevo teléfono: "))
-                    matriz[i][4] = telefono
-                
-                elif opcion == "4": #Modifica matriz especialidad
+                        telefono = input("Ingrese el nuevo teléfono: ")
+                    doctor["telefono"] = telefono
+
+                elif opcion == "4":
                     especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
                     print("Seleccione una especialidad: ")
                     for j in range(len(especialidades)):
                         print(j + 1, "-", especialidades[j])
-        
                     opcion_esp = int(input("Ingrese el número de su especialidad: "))
                     while opcion_esp < 1 or opcion_esp > len(especialidades):
                         print("Opcion invalida, seleccione una de las disponibles")
                         opcion_esp = int(input("Ingrese el número de su especialidad: "))
-                    matriz[i][5] = especialidades[opcion_esp - 1]
-                
-                elif opcion == "5": #Modifica matriz activo/inactivo
+                    doctor["especialidad"] = especialidades[opcion_esp - 1]
+
+                elif opcion == "5":
                     activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
                     while activo != "S" and activo != "N":
                         print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
                         activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
-                    matriz[i][6] = activo    
-        else:
-            i += 1
-    if not encontrado:
-        print("\nNo se encontró la matricula\n")  
+                    doctor["activo"] = activo
+            return
 
-# Genera un reporte que compara la lista de doctores registrados con la lista de disponibilidad para identificar doctores sin horarios asignados. 
-# Utiliza conjuntos para realizar la comparación y presenta un resumen de la cobertura médica.
-def reporte_cobertura_medica(matriz_doctores, matriz_disponibilidad):
+    print("\nNo se encontró la matricula\n")
+
+# Genera un reporte comparando doctores registrados vs doctores con disponibilidad cargada.
+def reporte_cobertura_medica(lista_doctores, lista_disponibilidad):
     todos_los_doctores = set()
-    for doc in matriz_doctores[:]:
-        todos_los_doctores.add(str(doc[1]))
+    for doc in lista_doctores:
+        todos_los_doctores.add(doc["matricula"])
 
     # Matrículas que aparecen en la tabla de disponibilidad
     doctores_con_horario = set()
-    for disp in matriz_disponibilidad[:]:
-        doctores_con_horario.add(str(disp[1]))
+    for disp in lista_disponibilidad:
+        doctores_con_horario.add(disp["matricula"])
 
-    # Diferencia (-) Doctores que están registrados pero NO tienen horarios cargados
+    # Diferencia: doctores registrados pero SIN horarios cargados
     doctores_sin_horario = todos_los_doctores - doctores_con_horario
 
     print(f"Total de doctores registrados: {len(todos_los_doctores)}")
     print(f"Doctores con disponibilidad: {len(doctores_con_horario)}")
-    
+
     if len(doctores_sin_horario) > 0:
         print(f"Alerta: Hay {len(doctores_sin_horario)} doctores sin disponibilidad cargada.")
         # Para que el usuario vea las matriculas ordenadas usamos sorted

@@ -1,0 +1,5 @@
+{
+  "admin": {"clave": "12345", "nombre": "Maria Lomoro",   "rol": "ADMINISTRATIVO"},
+  "recep": {"clave": "54321", "nombre": "Agustin Garcia", "rol": "RECEPCIONISTA"},
+  "doc":   {"clave": "11111", "nombre": "Dr Martinez",    "rol": "DOCTOR"}
+}
