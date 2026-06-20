@@ -4,12 +4,21 @@
 # Usamos datetime para convertir días de la semana a fechas concretas al mostrar disponibilidades
 from datetime import date, timedelta
 
-# Verifica si un DNI existe dentro de la lista de pacientes.
+# Recursividad: Verifica si un DNI existe dentro de la lista de pacientes.
+# ¿Por qué es válida esta función? Porque cada llamada recursiva reduce el tamaño de la lista de pacientes, 
+# acercándonos al caso base donde la lista está vacía o encontramos el DNI buscado. 
+# Esto garantiza que lleguemos a una conclusión sobre la existencia del DNI en la lista.
 def buscarDni(lista_pacientes, dni_buscado):
-    for paciente in lista_pacientes:
-        if int(paciente["dni"]) == dni_buscado:
-            return True
-    return False
+    # Caso base: si la lista está vacía, el DNI no se encontró.
+    if not lista_pacientes:
+        return False
+    
+    # Caso base: si el DNI del primer paciente coincide con el buscado, lo encontramos.
+    if int(lista_pacientes[0]["dni"]) == dni_buscado:
+        return True
+    
+    #Caso recursivo y reducción del dominio.
+    return buscarDni(lista_pacientes[1:], dni_buscado)
 
 # Convierte un nombre de día de la semana (ej: "LUNES") a la próxima fecha concreta (ej: "21/04/2026")
 # Usa la librería datetime para calcular cuántos días faltan hasta ese día de la semana
@@ -29,27 +38,58 @@ def proximo_dia_semana(nombre_dia):
     proxima = hoy + timedelta(days=dias_hasta)
     return proxima.strftime("%d/%m/%Y")  # Devolvemos la fecha en formato correcto.
 
-# Busca y devuelve el nombre completo de un médico utilizando su número de matrícula.
+# Recursividad: Busca y devuelve el nombre completo de un médico utilizando su número de matrícula.
+# ¿Por qué es válida esta función? Porque cada llamada recursiva reduce el tamaño de la lista de doctores, 
+# acercándonos al caso base donde la lista está vacía o encontramos la matrícula buscada. 
+# Esto garantiza que lleguemos a una conclusión sobre la existencia de la matrícula en la lista y 
+# podamos devolver el nombre del doctor o un mensaje de desconocido.
+
 def buscarNombreDoctor(lista_doctores, matricula):
-    for doctor in lista_doctores:
-        if str(doctor["matricula"]) == str(matricula):
-            return f"{doctor['nombre']} {doctor['apellido']}"
-    return "Dr. o Dra. desconocid@"
+    # Caso base: lista vacía, el médico no está registrado.
+    if not lista_doctores:
+        return "Dr. o Dra. desconocid@"
 
-# Filtra y muestra los médicos activos que pertenecen a una especialidad específica.
+    # Caso base: encontramos la matrícula en el primer elemento.
+    if str(lista_doctores[0]["matricula"]) == str(matricula):
+        return f"{lista_doctores[0]['nombre']} {lista_doctores[0]['apellido']}"
+
+    # Caso recursivo y reducción del dominio: seguimos buscando en el resto de la lista.
+    return buscarNombreDoctor(lista_doctores[1:], matricula)
+
+# Recursividad: Filtra y muestra los médicos activos que pertenecen a una especialidad específica.
+# ¿Por qué es válida esta función? Porque cada llamada recursiva reduce el tamaño de la lista de doctores, 
+# acercándonos al caso base donde la lista está vacía. 
+# Esto garantiza que procesemos todos los doctores y devolvamos solo aquellos que cumplen con los criterios de especialidad y si está activo.
+
+def filtrarDoctoresRecursivo(lista_doctores, especialidad_seleccionada):
+    # Caso base: si no hay doctores, devolvemos una lista vacía.
+    if not lista_doctores:
+        return []
+
+    primer_doc = lista_doctores[0]
+    # Caso recursivo y reducción del dominio: obtenemos primero los doctores válidos del resto de la lista.
+    resto_filtrado = filtrarDoctoresRecursivo(lista_doctores[1:], especialidad_seleccionada)
+
+    if primer_doc["especialidad"] == lista_doctores[0]["especialidad"] and primer_doc["activo"] == "S":
+        return [primer_doc] + resto_filtrado
+    else:
+        return resto_filtrado
+
+
 def buscarDoctorPorEspecialidad(lista_doctores, especialidad_seleccionada):
-    doctores_encontrados = []
-    for doctor in lista_doctores:
-        if doctor["especialidad"] == especialidad_seleccionada and doctor["activo"] == "S":
-            doctores_encontrados.append(doctor)
+    # Filtramos usando la función recursiva que devuelve solo los doctores activos de la especialidad seleccionada por el usuario.
+    doctores_encontrados = filtrarDoctoresRecursivo(lista_doctores, especialidad_seleccionada)
 
-    # sorted con lambda: doctores ordenados alfabeticamente por apellido
+    # Sorted con lambda: doctores ordenados alfabeticamente por apellido
     doctores_ordenados = sorted(doctores_encontrados, key=lambda doc: doc["apellido"])
 
     print(f"Médicos disponibles en:  {especialidad_seleccionada}")
+ 
     for i in range(len(doctores_ordenados)):
         print(f"{i+1} - Matrícula: {doctores_ordenados[i]['matricula']} | {doctores_ordenados[i]['nombre']} {doctores_ordenados[i]['apellido']}")
+
     return doctores_ordenados
+
 
 # Retorna la matrícula del médico elegido o una lista de matrículas si se seleccionan todos los de la especialidad.
 def doctor_seleccionado(especialistas, seleccion):
