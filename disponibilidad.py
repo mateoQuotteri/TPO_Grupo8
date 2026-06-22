@@ -1,14 +1,56 @@
 # Módulo
 # disponibilidad.py
 
+
+def buscar_matricula(lista_doctores):
+    """
+    Pide el ingreso de una matrícula por teclado y verifica que se encuentre en la lista de doctores.
+    """
+    matriculas=[m["matricula"] for m in lista_doctores]
+    matricula = input("Ingrese matrícula del doctor: ")
+    while matricula not in matriculas:
+        print("La matrícula ingresada no se encuentra en el sistema. Vuelva a intentar.")
+        matricula = input("Ingrese matrícula del doctor: ")
+    return matricula
+        
+
 # Agregar una nueva disponibilidad a la lista de disponibilidad
-def agregar_disponibilidad(lista_disponibilidad, id_contador):
+def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
     print("\n--- AGREGAR DISPONIBILIDAD ---")
 
-    matricula = input("Ingrese matrícula del doctor: ")
+    dias = ["LUNES","MARTES", "MIÉRCOLES", "MIERCOLES",
+        "JUEVES", "VIERNES", "SABADO", "SÁBADO", "DOMINGO"]
+
+    matricula=buscar_matricula(lista_doctores)
+
     dia = input("Ingrese día (Ej: Lunes): ").upper()
-    hora_inicio = int(input("Hora inicio (0-23): "))
-    hora_fin = int(input("Hora fin (0-23): "))
+    while dia not in dias:
+            print("Ingrese un día válido. Vuelva a intentar.")
+            dia = input("Ingrese día (Ej: Lunes): ").upper()
+
+    while True:
+        try:
+            hora_inicio = int(input("Hora inicio (8-20): "))
+            if hora_inicio>=8 and hora_inicio<=20:
+                break
+            else:
+                print("Opcion inválida. Intente nuevamente")
+        except ValueError:
+            print ("Debe ingresar un número entero válido. Intente nuevamente.")
+        except:
+            print("Error. Intente nuevamente.")
+    while True:
+        try:
+            hora_fin = int(input("Hora fin (0-23): "))
+            if hora_fin>=8 and hora_fin<=20:
+                break
+            else:
+                print("Opcion inválida. Intente nuevamente")
+        except ValueError:
+            print ("Debe ingresar un número entero válido. Intente nuevamente.")
+        except:
+            print("Error. Intente nuevamente.")
+    
 
     # VALIDACIÓN SIMPLE
     if hora_inicio >= hora_fin:
@@ -36,27 +78,60 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador):
 def eliminar_disponibilidad(lista_disponibilidad):
     print("\n--- ELIMINAR DISPONIBILIDAD ---")
 
-    id_buscar = input("Ingrese ID de disponibilidad a eliminar: ")
+    ids=[d["id"] for d in lista_disponibilidad]
+    
 
-    for i in range(len(lista_disponibilidad)):
-        if str(lista_disponibilidad[i]["id"]) == id_buscar:
-            lista_disponibilidad.pop(i)
-            print("Disponibilidad eliminada.")
-            return
+    while True:
+        try:
+            id_buscar = int(input("Ingrese ID de disponibilidad a eliminar: "))
+            while id_buscar not in ids:
+                print("ID no válido. Vuelva a intentar.")
+                id_buscar = int(input("Ingrese ID de disponibilidad a eliminar: "))
+            break
+        except ValueError:
+            print("Debe ingresar un número entero. Vuelva a intentar.")
+        except:
+            print("Error. Vuelva a intentar.")
 
-    print("Error: no se encontró el ID.")
+    index_eliminar=ids.index(id_buscar)
+    print("Se va a eliminar la disponibilidad con ID: ",id_buscar)
+    confirmar=input("Ingresar S para confirmar, o N para cancelar: ")
+    while confirmar != "S" and confirmar !="N":
+        print("Opción inválida. Vuelva a intentar.")
+        confirmar=input("Ingresar S para confirmar, o N para cancelar: ")
+    if confirmar == "S":
+        lista_disponibilidad.pop(index_eliminar)
+        print("Disponibilidad eliminada.")
+    elif confirmar == "N":
+        "Operación cancelada."
 
 # Modificar una disponibilidad de la lista de disponibilidad
-def modificar_disponibilidad(lista_disponibilidad):
+def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
     print("\n--- MODIFICAR DISPONIBILIDAD ---")
 
-    id_buscar = input("Ingrese ID de disponibilidad a modificar: ")
+    ids=[d["id"] for d in lista_disponibilidad]
 
+    while True:
+        try:
+            id_buscar = int(input("Ingrese ID de disponibilidad a modificar: "))
+            while id_buscar not in ids:
+                print("ID no válido. Vuelva a intentar.")
+                id_buscar = int(input("Ingrese ID de disponibilidad a modificar: "))
+            break
+        except ValueError:
+            print("Debe ingresar un número entero. Vuelva a intentar.")
+        except:
+            print("Error. Vuelva a intentar.")
+
+    index_modificar=ids.index(id_buscar)
+
+    #Falta terminar de modificar, tomar de referencia la modificación de doctores
     for fila in lista_disponibilidad:
         if str(fila["id"]) == id_buscar:
             print("Deje vacío para no modificar")
 
             nueva_matricula = input("Nueva matrícula: ")
+            matricula=buscar_matricula(lista_doctores)
             nuevo_dia = input("Nuevo día: ").upper()
             nueva_hora_inicio = input("Nueva hora inicio: ")
             nueva_hora_fin = input("Nueva hora fin: ")

@@ -18,14 +18,24 @@ import usuarios
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def cargar_json(nombre_archivo):
-    ruta = os.path.join(BASE_DIR, nombre_archivo)
-    with open(ruta, "r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        ruta = os.path.join(BASE_DIR, nombre_archivo)
+        with open(ruta, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("ERROR ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.") 
+    except OSError:
+        print("ERROR DE SISTEMA.")
 
 def guardar_json(nombre_archivo, datos):
-    ruta = os.path.join(BASE_DIR, nombre_archivo)
-    with open(ruta, "w", encoding="utf-8") as f:
-        json.dump(datos, f, ensure_ascii=False, indent=2)
+    try:
+        ruta = os.path.join(BASE_DIR, nombre_archivo)
+        with open(ruta, "w", encoding="utf-8") as f:
+            json.dump(datos, f, ensure_ascii=False, indent=2)
+    except FileNotFoundError:
+        print("ERROR ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.") 
+    except OSError:
+        print("ERROR DE SISTEMA.")
 
 #----------------------------------------------------------------------------------------------
 # FUNCIONES
@@ -44,12 +54,17 @@ def ordenar_pacientes_dic(lista, encabezado):
     clave_elegida = ""
 
     while opcion_valida == False:
-        opcion = int(input("Seleccione una opción: "))
-        if 1 <= opcion <= len(claves):
-            clave_elegida = claves[opcion - 1]
-            opcion_valida = True
-        else:
-            print("Opción inválida. Intente nuevamente.")
+        try:    
+            opcion = int(input("Seleccione una opción: "))
+            if 1 <= opcion <= len(claves):
+                clave_elegida = claves[opcion - 1]
+                opcion_valida = True
+            else:
+                print("Opción inválida. Intente nuevamente.")
+        except ValueError:
+            print ("Debe ingresar un número entero válido. Intente nuevamente.")
+        except:
+            print("Error. Intente nuevamente.")
 
     lista.sort(key=lambda p: p[clave_elegida])
     return lista
@@ -63,12 +78,17 @@ def ordenar_lista_dicts(lista, claves, encabezado):
     continuar = False
     columna_a_ordenar = 0
     while continuar == False:
-        opcion = int(input("Ingrese la opcion: "))
-        if 1 <= opcion <= len(claves):
-            columna_a_ordenar = opcion - 1
-            continuar = True
-        else:
-            print("Opcion inválida.")
+        try:
+            opcion = int(input("Ingrese la opcion: "))
+            if 1 <= opcion <= len(claves):
+                columna_a_ordenar = opcion - 1
+                continuar = True
+            else:
+                print("Opcion inválida.")
+        except ValueError:
+            print ("Debe ingresar un número entero válido. Intente nuevamente.")
+        except:
+            print("Error. Intente nuevamente.")
 
     lista.sort(key=lambda fila: str(fila[claves[columna_a_ordenar]]))
     return lista
@@ -283,12 +303,14 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                 if opcion == "0":  # Salir del submenú
                     break
                 elif opcion == "1":
-                    disponibilidad.agregar_disponibilidad(lista_disponibilidad, id_contador_disponibilidad)
+                    disponibilidad.agregar_disponibilidad(lista_disponibilidad, id_contador_disponibilidad,lista_doctores)
                     id_contador_disponibilidad += 1
                     guardar_json("disponibilidad.json", lista_disponibilidad)
                     print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
                     mostrar_lista(lista_disponibilidad)
                 elif opcion == "2":
+                    print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')                    
+                    mostrar_lista(lista_disponibilidad)
                     disponibilidad.eliminar_disponibilidad(lista_disponibilidad)
                     guardar_json("disponibilidad.json", lista_disponibilidad)
                     print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
@@ -473,10 +495,10 @@ def main():
     usuarios_data        = cargar_json("usuarios.json")
 
     # Contadores inicializados a partir de los datos cargados
-    id_contador_pacientes      = max((p["id"] for p in lista_pacientes),      default=0)
-    id_contador_doctores       = max((d["id"] for d in lista_doctores),       default=0)
+    id_contador_pacientes      = max((p["id"] for p in lista_pacientes),      default=0) + 1
+    id_contador_doctores       = max((d["id"] for d in lista_doctores),       default=0) + 1
     id_contador_disponibilidad = max((d["id"] for d in lista_disponibilidad), default=0) + 1
-    id_contador_turnos         = max((t["id"] for t in lista_turnos),         default=0)
+    id_contador_turnos         = max((t["id"] for t in lista_turnos),         default=0) + 1
 
     print("\n LISTA DE PACIENTES \n")
     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
