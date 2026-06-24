@@ -317,7 +317,7 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     mostrar_lista(lista_disponibilidad)
                     break
                 elif opcion == "3":
-                    disponibilidad.modificar_disponibilidad(lista_disponibilidad)
+                    disponibilidad.modificar_disponibilidad(lista_disponibilidad,lista_doctores)
                     guardar_json("disponibilidad.json", lista_disponibilidad)
                     print(f'{encabezados_disponibilidad[0]:^5}\t{encabezados_disponibilidad[1]:^5}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
                     mostrar_lista(lista_disponibilidad)
