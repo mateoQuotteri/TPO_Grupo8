@@ -28,7 +28,7 @@ def cargar_json(nombre_archivo):
         with open(ruta, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
-        print("ERROR ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.") 
+        print("ERROR: ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.") 
         raise SystemExit("ERROR CRITICO. SALIENDO DEL SISTEMA.")
     except OSError:
         print("ERROR DE SISTEMA.")
@@ -40,7 +40,7 @@ def guardar_json(nombre_archivo, datos):
         with open(ruta, "w", encoding="utf-8") as f:
             json.dump(datos, f, ensure_ascii=False, indent=2)
     except FileNotFoundError:
-        print("ERROR ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.") 
+        print("ERROR: ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.") 
     except OSError:
         print("ERROR DE SISTEMA.")
 
@@ -91,11 +91,11 @@ def ordenar_lista_dicts(lista, claves, encabezado):
                 columna_a_ordenar = opcion - 1
                 continuar = True
             else:
-                print("Opcion inválida.")
+                print("Opcion inválida.\n")
         except ValueError:
-            print ("Debe ingresar un número entero válido. Intente nuevamente.")
+            print ("Debe ingresar un número entero válido. Intente nuevamente.\n")
         except:
-            print("Error. Intente nuevamente.")
+            print("Error. Intente nuevamente.\n")
 
     lista.sort(key=lambda fila: str(fila[claves[columna_a_ordenar]]))
     return lista
@@ -177,7 +177,7 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
             if opcion in opciones_validas:
                 break
             else:
-                input("Opción inválida o no permitida para su rol. Presione ENTER.")
+                input("\nOpción inválida o no permitida para su rol. Presione ENTER.\n")
         print()
 
         if opcion == "0":
@@ -222,14 +222,13 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     if opcion in [str(i) for i in range(0, opciones + 1)]:
                         break
                     else:
-                        input("Opción inválida. Presione ENTER para volver a seleccionar.")
+                        input("\nOpción inválida. Presione ENTER para volver a seleccionar.\n")
                 print()
 
                 if opcion == "0":  # Salir del submenú
                     break  # No sale del programa, vuelve al menú anterior
                 elif opcion == "1":  # Opción 1
-                    pacientes.agregar_paciente(lista_pacientes, id_contador_pacientes)
-                    id_contador_pacientes += 1
+                    id_contador_pacientes=pacientes.agregar_paciente(lista_pacientes, id_contador_pacientes)
                     guardar_json("pacientes.json", lista_pacientes)
                     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_pacientes(lista_pacientes)
@@ -263,7 +262,7 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     if opcion in [str(i) for i in range(0, opciones + 1)]:
                         break
                     else:
-                        input("Opción inválida. Presione ENTER para volver a seleccionar.")
+                        input("\nOpción inválida. Presione ENTER para volver a seleccionar.\n")
                 print()
 
                 if opcion == "0":  # Salir del submenú
@@ -304,14 +303,13 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     if opcion in [str(i) for i in range(0, opciones + 1)]:
                         break
                     else:
-                        input("Opción inválida. Presione ENTER para volver a seleccionar.")
+                        input("\nOpción inválida. Presione ENTER para volver a seleccionar.\n")
                 print()
 
                 if opcion == "0":  # Salir del submenú
                     break
                 elif opcion == "1":
-                    disponibilidad.agregar_disponibilidad(lista_disponibilidad, id_contador_disponibilidad,lista_doctores)
-                    id_contador_disponibilidad += 1
+                    id_contador_disponibilidad=disponibilidad.agregar_disponibilidad(lista_disponibilidad, id_contador_disponibilidad,lista_doctores)
                     guardar_json("disponibilidad.json", lista_disponibilidad)
                     print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
                     mostrar_lista(lista_disponibilidad)
@@ -334,9 +332,9 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                 while True:
                     opciones = 3
                     print()
-                    print("---------------------------")
+                    print("---------------------------------------")
                     print("MENÚ PRINCIPAL > MENÚ DE TURNOS MÉDICOS")
-                    print("---------------------------")
+                    print("---------------------------------------")
                     print("[1] Agregar Turno.")
                     print("[2] Eliminar Turno.")
                     print("[3] Modificar Turno.")
@@ -450,13 +448,14 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
         elif opcion == "7":
             while True:
                 while True:
-                    opciones = 2
+                    opciones = 3
                     print()
                     print("---------------------------")
                     print("MENÚ PRINCIPAL > USUARIOS")
                     print("---------------------------")
                     print("[1] Agregar usuario.")
-                    print("[2] Eliminar usuario.")
+                    print("[2] Modificar clave.")
+                    print("[3] Eliminar usuario.")
                     print("---------------------------")
                     print("[0] Volver al menú anterior")
                     print("---------------------------")
@@ -474,6 +473,9 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     usuarios.agregar_usuario(usuarios_data)
                     guardar_json("usuarios.json", usuarios_data)
                 elif opcion == "2":
+                    usuarios.modificar_usuario(usuarios_data)
+                    guardar_json("usuarios.json", usuarios_data)
+                elif opcion == "3":
                     usuarios.eliminar_usuario(usuarios_data)
                     guardar_json("usuarios.json", usuarios_data)
 
@@ -502,10 +504,10 @@ def main():
     usuarios_data        = cargar_json("usuarios.json")
 
     # Contadores inicializados a partir de los datos cargados
-    id_contador_pacientes      = max((p["id"] for p in lista_pacientes),      default=0) + 1
-    id_contador_doctores       = max((d["id"] for d in lista_doctores),       default=0) + 1
-    id_contador_disponibilidad = max((d["id"] for d in lista_disponibilidad), default=0) + 1
-    id_contador_turnos         = max((t["id"] for t in lista_turnos),         default=0) + 1
+    id_contador_pacientes      = max((p["id"] for p in lista_pacientes),      default=0)
+    id_contador_doctores       = max((d["id"] for d in lista_doctores),       default=0)
+    id_contador_disponibilidad = max((d["id"] for d in lista_disponibilidad), default=0)
+    id_contador_turnos         = max((t["id"] for t in lista_turnos),         default=0)
 
     print("\n LISTA DE PACIENTES \n")
     print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')

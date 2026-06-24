@@ -71,6 +71,8 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
 
     matricula=buscar_matricula(lista_doctores)
 
+    id_contador += 1
+
     dia = input("Ingrese día (Ej: Lunes): ").upper()
     while dia not in dias:
             print("Ingrese un día válido. Vuelva a intentar.")
@@ -101,6 +103,7 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
     }
     lista_disponibilidad.append(nueva_disp)
     print("Disponibilidad agregada correctamente.")
+    return id_contador
 
 # Eliminar una disponibilidad de la lista de disponibilidad
 def eliminar_disponibilidad(lista_disponibilidad):

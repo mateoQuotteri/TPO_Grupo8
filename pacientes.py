@@ -25,6 +25,8 @@ def validar_correo(correo):
 
 # Solicita datos, valida el formato y añade un nuevo paciente a la lista
 def agregar_paciente(lista, contador):
+
+    contador+=1
     dni_str = input("Ingrese el DNI: ")
     while not validar_dni(dni_str):
         print("Dato incorrecto")
@@ -64,6 +66,7 @@ def agregar_paciente(lista, contador):
     
     lista.append(nuevo_paciente)
     print("\nDatos agregados con éxito!\n")
+    return contador
 
 # Busca un paciente por DNI y lo elimina de la lista si es encontrado
 def eliminar_paciente(lista):

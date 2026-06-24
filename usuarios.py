@@ -1,6 +1,20 @@
 # Módulo
 # usuarios.py
 
+
+def ingresar_clave():
+    try:        
+        clave=int(input("Ingrese la nueva clave numérica (5 dígitos): "))
+        if clave>10000 and clave<99999:
+            return str(clave)
+        else:
+            print("Debe ingresar una clave de 5 dígitos númericos.")
+            clave=int(input("Ingrese la nueva clave numérica (5 dígitos): "))
+    except ValueError:
+        print ("Debe ingresar un número entero válido. Intente nuevamente.")
+    except:
+        print("Error. Intente nuevamente.")
+
 def agregar_usuario(usuarios):
     perfiles = ["ADMINISTRATIVO", "RECEPCIONISTA", "DOCTOR"]
     print("AGREGAR UN USUARIO")
@@ -20,7 +34,9 @@ def agregar_usuario(usuarios):
         print("Perfil seleccionado: ", perfil)
 
         user = input("Ingrese el nombre de usuario: ")
-        clave = input("Ingrese la clave: ")
+
+        clave=ingresar_clave()
+
         nombre = input("Ingrese nombre y apellido: ")
 
         usuarios[user] = {"clave": clave, "nombre": nombre, "rol": perfil}
@@ -28,6 +44,26 @@ def agregar_usuario(usuarios):
         print()
         print("Usuario agregado de forma correcta.")
         print()
+
+def modificar_usuario(usuarios):
+    """
+    Permite ingresar un usuario por pantalla y cambiar la clave.
+    """
+    print("\nActualizar clave:\n")
+    buscando=True
+    while buscando:
+        user = input("Ingrese el nombre del usuario o 0 para salir: \n")
+        if user == 0:
+            print("Operación cancelada.\n")
+            buscando=False
+        else:
+            while user not in usuarios:
+                print("Usuario no encontrado.\n")
+                user = input("Ingrese el nombre del usuario o 0 para salir: \n")
+            buscando=False
+    clave=ingresar_clave()
+    usuarios[user]["clave"]=clave
+    print("\nClave modificada de forma correcta.\n")
 
 def eliminar_usuario(usuarios):
     print("ELIMINAR UN USUARIO")
