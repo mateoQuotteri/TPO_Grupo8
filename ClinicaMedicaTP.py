@@ -18,14 +18,21 @@ import usuarios
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def cargar_json(nombre_archivo):
+    '''
+    Se abre el archivo indicado para cargar los datos. 
+    Si el archivo no es encontrado o hay algún error de sistema en la carga de datos,
+    se realiza un raise de la excepción SystemExit para salir del sistema sin provocar errores adicionales.
+    '''
     try:
         ruta = os.path.join(BASE_DIR, nombre_archivo)
         with open(ruta, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
         print("ERROR ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.") 
+        raise SystemExit("ERROR CRITICO. SALIENDO DEL SISTEMA.")
     except OSError:
         print("ERROR DE SISTEMA.")
+        raise SystemExit("ERROR CRITICO. SALIENDO DEL SISTEMA.")
 
 def guardar_json(nombre_archivo, datos):
     try:

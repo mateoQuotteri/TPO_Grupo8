@@ -131,54 +131,84 @@ def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
 
     id_buscar=buscar_id_disponibilidad(lista_disponibilidad)
     index_modificar=ids.index(id_buscar)
+    respaldo=lista_disponibilidad[index_modificar].copy()
 
     editando = True
     while editando:
         print("\nSeleccione el dato que desea modificar:")
-        print("[1] Matrícula")
-        print("[2] Día")
-        print("[3] Hora de Inicio")
-        print("[4] Hora de Finalización")
-        print("[5] Rango Horario Completo")
-        print("[0] Terminar edición")
+        print("[1] Matrícula.")
+        print("[2] Día.")
+        print("[3] Hora de Inicio.")
+        print("[4] Hora de Finalización.")
+        print("[5] Rango Horario Completo.")
+        print("[0] Terminar edición.")
 
         opcion = input("Ingrese una opción: ")
 
         if opcion == "0":#MODIFICAR FORMA UN BUCLE INFINITO
-            for fila in lista_disponibilidad:
-                if fila["matricula"] == lista_disponibilidad[index_modificar]["matricula"] and fila["dia"] == lista_disponibilidad[index_modificar]["dia"]:
-                    if fila["hora_inicio"] == lista_disponibilidad[index_modificar]["hora_inicio"] and fila["hora_fin"] == lista_disponibilidad[index_modificar]["hora_fin"]:
-                        print("Error: disponibilidad duplicada.")
-                    else:
-                        print("\nEdición terminada.\n")
-                        editando = False
+            print("\nEdición terminada.\n")
+            editando = False
+
         elif opcion == "1":
             matricula=buscar_matricula(lista_doctores)
-            lista_disponibilidad[index_modificar]["matricula"]=str(matricula)
-            print("\nMatricula actualizada correctamente. \n")
+            lista_disponibilidad[index_modificar]["matricula"]=matricula
+            cambios=True
+            
         elif opcion == "2":
             dia = input("Ingrese día (Ej: Lunes): ").upper()
             while dia not in dias:
                 print("Ingrese un día válido. Vuelva a intentar.")
                 dia = input("Ingrese día (Ej: Lunes): ").upper()
             lista_disponibilidad[index_modificar]["dia"]=dia
-            print("\nDía actualizado correctamente. \n")
+            cambios=True
+            
         elif opcion == "3":
             hora_i=hora_inicio()
-            lista_disponibilidad[index_modificar]["hora_inicio"]=str(hora_i)
-            print("\nHora de inicio actualizada correctamente. \n")
+            if hora_i>=int(lista_disponibilidad[index_modificar]["hora_fin"]):
+                print("Error: hora de inicio debe ser menor que hora de finalización.")
+                hora_i=hora_inicio()
+            else:
+                lista_disponibilidad[index_modificar]["hora_inicio"]=str(hora_i)
+                cambios=True
+            
         elif opcion == "4":
             hora_f=hora_fin()
-            lista_disponibilidad[index_modificar]["hora_fin"]=str(hora_f)
-            print("\nHora de fin actualizada correctamente. \n")
+            if int(lista_disponibilidad[index_modificar]["hora_inicio"])>=hora_f:
+                print("Error: hora de inicio debe ser menor que hora de finalización.")
+                hora_f=hora_fin()
+            else:
+                lista_disponibilidad[index_modificar]["hora_fin"]=str(hora_f)
+                cambios=True
+
         elif opcion == "5":
             while True:
                 hora_i=hora_inicio()
                 hora_f=hora_fin()
                 if hora_i >= hora_f:
-                    print("Error: hora inicio debe ser menor que hora fin.")       
+                    print("Error: hora de inicio debe ser menor que hora de finalización.")       
                 else:
                     lista_disponibilidad[index_modificar]["hora_inicio"]=str(hora_i)
                     lista_disponibilidad[index_modificar]["hora_fin"]=str(hora_f)
-                    print("\nRango horario actualizado correctamente. \n")
+                    cambios=True
                     break
+
+        else: 
+            print("Opción inválida.")
+
+        if cambios:
+            duplicado = False
+            i = 0
+            while i < len(lista_disponibilidad) and not duplicado:
+                fila=lista_disponibilidad[i]
+                if fila["id"] != id_buscar:
+                    if fila["matricula"] == lista_disponibilidad[index_modificar]["matricula"] and fila["dia"] == lista_disponibilidad[index_modificar]["dia"]:
+                        if str(fila["hora_inicio"]) == lista_disponibilidad[index_modificar]["hora_inicio"] and fila["hora_fin"] == lista_disponibilidad[index_modificar]["hora_fin"]:
+                            duplicado = True
+                i+=1
+
+            if duplicado:
+                print("\nError: disponibilidad duplicada.")
+                print("No se guardaron los cambios realizados.\n")
+                lista_disponibilidad[index_modificar] = respaldo
+            else:
+                print("\nSe guardaron los cambios. Datos actualizados correctamente.\n")
