@@ -74,18 +74,23 @@ def agregar_paciente(lista, contador):
 
 # Busca un paciente por DNI y lo elimina de la lista si es encontrado
 def eliminar_paciente(lista):
-    dni_buscador = int(input("Ingrese el DNI a eliminar: "))
+    try:
+        dni_buscador = int(input("Ingrese el DNI a eliminar: "))
+        
+        indice_encontrado = -1
+        for i in range(len(lista)):
+            if int(lista[i]["dni"]) == dni_buscador:
+                indice_encontrado = i
 
-    indice_encontrado = -1
-    for i in range(len(lista)):
-        if int(lista[i]["dni"]) == dni_buscador:
-            indice_encontrado = i
-
-    if indice_encontrado != -1:
-        lista.pop(indice_encontrado)
-        print("Paciente eliminado correctamente.")
-    else:
-        print("No se encontró ningún paciente con ese DNI.")
+        if indice_encontrado != -1:
+            lista.pop(indice_encontrado)
+            print("Paciente eliminado correctamente.")
+        else:
+            print("No se encontró ningún paciente con ese DNI.")
+    except ValueError:
+        print("Debe ingresar un número entero válido. Intente nuevamente.")
+    except:
+        print("Error. Intente nuevamente.")
 
 # Busca un paciente por DNI y permite actualizar sus datos personales
 def modificar_paciente(lista):
