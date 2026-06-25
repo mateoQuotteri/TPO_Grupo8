@@ -125,11 +125,15 @@ def ordenar_lista_dicts(lista, claves, encabezado):
     lista.sort(key=lambda fila: str(fila[claves[columna_a_ordenar]]))
     return lista
 
+def quitar_tildes(texto):
+    reemplazos = {"Á":"A","É":"E","Í":"I","Ó":"O","Ú":"U","á":"a","é":"e","í":"i","ó":"o","ú":"u"}
+    return "".join(reemplazos.get(c, c) for c in texto)
+
 def pedir_especialidad():
     return input("Ingrese especialidad: ").strip().upper()
 
 def filtrar_por_especialidad(lista_doctores, especialidad):
-    return list(filter(lambda doc: especialidad in doc["especialidad"], lista_doctores))
+    return list(filter(lambda doc: quitar_tildes(especialidad) in quitar_tildes(doc["especialidad"]), lista_doctores))
 
 def mostrar_reporte(encabezados, datos):
     print()
