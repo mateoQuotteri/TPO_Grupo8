@@ -5,51 +5,41 @@
 def agregar_doctor(lista, contador):
     try:
         matricula = input("Ingrese el número de matricula: ")
-        if not matricula.isdigit() or not (10000 <= int(matricula) <= 99999):
-            print("Matrícula inválida. Debe ser un número de 5 dígitos.")
-            input("Presione ENTER para volver a comenzar...")
-            return contador
+        while not matricula.isdigit() or not (10000 <= int(matricula) <= 99999):
+            print("Dato incorrecto")
+            matricula = input("Ingrese el número de matricula: ")
 
         for doctor in lista:
             if doctor["matricula"] == matricula:
                 print("La matrícula ya está asociada a un doctor.")
-                input("Presione ENTER para continuar...")
                 return contador
 
         contador += 1
         nombre = input("Ingrese el nombre: ").upper()
         apellido = input("Ingrese el apellido: ").upper()
 
-        telefono = input("Ingrese el teléfono: ")
-        if not telefono.isdigit() or not (1000000000 <= int(telefono) <= 9999999999):
-            print("Teléfono inválido. Debe ser un número de 10 dígitos.")
-            return contador
+        telefono = input("Ingrese el telefono: ")
+        while not telefono.isdigit() or not (1000000000 <= int(telefono) <= 9999999999):
+            print("Dato incorrecto.")
+            telefono = input("Ingrese el número de teléfono: ")
 
-        especialidades = [
-            "CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA",
-            "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA",
-            "DERMATOLOGÍA", "TRAUMATOLOGÍA"
-        ]
+        especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
         print("Seleccione una especialidad: ")
-        for i, esp in enumerate(especialidades, start=1):
-            print(i, "-", esp)
+        for i in range(len(especialidades)):
+            print(i + 1, "-", especialidades[i])
 
-        try:
+        opcion = int(input("Ingrese el número de su especialidad: "))
+        while opcion < 1 or opcion > len(especialidades):
+            print("Opcion invalida, seleccione una de las disponibles")
             opcion = int(input("Ingrese el número de su especialidad: "))
-        except ValueError:
-            print("Opción inválida. Debe ser un número.")
-            return contador
-
-        if opcion < 1 or opcion > len(especialidades):
-            print("Opción inválida. Debe estar dentro del rango.")
-            return contador
 
         especialidad = especialidades[opcion - 1]
 
         activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
-        if activo not in ["S", "N"]:
-            print("Estado inválido. Debe ser `S` o `N`.")
-            return contador
+        while activo != "S" and activo != "N":
+            print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
+            activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
+
 
         nuevo_doctor = {
             "id": contador,
@@ -64,9 +54,10 @@ def agregar_doctor(lista, contador):
         print("\n Datos agregados con éxito!\n")
         return contador
 
-    except Exception as e:
-        print(f"Error inesperado: {e}")
-        return contador
+    except ValueError:
+        print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
+    except:
+        print("\nError. Intente nuevamente.")
 
 # Elimina el doctor correspondiente a la matrícula ingresada.
 def eliminar_doctor(lista):
@@ -81,62 +72,67 @@ def eliminar_doctor(lista):
 
 # Permite editar campos individuales de un doctor mediante un menú de opciones.
 def modificar_doctor(lista):
-    matricula_buscada = input("Ingrese la matricula del doctor que desea modificar: ")
-    while not matricula_buscada.isdigit() or not (10000 <= int(matricula_buscada) <= 99999):
-        print("Dato incorrecto")
+    try:
         matricula_buscada = input("Ingrese la matricula del doctor que desea modificar: ")
+        while not matricula_buscada.isdigit() or not (10000 <= int(matricula_buscada) <= 99999):
+            print("Dato incorrecto")
+            matricula_buscada = input("Ingrese la matricula del doctor que desea modificar: ")
 
-    for doctor in lista:
-        if doctor["matricula"] == matricula_buscada:
-            editando = True
-            while editando:
-                print("\nSeleccione el dato que desea modificar:")
-                print("[1] Nombre")
-                print("[2] Apellido")
-                print("[3] Teléfono")
-                print("[4] Especialidad")
-                print("[5] Activo/Inactivo")
-                print("[0] Terminar edición")
+        for doctor in lista:
+            if doctor["matricula"] == matricula_buscada:
+                editando = True
+                while editando:
+                    print("\nSeleccione el dato que desea modificar:")
+                    print("[1] Nombre")
+                    print("[2] Apellido")
+                    print("[3] Teléfono")
+                    print("[4] Especialidad")
+                    print("[5] Activo/Inactivo")
+                    print("[0] Terminar edición")
 
-                opcion = input("Ingrese una opción: ")
+                    opcion = input("Ingrese una opción: ")
 
-                if opcion == "0":
-                    print("\nEdición terminada.\n")
-                    editando = False
+                    if opcion == "0":
+                        print("\nEdición terminada.\n")
+                        editando = False
 
-                elif opcion == "1":
-                    doctor["nombre"] = input("Ingrese el nuevo nombre: ").upper()
+                    elif opcion == "1":
+                        doctor["nombre"] = input("Ingrese el nuevo nombre: ").upper()
 
-                elif opcion == "2":
-                    doctor["apellido"] = input("Ingrese el nuevo apellido: ").upper()
+                    elif opcion == "2":
+                        doctor["apellido"] = input("Ingrese el nuevo apellido: ").upper()
 
-                elif opcion == "3":
-                    telefono = input("Ingrese el nuevo teléfono: ")
-                    while not telefono.isdigit() or not (1000000000 <= int(telefono) <= 9999999999):
-                        print("Dato incorrecto")
+                    elif opcion == "3":
                         telefono = input("Ingrese el nuevo teléfono: ")
-                    doctor["telefono"] = telefono
+                        while not telefono.isdigit() or not (1000000000 <= int(telefono) <= 9999999999):
+                            print("Dato incorrecto")
+                            telefono = input("Ingrese el nuevo teléfono: ")
+                        doctor["telefono"] = telefono
 
-                elif opcion == "4":
-                    especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
-                    print("Seleccione una especialidad: ")
-                    for j in range(len(especialidades)):
-                        print(j + 1, "-", especialidades[j])
-                    opcion_esp = int(input("Ingrese el número de su especialidad: "))
-                    while opcion_esp < 1 or opcion_esp > len(especialidades):
-                        print("Opcion invalida, seleccione una de las disponibles")
+                    elif opcion == "4":
+                        especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
+                        print("Seleccione una especialidad: ")
+                        for j in range(len(especialidades)):
+                            print(j + 1, "-", especialidades[j])
                         opcion_esp = int(input("Ingrese el número de su especialidad: "))
-                    doctor["especialidad"] = especialidades[opcion_esp - 1]
+                        while opcion_esp < 1 or opcion_esp > len(especialidades):
+                            print("Opcion invalida, seleccione una de las disponibles")
+                            opcion_esp = int(input("Ingrese el número de su especialidad: "))
+                        doctor["especialidad"] = especialidades[opcion_esp - 1]
 
-                elif opcion == "5":
-                    activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
-                    while activo != "S" and activo != "N":
-                        print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
+                    elif opcion == "5":
                         activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
-                    doctor["activo"] = activo
-            return
+                        while activo != "S" and activo != "N":
+                            print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
+                            activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
+                        doctor["activo"] = activo
+                return
 
-    print("\nNo se encontró la matricula\n")
+        print("\nNo se encontró la matricula\n")
+    except ValueError:
+        print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
+    except:
+        print("\nError. Intente nuevamente.")
 
 # Genera un reporte comparando doctores registrados vs doctores con disponibilidad cargada.
 def reporte_cobertura_medica(lista_doctores, lista_disponibilidad):

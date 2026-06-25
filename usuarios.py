@@ -31,6 +31,7 @@ def seleccion_perfil():
         while aux < 0 or aux > len(perfiles):
             print("\nOpción inválida. Vuelva a intentar.")
             aux = int(input("\nSeleccione el perfil del usuario. Ingrese 0 para salir. "))
+        return aux
     except ValueError:
         print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
     except:
@@ -41,12 +42,9 @@ def agregar_usuario(usuarios):
     print("AGREGAR UN USUARIO")
     print()
 
-    for i in range(len(perfiles)):
-        print([i + 1], perfiles[i])
-
-    perfil=seleccion_perfil()
-    if perfil != 0:
-        perfil = perfiles[perfil - 1]
+    seleccion=seleccion_perfil()
+    if seleccion != 0:
+        perfil = perfiles[seleccion - 1]
         print("\nPerfil seleccionado: ", perfil)
         user = input("\nIngrese el nombre de usuario: ")
         while user in usuarios:
