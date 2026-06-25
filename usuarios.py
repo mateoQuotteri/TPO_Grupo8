@@ -46,9 +46,7 @@ def agregar_usuario(usuarios):
         print()
 
 def modificar_usuario(usuarios):
-    """
-    Permite ingresar un usuario por pantalla y cambiar la clave.
-    """
+   
     print("\nActualizar clave:\n")
     buscando=True
     while buscando:

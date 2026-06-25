@@ -18,11 +18,7 @@ import usuarios
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def cargar_json(nombre_archivo):
-    '''
-    Se abre el archivo indicado para cargar los datos. 
-    Si el archivo no es encontrado o hay algún error de sistema en la carga de datos,
-    se realiza un raise de la excepción SystemExit para salir del sistema sin provocar errores adicionales.
-    '''
+  
     try:
         ruta = os.path.join(BASE_DIR, nombre_archivo)
         with open(ruta, "r", encoding="utf-8") as f:
@@ -45,10 +41,7 @@ def guardar_json(nombre_archivo, datos):
         print("ERROR DE SISTEMA.")
 
 def cargar_txt(nombre_archivo):
-    '''
-    Lee usuarios.txt con formato: usuario|clave|nombre|rol (una línea por usuario).
-    Devuelve un diccionario con los datos cargados.
-    '''
+   
     try:
         ruta = os.path.join(BASE_DIR, nombre_archivo)
         usuarios = {}
@@ -67,9 +60,7 @@ def cargar_txt(nombre_archivo):
         raise SystemExit("ERROR CRITICO. SALIENDO DEL SISTEMA.")
 
 def guardar_txt(nombre_archivo, usuarios):
-    '''
-    Escribe el diccionario de usuarios en usuarios.txt con formato: usuario|clave|nombre|rol.
-    '''
+    
     try:
         ruta = os.path.join(BASE_DIR, nombre_archivo)
         with open(ruta, "w", encoding="utf-8") as f:
@@ -82,9 +73,7 @@ def guardar_txt(nombre_archivo, usuarios):
 
 #----------------------------------------------------------------------------------------------
 # FUNCIONES
-#----------------------------------------------------------------------------------------------
-
-# Ordena la lista de diccionarios de pacientes según la clave elegida (ID, DNI, Nombre, etc.) por el usuario.
+#---------------------------------------
 def ordenar_pacientes_dic(lista, encabezado):
     claves = ["id", "dni", "nombre", "apellido", "telefono", "correo"]
 
@@ -234,7 +223,7 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
         if opcion == "0":
             exit()
 
-        # MEDICO (Solo lectura y filtrado)
+        # MEDICO (Solo lect)
         if rol == "DOCTOR":
             if opcion == "3":
                 print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
