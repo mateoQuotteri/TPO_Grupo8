@@ -3,55 +3,70 @@
 
 # Valida matrícula única, datos de contacto y especialidad para sumar un nuevo doctor.
 def agregar_doctor(lista, contador):
-
-    matricula = input("Ingrese el número de matricula: ")
-    while not matricula.isdigit() or not (10000 <= int(matricula) <= 99999):
-        print("Dato incorrecto")
+    try:
         matricula = input("Ingrese el número de matricula: ")
-
-    for doctor in lista:
-        if doctor["matricula"] == matricula:
-            print("La matrícula ya está asociada a un doctor.")
+        if not matricula.isdigit() or not (10000 <= int(matricula) <= 99999):
+            print("Matrícula inválida. Debe ser un número de 5 dígitos.")
+            input("Presione ENTER para volver a comenzar...")
             return contador
 
-    contador += 1
-    nombre = input("Ingrese el nombre: ").upper()
-    apellido = input("Ingrese el apellido: ").upper()
+        for doctor in lista:
+            if doctor["matricula"] == matricula:
+                print("La matrícula ya está asociada a un doctor.")
+                input("Presione ENTER para continuar...")
+                return contador
 
-    telefono = input("Ingrese el telefono: ")
-    while not telefono.isdigit() or not (1000000000 <= int(telefono) <= 9999999999):
-        print("Dato incorrecto.")
-        telefono = input("Ingrese el número de teléfono: ")
+        contador += 1
+        nombre = input("Ingrese el nombre: ").upper()
+        apellido = input("Ingrese el apellido: ").upper()
 
-    especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
-    print("Seleccione una especialidad: ")
-    for i in range(len(especialidades)):
-        print(i + 1, "-", especialidades[i])
+        telefono = input("Ingrese el teléfono: ")
+        if not telefono.isdigit() or not (1000000000 <= int(telefono) <= 9999999999):
+            print("Teléfono inválido. Debe ser un número de 10 dígitos.")
+            return contador
 
-    opcion = int(input("Ingrese el número de su especialidad: "))
-    while opcion < 1 or opcion > len(especialidades):
-        print("Opcion invalida, seleccione una de las disponibles")
-        opcion = int(input("Ingrese el número de su especialidad: "))
+        especialidades = [
+            "CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA",
+            "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA",
+            "DERMATOLOGÍA", "TRAUMATOLOGÍA"
+        ]
+        print("Seleccione una especialidad: ")
+        for i, esp in enumerate(especialidades, start=1):
+            print(i, "-", esp)
 
-    especialidad = especialidades[opcion - 1]
+        try:
+            opcion = int(input("Ingrese el número de su especialidad: "))
+        except ValueError:
+            print("Opción inválida. Debe ser un número.")
+            return contador
 
-    activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
-    while activo != "S" and activo != "N":
-        print("Dato incorrecto. Ingrese `S` para activo o `N` para inactivo.")
+        if opcion < 1 or opcion > len(especialidades):
+            print("Opción inválida. Debe estar dentro del rango.")
+            return contador
+
+        especialidad = especialidades[opcion - 1]
+
         activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
+        if activo not in ["S", "N"]:
+            print("Estado inválido. Debe ser `S` o `N`.")
+            return contador
 
-    nuevo_doctor = {
-        "id": contador,
-        "matricula": matricula,
-        "nombre": nombre,
-        "apellido": apellido,
-        "telefono": telefono,
-        "especialidad": especialidad,
-        "activo": activo
-    }
-    lista.append(nuevo_doctor)
-    print("\nDatos agregados con éxito!\n")
-    return contador
+        nuevo_doctor = {
+            "id": contador,
+            "matricula": matricula,
+            "nombre": nombre,
+            "apellido": apellido,
+            "telefono": telefono,
+            "especialidad": especialidad,
+            "activo": activo
+        }
+        lista.append(nuevo_doctor)
+        print("\n Datos agregados con éxito!\n")
+        return contador
+
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+        return contador
 
 # Elimina el doctor correspondiente a la matrícula ingresada.
 def eliminar_doctor(lista):

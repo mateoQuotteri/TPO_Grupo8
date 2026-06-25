@@ -278,5 +278,12 @@
     "dia": "LUNES",
     "hora_inicio": "12",
     "hora_fin": "20"
+  },
+  {
+    "id": 42,
+    "matricula": "18901",
+    "dia": "LUNES",
+    "hora_inicio": "8",
+    "hora_fin": "17"
   }
 ]

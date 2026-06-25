@@ -70,7 +70,7 @@ def filtrarDoctoresRecursivo(lista_doctores, especialidad_seleccionada):
     # Caso recursivo y reducción del dominio: obtenemos primero los doctores válidos del resto de la lista.
     resto_filtrado = filtrarDoctoresRecursivo(lista_doctores[1:], especialidad_seleccionada)
 
-    if primer_doc["especialidad"] == lista_doctores[0]["especialidad"] and primer_doc["activo"] == "S":
+    if primer_doc["especialidad"] == especialidad_seleccionada and primer_doc["activo"] == "S":
         return [primer_doc] + resto_filtrado
     else:
         return resto_filtrado
@@ -162,71 +162,106 @@ def turno_ocupado(lista_turnos, fecha, hora, matricula):
 
 # Gestiona el flujo completo para registrar un nuevo turno: valida el paciente, elige especialidad, médico y horario.
 def agregar_turno(lista_turnos, lista_pacientes, lista_doctores, contador, lista_disponibilidad):
-    contador += 1
+    try:
 
-    dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
-    if dni == 0:
-        return
+        # DNI del paciente
+        try:
+            dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
+        except ValueError:
+            print("Error: El DNI debe ser un número entero.")
+            return contador
 
-    while not buscarDni(lista_pacientes, dni):
-        print("Dato incorrecto o DNI no registrado.")
-        dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
         if dni == 0:
-            return
+            return contador
 
-    especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
+        if not buscarDni(lista_pacientes, dni):
+            print("Dato incorrecto o DNI no registrado.")
+            return contador
 
-    while True:
+        # Selección de especialidad
+        especialidades = [
+            "CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA",
+            "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA",
+            "DERMATOLOGÍA", "TRAUMATOLOGÍA"
+        ]
         print("\nSeleccione una especialidad (0 para volver al menú): ")
-        for i in range(len(especialidades)):
-            print(i + 1, "-", especialidades[i])
-        opcion = int(input("Ingrese el número de la especialidad: \t"))
+        for i, esp in enumerate(especialidades, start=1):
+            print(i, "-", esp)
+        
+        try:
+            opcion = int(input("Ingrese el número de la especialidad: "))
+        except ValueError:
+            print("Error: Debe ingresar un número válido.")
+            return contador
 
         if opcion == 0:
-            return
-        while opcion < 1 or opcion > len(especialidades):
-            print("Opción inválida.")
-            opcion = int(input("Ingrese el número de la especialidad: \t"))
+            return contador
+        if opcion < 1 or opcion > len(especialidades):
+            print("Opción inválida. Debe estar dentro del rango.")
+            return contador
 
         especialidad = especialidades[opcion - 1]
         especialistas = buscarDoctorPorEspecialidad(lista_doctores, especialidad)
 
-        seleccion = int(input("Seleccione una opción: "))
-        while seleccion < 0 or seleccion > len(especialistas):
-            print("Opción inválida.")
+        # Selección de doctor
+        try:
             seleccion = int(input("Seleccione una opción: "))
+        except ValueError:
+            print("Error: Debe ingresar un número válido.")
+            return contador
+
+        if seleccion < 1 or seleccion > len(especialistas):
+            print("Opción inválida.")
+            return contador
 
         matricula = doctor_seleccionado(especialistas, seleccion)
+
+
+        # Selección de turno disponible
         turno = turnos_disponibles(matricula, lista_disponibilidad, lista_turnos, especialidad, lista_doctores)
-
         if turno == "volver":
-            continue
+            return contador
 
-        if turno is not None and turno is not False:
-            if turno_ocupado(lista_turnos, turno[0], turno[1], turno[2]):
-                print("Que pena :( Este turno ya fue tomado por otro paciente.")
-            else:
-                nuevo_id = len(lista_turnos) + 1
-                nuevo_turno = {
-                    "id": nuevo_id,
-                    "fecha": turno[0],
-                    "hora": turno[1],
-                    "dni": str(dni),
-                    "especialidad": turno[3],
-                    "matricula": turno[2]
-                }
-                lista_turnos.append(nuevo_turno)
-                print("\nTurno agregado con éxito.\n")
-        break
+        if turno and not turno_ocupado(lista_turnos, turno[0], turno[1], turno[2]):
+            contador += 1
+            nuevo_id = len(lista_turnos) + 1
+            nuevo_turno = {
+                "id": nuevo_id,
+                "fecha": turno[0],
+                "hora": turno[1],
+                "dni": str(dni),
+                "especialidad": turno[3],
+                "matricula": turno[2]
+            }
+            lista_turnos.append(nuevo_turno)
+            print("\nTurno agregado con éxito.\n")
+        else:
+            print("Ese turno ya fue tomado por otro paciente.")
+
+        return contador
+
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+        return contador
 
 # Permite al usuario visualizar los turnos de un paciente por DNI y dar de baja el que seleccione del listado.
 def eliminar_turno(lista_pacientes, lista_turnos):
-    dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
+    try:
+        dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
+    except ValueError:
+        print("Error: El DNI debe ser un número entero.")
+        return
+
     if dni == 0:
         return
+
     while not buscarDni(lista_pacientes, dni):
         print("Dato incorrecto o DNI no registrado.")
-        dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
+        try:
+            dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
+        except ValueError:
+            print("Error: El DNI debe ser un número entero.")
+            return
         if dni == 0:
             return
 
@@ -243,12 +278,22 @@ def eliminar_turno(lista_pacientes, lista_turnos):
         print("El DNI no tiene turnos asociados.")
         return
 
-    turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar o 0 para salir: "))
+    try:
+        turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar o 0 para salir: "))
+    except ValueError:
+        print("Error: Debe ingresar un número entero.")
+        return
+
     if turno_para_eliminar == 0:
         return
-    while turno_para_eliminar > len(cantidad_turnos):
+
+    while turno_para_eliminar < 1 or turno_para_eliminar > len(cantidad_turnos):
         print("Opcion Invalida")
-        turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar o 0 para salir: "))
+        try:
+            turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar o 0 para salir: "))
+        except ValueError:
+            print("Error: Debe ingresar un número entero.")
+            return
         if turno_para_eliminar == 0:
             return
 
@@ -256,14 +301,25 @@ def eliminar_turno(lista_pacientes, lista_turnos):
     lista_turnos.pop(indice_eliminado)
     print("\nTurno eliminado con éxito.\n")
 
+
 # Permite cambiar la fecha, hora o médico de un turno ya existente manteniendo la misma especialidad original.
 def modificar_turno(lista_turnos, lista_doctores, lista_pacientes, lista_disponibilidad):
-    dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
+    try:
+        dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
+    except ValueError:
+        print("Error: El DNI debe ser un número entero.")
+        return
+
     if dni == 0:
         return
+
     while not buscarDni(lista_pacientes, dni):
         print("Dato incorrecto o DNI no registrado.")
-        dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
+        try:
+            dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
+        except ValueError:
+            print("Error: El DNI debe ser un número entero.")
+            return
         if dni == 0:
             return
 
@@ -278,12 +334,22 @@ def modificar_turno(lista_turnos, lista_doctores, lista_pacientes, lista_disponi
         return
 
     print(f"LISTA TURNOS RESERVADOS", turnos_reservados)
-    id_turno_a_modificar = int(input("Ingrese el numero de turno a modificar o 0 para volver: "))
+    try:
+        id_turno_a_modificar = int(input("Ingrese el numero de turno a modificar o 0 para volver: "))
+    except ValueError:
+        print("Error: Debe ingresar un número entero.")
+        return
+
     if id_turno_a_modificar == 0:
         return
+
     while id_turno_a_modificar not in [t["id"] for t in turnos_reservados]:
         print("Opcion Invalida")
-        id_turno_a_modificar = int(input("Ingrese el numero de turno a modificar o 0 para volver: "))
+        try:
+            id_turno_a_modificar = int(input("Ingrese el numero de turno a modificar o 0 para volver: "))
+        except ValueError:
+            print("Error: Debe ingresar un número entero.")
+            return
         if id_turno_a_modificar == 0:
             return
 
@@ -297,10 +363,19 @@ def modificar_turno(lista_turnos, lista_doctores, lista_pacientes, lista_disponi
 
     especialistas = buscarDoctorPorEspecialidad(lista_doctores, especialidad)
 
-    seleccion = int(input("Seleccione una opción: "))
+    try:
+        seleccion = int(input("Seleccione una opción: "))
+    except ValueError:
+        print("Error: Debe ingresar un número entero.")
+        return
+
     while seleccion < 0 or seleccion > len(especialistas):
         print("Opción inválida.")
-        seleccion = int(input("Seleccione una opción: "))
+        try:
+            seleccion = int(input("Seleccione una opción: "))
+        except ValueError:
+            print("Error: Debe ingresar un número entero.")
+            return
 
     matricula = doctor_seleccionado(especialistas, seleccion)
 

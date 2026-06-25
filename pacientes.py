@@ -25,48 +25,63 @@ def validar_correo(correo):
 
 # Solicita datos, valida el formato y añade un nuevo paciente a la lista
 def agregar_paciente(lista, contador):
+    try:
+        dni_str = input("Ingrese el DNI: ")
+        try:
+            dni = int(dni_str)
+            if not validar_dni(dni_str):
+                raise ValueError("DNI inválido.")
+        except ValueError as e:
+            print(e)
+            return contador
 
-    contador+=1
-    dni_str = input("Ingrese el DNI: ")
-    while not validar_dni(dni_str):
-        print("Dato incorrecto")
-        dni_str = input("DNI: ")
-    dni = int(dni_str)
+        # Validar duplicado
+        for paciente in lista:
+            if str(paciente["dni"]) == str(dni):
+                print("Error: El paciente ya está registrado.")
+                return contador
 
-    nombre = input("Ingrese el nombre: ").upper()
-    while not validar_nombre(nombre):
-        print("Dato incorrecto")
-        nombre = input("Nombre: ").upper()
+        nombre = input("Ingrese el nombre: ").upper()
+        if not validar_nombre(nombre):
+            print("Nombre inválido.")
+            return contador
 
-    apellido = input("Ingrese el apellido: ").upper()
-    while not validar_apellido(apellido):
-        print("Dato incorrecto")
-        apellido = input("Apellido: ").upper()
+        apellido = input("Ingrese el apellido: ").upper()
+        if not validar_apellido(apellido):
+            print("Apellido inválido.")
+            return contador
 
-    telefono_str = input("Ingrese el telefono: ")
-    while not validar_telefono(telefono_str):
-        print("Dato incorrecto")
-        telefono_str = input("Telefono: ")
-    telefono = int(telefono_str)
+        telefono_str = input("Ingrese el teléfono: ")
+        try:
+            telefono = int(telefono_str)
+            if not validar_telefono(telefono_str):
+                raise ValueError("Teléfono inválido.")
+        except ValueError as e:
+            print(e)
+            return contador
 
-    correo = input("Ingrese el correo: ")
-    while not validar_correo(correo):
-        print("Dato incorrecto")
-        correo = input("Correo: ")
-    correo = correo.upper()
-    
-    nuevo_paciente = {
-        "id": contador,
-        "dni": dni,
-        "nombre": nombre,
-        "apellido": apellido,
-        "telefono": telefono,
-        "correo": correo
-    }
-    
-    lista.append(nuevo_paciente)
-    print("\nDatos agregados con éxito!\n")
-    return contador
+        correo = input("Ingrese el correo: ").upper()
+        if not validar_correo(correo):
+            print("Correo inválido.")
+            return contador
+
+        contador += 1
+        nuevo_paciente = {
+            "id": contador,
+            "dni": dni,
+            "nombre": nombre,
+            "apellido": apellido,
+            "telefono": telefono,
+            "correo": correo
+        }
+
+        lista.append(nuevo_paciente)
+        print("\nPaciente agregado con éxito!\n")
+        return contador
+
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+        return contador
 
 # Busca un paciente por DNI y lo elimina de la lista si es encontrado
 def eliminar_paciente(lista):
@@ -80,6 +95,7 @@ def eliminar_paciente(lista):
     if indice_encontrado != -1:
         lista.pop(indice_encontrado)
         print("Paciente eliminado correctamente.")
+        input("Presione ENTER para volver al menú...")
     else:
         print("No se encontró ningún paciente con ese DNI.")
 
