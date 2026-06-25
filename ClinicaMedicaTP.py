@@ -40,7 +40,43 @@ def guardar_json(nombre_archivo, datos):
         with open(ruta, "w", encoding="utf-8") as f:
             json.dump(datos, f, ensure_ascii=False, indent=2)
     except FileNotFoundError:
-        print("ERROR: ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.") 
+        print("ERROR: ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.")
+    except OSError:
+        print("ERROR DE SISTEMA.")
+
+def cargar_txt(nombre_archivo):
+    '''
+    Lee usuarios.txt con formato: usuario|clave|nombre|rol (una línea por usuario).
+    Devuelve un diccionario con los datos cargados.
+    '''
+    try:
+        ruta = os.path.join(BASE_DIR, nombre_archivo)
+        usuarios = {}
+        with open(ruta, "r", encoding="utf-8") as f:
+            for linea in f:
+                linea = linea.strip()
+                if linea:
+                    usuario, clave, nombre, rol = linea.split("|")
+                    usuarios[usuario] = {"clave": clave, "nombre": nombre, "rol": rol}
+        return usuarios
+    except FileNotFoundError:
+        print("ERROR: ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.")
+        raise SystemExit("ERROR CRITICO. SALIENDO DEL SISTEMA.")
+    except OSError:
+        print("ERROR DE SISTEMA.")
+        raise SystemExit("ERROR CRITICO. SALIENDO DEL SISTEMA.")
+
+def guardar_txt(nombre_archivo, usuarios):
+    '''
+    Escribe el diccionario de usuarios en usuarios.txt con formato: usuario|clave|nombre|rol.
+    '''
+    try:
+        ruta = os.path.join(BASE_DIR, nombre_archivo)
+        with open(ruta, "w", encoding="utf-8") as f:
+            for usuario, datos in usuarios.items():
+                f.write(f"{usuario}|{datos['clave']}|{datos['nombre']}|{datos['rol']}\n")
+    except FileNotFoundError:
+        print("ERROR: ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.")
     except OSError:
         print("ERROR DE SISTEMA.")
 
@@ -107,16 +143,31 @@ def filtrar_por_especialidad(lista_doctores, especialidad):
     return list(filter(lambda doc: especialidad in doc["especialidad"], lista_doctores))
 
 def mostrar_reporte(encabezados, datos):
-    print("\n--- REPORTE ---\n")
-    ancho = 18
-    for col in encabezados:
-        print(f"{str(col):<{ancho}}", end="")
     print()
-    print("-" * (ancho * len(encabezados)))
-    for item in datos:
-        for valor in item.values():
-            print(f"{str(valor):<{ancho}}", end="")
+    if not datos:
+        print("  No se encontraron resultados para esa especialidad.")
         print()
+        return
+
+    # Ancho de cada columna: máximo entre el encabezado y el valor más largo + padding
+    anchos = [len(str(h)) for h in encabezados]
+    for item in datos:
+        for j, v in enumerate(item.values()):
+            anchos[j] = max(anchos[j], len(str(v)))
+    anchos = [a + 2 for a in anchos]
+
+    def fila_sep(izq, mid, der, relleno):
+        return izq + mid.join(relleno * a for a in anchos) + der
+
+    print(fila_sep("╔", "╦", "╗", "═"))
+    print("║" + "║".join(f"{str(h):^{a}}" for h, a in zip(encabezados, anchos)) + "║")
+    print(fila_sep("╠", "╬", "╣", "═"))
+    for i, item in enumerate(datos):
+        print("║" + "║".join(f"{str(v):^{a}}" for v, a in zip(item.values(), anchos)) + "║")
+        if i < len(datos) - 1:
+            print(fila_sep("╟", "╫", "╢", "─"))
+    print(fila_sep("╚", "╩", "╝", "═"))
+    print(f"\n  Total: {len(datos)} resultado(s).\n")
 
 # Recorre y muestra en consola cualquier lista de dicts con un formato de columnas alineadas.
 def mostrar_lista(lista):
@@ -471,13 +522,13 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     break
                 elif opcion == "1":
                     usuarios.agregar_usuario(usuarios_data)
-                    guardar_json("usuarios.json", usuarios_data)
+                    guardar_txt("usuarios.txt", usuarios_data)
                 elif opcion == "2":
                     usuarios.modificar_usuario(usuarios_data)
-                    guardar_json("usuarios.json", usuarios_data)
+                    guardar_txt("usuarios.txt", usuarios_data)
                 elif opcion == "3":
                     usuarios.eliminar_usuario(usuarios_data)
-                    guardar_json("usuarios.json", usuarios_data)
+                    guardar_txt("usuarios.txt", usuarios_data)
 
     return
 
@@ -501,7 +552,7 @@ def main():
     lista_doctores       = cargar_json("doctores.json")
     lista_disponibilidad = cargar_json("disponibilidad.json")
     lista_turnos         = cargar_json("turnos.json")
-    usuarios_data        = cargar_json("usuarios.json")
+    usuarios_data        = cargar_txt("usuarios.txt")
 
     # Contadores inicializados a partir de los datos cargados
     id_contador_pacientes      = max((p["id"] for p in lista_pacientes),      default=0)

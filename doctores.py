@@ -137,12 +137,21 @@ def reporte_cobertura_medica(lista_doctores, lista_disponibilidad):
     # Diferencia: doctores registrados pero SIN horarios cargados
     doctores_sin_horario = todos_los_doctores - doctores_con_horario
 
-    print(f"Total de doctores registrados: {len(todos_los_doctores)}")
-    print(f"Doctores con disponibilidad: {len(doctores_con_horario)}")
-
-    if len(doctores_sin_horario) > 0:
-        print(f"Alerta: Hay {len(doctores_sin_horario)} doctores sin disponibilidad cargada.")
+    ancho = 44
+    print()
+    print("╔" + "═" * ancho + "╗")
+    print("║" + "  REPORTE DE COBERTURA MÉDICA".center(ancho) + "║")
+    print("╠" + "═" * ancho + "╣")
+    print("║" + f"  Total de doctores registrados:   {len(todos_los_doctores)}".ljust(ancho) + "║")
+    print("║" + f"  Doctores con disponibilidad:     {len(doctores_con_horario)}".ljust(ancho) + "║")
+    print("║" + f"  Doctores sin disponibilidad:     {len(doctores_sin_horario)}".ljust(ancho) + "║")
+    print("╠" + "═" * ancho + "╣")
+    if doctores_sin_horario:
+        print("║" + "  [!] Matrículas a revisar:".ljust(ancho) + "║")
         # Para que el usuario vea las matriculas ordenadas usamos sorted
-        print(f"Matrículas a revisar: {sorted(list(doctores_sin_horario))}")
+        for mat in sorted(doctores_sin_horario):
+            print("║" + f"        - {mat}".ljust(ancho) + "║")
     else:
-        print("Todos los doctores tienen sus horarios al día.")
+        print("║" + "  [OK] Todos los doctores tienen horarios.".ljust(ancho) + "║")
+    print("╚" + "═" * ancho + "╝")
+    print()
