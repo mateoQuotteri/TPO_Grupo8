@@ -68,8 +68,15 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
 
     dias = ["LUNES","MARTES", "MIÉRCOLES", "MIERCOLES",
         "JUEVES", "VIERNES", "SABADO", "SÁBADO", "DOMINGO"]
-
-    matricula=buscar_matricula(lista_doctores)
+    try:
+        matricula = int(input("Ingrese matrícula del doctor: "))
+        while matricula<10000 or matricula>99999:
+            print("La matrícula ingresada no se encuentra en el sistema. Vuelva a intentar.")
+            matricula = int(input("Ingrese matrícula del doctor: "))
+    except ValueError:
+        print("Debe ingresar un número entero. Vuelva a intentar.")
+    except:
+        print("Error. Vuelva a intentar.")
 
     id_contador += 1
 
@@ -81,7 +88,6 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
     hora_i=hora_inicio()
     hora_f=hora_fin()
     
-
     # VALIDACIÓN SIMPLE
     if hora_i >= hora_f:
         print("Error: hora inicio debe ser menor que hora fin.")
@@ -89,7 +95,7 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
 
     # VALIDAR DUPLICADO (mismo doctor, mismo día y rango igual)
     for fila in lista_disponibilidad:
-        if fila["matricula"] == matricula and fila["dia"] == dia:
+        if fila["matricula"] == str(matricula) and fila["dia"] == dia:
             if fila["hora_inicio"] == str(hora_i) and fila["hora_fin"] == str(hora_f):
                 print("Error: disponibilidad duplicada.")
                 return
