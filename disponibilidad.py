@@ -10,8 +10,8 @@ def buscar_matricula(lista_doctores):
     matriculas=[m["matricula"] for m in lista_doctores]
     matricula = input("Ingrese matrícula del doctor: ")
     while matricula not in matriculas:
-        print("La matrícula ingresada no se encuentra en el sistema. Vuelva a intentar.")
-        matricula = input("Ingrese matrícula del doctor: ")
+        print("\nLa matrícula ingresada no se encuentra en el sistema. Vuelva a intentar.")
+        matricula = input("\nIngrese matrícula del doctor: ")
     return matricula
         
 def hora_inicio():
@@ -24,9 +24,9 @@ def hora_inicio():
             if hora>=8 and hora<=20:
                 return hora
             else:
-                print("Opcion inválida. Intente nuevamente")
+                print("\nOpcion inválida. Intente nuevamente.")
         except ValueError:
-            print ("Debe ingresar un número entero válido. Intente nuevamente.")
+            print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
         except:
             print("Error. Intente nuevamente.")
 
@@ -40,9 +40,9 @@ def hora_fin():
             if hora>=8 and hora<=20:
                 return hora
             else:
-                print("Opcion inválida. Intente nuevamente")
+                print("\nOpcion inválida. Intente nuevamente.")
         except ValueError:
-            print ("Debe ingresar un número entero válido. Intente nuevamente.")
+            print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
         except:
             print("Error. Intente nuevamente.")
 
@@ -53,13 +53,13 @@ def buscar_id_disponibilidad(lista_disponibilidad):
     ids=[d["id"] for d in lista_disponibilidad]
     while True:
         try:
-            id_buscar = int(input("Ingrese ID de disponibilidad: "))
+            id_buscar = int(input("\nIngrese ID de disponibilidad: "))
             while id_buscar not in ids:
-                print("ID no válido. Vuelva a intentar.")
-                id_buscar = int(input("Ingrese ID de disponibilidad: "))
+                print("\nID no válido. Vuelva a intentar.")
+                id_buscar = int(input("\nIngrese ID de disponibilidad: "))
             return id_buscar
         except ValueError:
-            print("Debe ingresar un número entero. Vuelva a intentar.")
+            print("\nDebe ingresar un número entero. Vuelva a intentar.\n")
         except:
             print("Error. Vuelva a intentar.")
 
@@ -69,38 +69,28 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
 
     dias = ["LUNES","MARTES", "MIÉRCOLES", "MIERCOLES",
         "JUEVES", "VIERNES", "SABADO", "SÁBADO", "DOMINGO"]
-    try:
-        matricula = int(input("Ingrese matrícula del doctor: "))
-        while matricula<10000 or matricula>99999:
-            print("La matrícula ingresada no se encuentra en el sistema. Vuelva a intentar.")
-            matricula = int(input("Ingrese matrícula del doctor: "))
-    except ValueError:
-        print("Debe ingresar un número entero. Vuelva a intentar.")
-    except:
-        print("Error. Vuelva a intentar.")
+    matricula=buscar_matricula(lista_doctores)
 
-    id_contador += 1
-
-    dia = input("Ingrese día (Ej: Lunes): ").upper()
+    dia = input("\nIngrese día (Ej: Lunes): ").upper()
     while dia not in dias:
-            print("Ingrese un día válido. Vuelva a intentar.")
-            dia = input("Ingrese día (Ej: Lunes): ").upper()
+            print("\nIngrese un día válido. Vuelva a intentar.")
+            dia = input("\nIngrese día (Ej: Lunes): ").upper()
 
     hora_i=hora_inicio()
     hora_f=hora_fin()
     
     # VALIDACIÓN SIMPLE
     if hora_i >= hora_f:
-        print("Error: hora inicio debe ser menor que hora fin.")
-        return
+        print("\nError: hora inicio debe ser menor que hora fin.\n")
+        return id_contador
 
     # VALIDAR DUPLICADO (mismo doctor, mismo día y rango igual)
     for fila in lista_disponibilidad:
         if fila["matricula"] == str(matricula) and fila["dia"] == dia:
             if fila["hora_inicio"] == str(hora_i) and fila["hora_fin"] == str(hora_f):
-                print("Error: disponibilidad duplicada.")
-                return
-
+                print("\nError: disponibilidad duplicada.\n")
+                return id_contador
+    id_contador += 1
     nueva_disp = {
         "id": id_contador,
         "matricula": matricula,
@@ -109,7 +99,7 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
         "hora_fin": str(hora_f)
     }
     lista_disponibilidad.append(nueva_disp)
-    print("Disponibilidad agregada correctamente.")
+    print("\nDisponibilidad agregada correctamente.\n")
     return id_contador
 
 # Eliminar una disponibilidad de la lista de disponibilidad
@@ -119,16 +109,16 @@ def eliminar_disponibilidad(lista_disponibilidad):
     ids=[d["id"] for d in lista_disponibilidad]
     id_buscar=buscar_id_disponibilidad(lista_disponibilidad)
     index_eliminar=ids.index(id_buscar)
-    print("Se va a eliminar la disponibilidad con ID: ",id_buscar)
-    confirmar=input("Ingresar S para confirmar, o N para cancelar: ")
+    print("\nSe va a eliminar la disponibilidad con ID: ",id_buscar)
+    confirmar=input("\nIngresar S para confirmar, o N para cancelar: ")
     while confirmar != "S" and confirmar !="N":
-        print("Opción inválida. Vuelva a intentar.")
-        confirmar=input("Ingresar S para confirmar, o N para cancelar: ")
+        print("\nOpción inválida. Vuelva a intentar.")
+        confirmar=input("\nIngresar S para confirmar, o N para cancelar: ")
     if confirmar == "S":
         lista_disponibilidad.pop(index_eliminar)
-        print("Disponibilidad eliminada.")
+        print("\nDisponibilidad eliminada.\n")
     elif confirmar == "N":
-        "Operación cancelada."
+        "\nOperación cancelada.\n"
 
 # Modificar una disponibilidad de la lista de disponibilidad
 def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
@@ -165,17 +155,17 @@ def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
             cambios=True
             
         elif opcion == "2":
-            dia = input("Ingrese día (Ej: Lunes): ").upper()
+            dia = input("\nIngrese día (Ej: Lunes): ").upper()
             while dia not in dias:
-                print("Ingrese un día válido. Vuelva a intentar.")
-                dia = input("Ingrese día (Ej: Lunes): ").upper()
+                print("\nIngrese un día válido. Vuelva a intentar.")
+                dia = input("\nIngrese día (Ej: Lunes): ").upper()
             lista_disponibilidad[index_modificar]["dia"]=dia
             cambios=True
             
         elif opcion == "3":
             hora_i=hora_inicio()
             if hora_i>=int(lista_disponibilidad[index_modificar]["hora_fin"]):
-                print("Error: hora de inicio debe ser menor que hora de finalización.")
+                print("\nError: hora de inicio debe ser menor que hora de finalización.\n")
                 hora_i=hora_inicio()
             else:
                 lista_disponibilidad[index_modificar]["hora_inicio"]=str(hora_i)
@@ -184,7 +174,7 @@ def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
         elif opcion == "4":
             hora_f=hora_fin()
             if int(lista_disponibilidad[index_modificar]["hora_inicio"])>=hora_f:
-                print("Error: hora de inicio debe ser menor que hora de finalización.")
+                print("\nError: hora de inicio debe ser menor que hora de finalización.\n")
                 hora_f=hora_fin()
             else:
                 lista_disponibilidad[index_modificar]["hora_fin"]=str(hora_f)
@@ -195,7 +185,7 @@ def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
                 hora_i=hora_inicio()
                 hora_f=hora_fin()
                 if hora_i >= hora_f:
-                    print("Error: hora de inicio debe ser menor que hora de finalización.")       
+                    print("\nError: hora de inicio debe ser menor que hora de finalización.\n")       
                 else:
                     lista_disponibilidad[index_modificar]["hora_inicio"]=str(hora_i)
                     lista_disponibilidad[index_modificar]["hora_fin"]=str(hora_f)
@@ -203,7 +193,7 @@ def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
                     break
 
         else: 
-            print("Opción inválida.")
+            print("\nOpción inválida.\n")
 
         if cambios:
             duplicado = False

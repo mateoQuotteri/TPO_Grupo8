@@ -274,7 +274,7 @@
   },
   {
     "id": 41,
-    "matricula": "58321",
+    "matricula": "27890",
     "dia": "LUNES",
     "hora_inicio": "12",
     "hora_fin": "20"
@@ -285,5 +285,19 @@
     "dia": "LUNES",
     "hora_inicio": "8",
     "hora_fin": "17"
+  },
+  {
+    "id": 43,
+    "matricula": "18901",
+    "dia": "MARTES",
+    "hora_inicio": "10",
+    "hora_fin": "15"
+  },
+  {
+    "id": 44,
+    "matricula": "45679",
+    "dia": "MIERCOLES",
+    "hora_inicio": "9",
+    "hora_fin": "10"
   }
 ]
