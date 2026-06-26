@@ -181,3 +181,15 @@ def modificar_paciente(lista):
         print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
     except:
         print("\nError. Intente nuevamente.")
+
+lista_prueba = [
+    {"dni": "12345678"},
+    {"dni": "28756432"},
+    {"dni": "99001122"}
+]
+
+lista_prueba = [
+    {"dni": "12345678"},
+    {"dni": "28756432"},
+    {"dni": "99001122"}
+]

@@ -1,6 +1,7 @@
 # Módulo
 # disponibilidad.py
 
+from functools import reduce
 
 def buscar_matricula(lista_doctores):
     """
@@ -221,3 +222,18 @@ def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
                 lista_disponibilidad[index_modificar] = respaldo
             else:
                 print("\nSe guardaron los cambios. Datos actualizados correctamente.\n")
+
+#Horas semanales por doctor
+def reporte_horas_doctor(lista_disponibilidad, matricula):
+    # Lista de horas trabajadas por cada disponibilidad del doctor
+    horas = [int(d["hora_fin"]) - int(d["hora_inicio"]) for d in lista_disponibilidad if d["matricula"] == matricula]
+
+    if not horas:
+        print(f"No hay disponibilidad cargada para el doctor {matricula}.")
+        return
+
+    # Usamos reduce para sumar todas las horas
+    total = reduce(lambda x, y: x + y, horas, 0)
+
+    print("\n--- REPORTE DE HORAS SEMANALES ---")
+    print(f"Doctor {matricula} trabaja {total} horas semanales.")

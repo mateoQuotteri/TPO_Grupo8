@@ -460,18 +460,22 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
         elif opcion == "6":
             while True:
                 while True:
-                    opciones = 2
+                    opciones = 6
                     print()
                     print("---------------------------")
                     print("MENÚ PRINCIPAL > MENÚ DE REPORTES MÉDICOS")
                     print("---------------------------")
                     print("[1] Reporte de Especialidades.")
                     print("[2] Reporte de Disponibilidad horaria de Doctores.")
+                    print("[3] Promedio de turnos por doctor.")
+                    print("[4] Porcentaje de doctores activos.")   
+                    print("[5] Máximo y mínimo de turnos asignados.")
+                    print("[6] Reporte de horas semanales de un doctor.")
                     print("[0] Volver al menú anterior")
                     print("---------------------------")
                     print()
                     opcion = input("Seleccione una opción: ")
-                    if opcion in [str(i) for i in range(0, 3)]:
+                    if opcion in [str(i) for i in range(0, opciones + 1)]:
                         break
                     else:
                         input("Opción inválida. Presione ENTER para volver a seleccionar.")
@@ -486,6 +490,20 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                 elif opcion == "2":
                     doctores.reporte_cobertura_medica(lista_doctores, lista_disponibilidad)
                     input("\nPresione ENTER para continuar...")
+                elif opcion == "3":
+                    turnos.reporte_promedio_turnos(lista_turnos, lista_doctores)
+                    input("\nPresione ENTER para continuar...")
+                elif opcion == "4":
+                    doctores.reporte_doctores_activos(lista_doctores)
+                    input("\nPresione ENTER para continuar...")
+                elif opcion == "5":
+                    turnos.reporte_max_min_turnos(lista_turnos)
+                    input("\nPresione ENTER para continuar...")
+                elif opcion == "6":
+                    matricula = input("Ingrese matrícula del doctor: ")
+                    disponibilidad.reporte_horas_doctor(lista_disponibilidad, matricula)
+                    input("\nPresione ENTER para continuar...")
+
 
         elif opcion == "7":
             while True:

@@ -386,3 +386,35 @@ def modificar_turno(lista_turnos, lista_doctores, lista_pacientes, lista_disponi
         lista_turnos[id_turno]["hora"] = turno[1]
         lista_turnos[id_turno]["especialidad"] = turno[3]
         print("\nTurno modificado con éxito.\n")
+
+def reporte_promedio_turnos(lista_turnos, lista_doctores):
+    if not lista_turnos or not lista_doctores:
+        print("No hay datos suficientes.")
+        return
+
+    total_turnos = len(lista_turnos)
+    total_doctores = len(lista_doctores)
+    promedio = total_turnos / total_doctores if total_doctores > 0 else 0
+
+    print("\n--- REPORTE PROMEDIO DE TURNOS ---")
+    print(f"Promedio de turnos por doctor: {promedio:.2f}")
+
+
+def reporte_max_min_turnos(lista_turnos):
+    if not lista_turnos:
+        print("No hay turnos registrados.")
+        return
+
+    # Contar turnos por matrícula
+    conteo = {}
+    for turno in lista_turnos:
+        matricula = turno["matricula"]
+        conteo[matricula] = conteo.get(matricula, 0) + 1
+
+    max_doc = max(conteo, key=conteo.get)
+    min_doc = min(conteo, key=conteo.get)
+
+    print("\n--- REPORTE DE TURNOS ---")
+    print(f"Doctor con más turnos: {max_doc} ({conteo[max_doc]} turnos)")
+    print(f"Doctor con menos turnos: {min_doc} ({conteo[min_doc]} turnos)")
+

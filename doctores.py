@@ -166,3 +166,15 @@ def reporte_cobertura_medica(lista_doctores, lista_disponibilidad):
         print("║" + "  [OK] Todos los doctores tienen horarios.".ljust(ancho) + "║")
     print("╚" + "═" * ancho + "╝")
     print()
+
+#Porcentaje de doctores activos
+def reporte_doctores_activos(lista_doctores):
+    activos = sum(1 for d in lista_doctores if d["activo"] == "S")
+    inactivos = sum(1 for d in lista_doctores if d["activo"] == "N")
+    total = activos + inactivos
+
+    porcentaje = (activos / total) * 100 if total > 0 else 0
+
+    print("\n--- REPORTE DE DOCTORES ACTIVOS ---")
+    print(f"Doctores activos: {activos} ({porcentaje:.2f}%)")
+    print(f"Doctores inactivos: {inactivos}")
