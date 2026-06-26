@@ -20,11 +20,11 @@ def hora_inicio():
     """
     while True:
         try:
-            hora = int(input("Hora inicio (8-20): "))
+            hora = int(input("Hora de inicio (8-20): "))
             if hora>=8 and hora<=20:
                 return hora
             else:
-                print("\nOpcion inválida. Intente nuevamente.")
+                print("\nOpcion inválida. Intente nuevamente.\n")
         except ValueError:
             print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
         except:
@@ -36,7 +36,7 @@ def hora_fin():
     """
     while True:
         try:
-            hora = int(input("Hora fin (8-20): "))
+            hora = int(input("Hora de finalización (8-20): "))
             if hora>=8 and hora<=20:
                 return hora
             else:
@@ -81,7 +81,7 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
     
     # VALIDACIÓN SIMPLE
     if hora_i >= hora_f:
-        print("\nError: hora inicio debe ser menor que hora fin.\n")
+        print("\nError: Hora de inicio debe ser menor que hora finalización.\n")
         return id_contador
 
     # VALIDAR DUPLICADO (mismo doctor, mismo día y rango igual)

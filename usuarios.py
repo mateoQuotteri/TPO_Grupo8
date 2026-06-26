@@ -2,27 +2,31 @@
 # usuarios.py
 
 def pedir_entero(mensaje):
+    """
+    Solicita el ingreso de un número entero y maneja el error si el usuario ingresa un valor no válido.
+    """
     while True:
         try:
             return int(input(mensaje))
         except ValueError:
-            print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
+            print("Debe ingresar un numero entero válido. Use -1 para cancelar.")
 
 def ingresar_clave():
     """
     Pide ingreso de clave por teclado y verifica si cumple que sean 5 dígitos numéricos.
     """
-    try:        
-        clave=int(input("Ingrese la nueva clave numérica (5 dígitos): "))
-        if clave>10000 and clave<99999:
-            return str(clave)
-        else:
-            print("Debe ingresar una clave de 5 dígitos númericos.")
+    while True:
+        try:        
             clave=int(input("Ingrese la nueva clave numérica (5 dígitos): "))
-    except ValueError:
-        print ("Debe ingresar un número entero válido. Intente nuevamente.")
-    except:
-        print("Error. Intente nuevamente.")
+            if clave>10000 and clave<99999:
+                return str(clave)
+            else:
+                print("Debe ingresar una clave de 5 dígitos númericos.")
+                clave=int(input("Ingrese la nueva clave numérica (5 dígitos): "))
+        except ValueError:
+            print ("Debe ingresar un número entero válido. Intente nuevamente.")
+        except:
+            print("Error. Intente nuevamente.")
 
 def seleccion_perfil():
     """
@@ -44,8 +48,11 @@ def seleccion_perfil():
         print("\nError. Intente nuevamente.")        
 
 def agregar_usuario(usuarios):
+    """
+    Permite el ingreso de un usuario nuevo. 
+    """
     perfiles = ["ADMINISTRATIVO", "RECEPCIONISTA", "DOCTOR"]
-    print("AGREGAR UN USUARIO")
+    print("---AGREGAR UN USUARIO---")
     print()
 
     seleccion=seleccion_perfil()
@@ -113,7 +120,10 @@ def modificar_usuario(usuarios):
         usuarios[user]["rol"] = perfil
 
 def eliminar_usuario(usuarios):
-    print("ELIMINAR UN USUARIO")
+    """
+    Permite eliminar 
+    """
+    print("---ELIMINAR UN USUARIO---")
     print()
     user = input("Ingrese el nombre del usuario a eliminar o -1 para cancelar: ")
 

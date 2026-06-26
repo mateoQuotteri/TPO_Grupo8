@@ -15,7 +15,7 @@
     "rol": "DOCTOR"
   },
   "123": {
-    "clave": 12345,
+    "clave": "12345",
     "nombre": "pruebas",
     "rol": "ADMINISTRATIVO"
   }

@@ -299,5 +299,19 @@
     "dia": "MIERCOLES",
     "hora_inicio": "9",
     "hora_fin": "10"
+  },
+  {
+    "id": 46,
+    "matricula": "12345",
+    "dia": "VIERNES",
+    "hora_inicio": "9",
+    "hora_fin": "20"
+  },
+  {
+    "id": 47,
+    "matricula": "12345",
+    "dia": "VIERNES",
+    "hora_inicio": "8",
+    "hora_fin": "12"
   }
 ]

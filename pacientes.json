@@ -158,5 +158,21 @@
     "apellido": "SANCHEZ",
     "telefono": "1166148065",
     "correo": "JOSEMARIA@GMAIL.COM"
+  },
+  {
+    "id": 23,
+    "dni": "41351662",
+    "nombre": "GUADALUPE",
+    "apellido": "MERAYO",
+    "telefono": "1156342298",
+    "correo": "GMERAYO@DEGASA.COM.AR"
+  },
+  {
+    "id": 25,
+    "dni": "41351663",
+    "nombre": "PRUEBA",
+    "apellido": "PRUEBA",
+    "telefono": "1122331122",
+    "correo": "M@PRUEBA.COM"
   }
 ]

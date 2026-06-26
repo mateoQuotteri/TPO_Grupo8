@@ -1,7 +1,7 @@
 # Modulo
 # doctores.py
 
-ESPECIALIDADES = ["CLINICA MEDICA", "PEDIATRIA", "GINECOLOGIA", "GINECOLOGIA Y OBSTETRICIA", "CARDIOLOGIA", "OFTALMOLOGIA", "ODONTOLOGIA", "DERMATOLOGIA", "TRAUMATOLOGIA"]
+ESPECIALIDADES = ["CLINICA MEDICA", "PEDIATRIA", "GINECOLOGIA", "CARDIOLOGIA", "OFTALMOLOGIA", "ODONTOLOGIA", "DERMATOLOGIA", "TRAUMATOLOGIA"]
 
 def pedir_entero(mensaje):
     while True:
@@ -133,7 +133,7 @@ def modificar_doctor(lista):
                         doctor["telefono"] = telefono
 
                     elif opcion == "4":
-                        especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA Y OBSTETRICIA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
+                        especialidades = ["CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA", "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA", "DERMATOLOGÍA", "TRAUMATOLOGÍA"]
                         print("Seleccione una especialidad: ")
                         for j in range(len(especialidades)):
                             print(j + 1, "-", especialidades[j])

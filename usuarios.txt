@@ -3,3 +3,4 @@ recep|54321|Agustin Garcia|RECEPCIONISTA
 doc|11111|Dr Martinez|DOCTOR
 123|12345|pruebas|ADMINISTRATIVO
 Mateo|54321|Mateo Quotteri|ADMINISTRATIVO
+prueba|12345|Prueba|DOCTOR

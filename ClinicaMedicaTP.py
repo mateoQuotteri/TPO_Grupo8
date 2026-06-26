@@ -202,16 +202,16 @@ def datos_reporte_porcentual_turnos(lista_turnos, lista_doctores):
     return datos
 
 # Recorre y muestra en consola cualquier lista de dicts con un formato de columnas alineadas.
-def mostrar_lista(lista):
+def mostrar_lista(lista,encabezados):
     if not lista:
         mostrar_reporte([], [])
         return
-    encabezados = list(lista[0].keys())
+    #encabezados = list(lista[0].keys())
     mostrar_reporte(encabezados, lista)
 
 # Muestra la lista de diccionarios de pacientes con un formato tabular específico, accediendo a cada campo por su clave.
 def mostrar_pacientes(lista_pacientes):
-    mostrar_reporte(['id', 'dni', 'nombre', 'apellido', 'telefono', 'correo'], lista_pacientes)
+    mostrar_reporte(['ID', 'DNI', 'NOMBRE', 'APELLIDO', 'TELÉFONO', 'CORREO'], lista_pacientes)
 
 # Punto central del programa que gestiona la navegación entre los submenús.
 def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista_disponibilidad, lista_turnos,
@@ -267,11 +267,9 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
         # MEDICO (Solo lect)
         if rol == "DOCTOR":
             if opcion == "3":
-                print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
-                mostrar_lista(lista_disponibilidad)
+                mostrar_lista(lista_disponibilidad,encabezados_disponibilidad)
             elif opcion == "4":
                 print(f"\nTURNOS DE LA MATRÍCULA: {matricula_sesion}")
-                print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
                 encontrado = False
                 for t in lista_turnos:
                     if str(t["matricula"]) == str(matricula_sesion):
@@ -311,17 +309,14 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                 elif opcion == "1":  # Opción 1
                     id_contador_pacientes=pacientes.agregar_paciente(lista_pacientes, id_contador_pacientes)
                     guardar_json("pacientes.json", lista_pacientes)
-                    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_pacientes(lista_pacientes)
                 elif opcion == "2":  # Opción 2
                     pacientes.eliminar_paciente(lista_pacientes)
                     guardar_json("pacientes.json", lista_pacientes)
-                    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_pacientes(lista_pacientes)
                 elif opcion == "3":  # Opción 3
                     pacientes.modificar_paciente(lista_pacientes)
                     guardar_json("pacientes.json", lista_pacientes)
-                    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_pacientes(lista_pacientes)
 
         elif opcion == "2":  # OPCIÓN 2
@@ -351,19 +346,16 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                 elif opcion == "1":
                     id_contador_doctores = doctores.agregar_doctor(lista_doctores, id_contador_doctores)
                     guardar_json("doctores.json", lista_doctores)
-                    print(f'{encabezados_doctores[0]:^15}\t{encabezados_doctores[1]:^15}\t{encabezados_doctores[2]:^15}\t{encabezados_doctores[3]:^15}\t{encabezados_doctores[4]:^15}\t{encabezados_doctores[5]:^15}\t{encabezados_doctores[6]:^15}')
-                    mostrar_lista(lista_doctores)
+                    mostrar_lista(lista_doctores,encabezados_doctores)
                 elif opcion == "2":
                     doctores.eliminar_doctor(lista_doctores)
                     guardar_json("doctores.json", lista_doctores)
-                    print(f'{encabezados_doctores[0]:^15}\t{encabezados_doctores[1]:^15}\t{encabezados_doctores[2]:^15}\t{encabezados_doctores[3]:^15}\t{encabezados_doctores[4]:^15}\t{encabezados_doctores[5]:^15}\t{encabezados_doctores[6]:^15}')
-                    mostrar_lista(lista_doctores)
+                    mostrar_lista(lista_doctores,encabezados_doctores)
                     break
                 elif opcion == "3":
                     doctores.modificar_doctor(lista_doctores)
                     guardar_json("doctores.json", lista_doctores)
-                    print(f'{encabezados_doctores[0]:^15}\t{encabezados_doctores[1]:^15}\t{encabezados_doctores[2]:^15}\t{encabezados_doctores[3]:^15}\t{encabezados_doctores[4]:^15}\t{encabezados_doctores[5]:^15}\t{encabezados_doctores[6]:^15}')
-                    mostrar_lista(lista_doctores)
+                    mostrar_lista(lista_doctores,encabezados_doctores)
 
         elif opcion == "3":  # OPCIÓN 3
             while True:
@@ -392,21 +384,17 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                 elif opcion == "1":
                     id_contador_disponibilidad=disponibilidad.agregar_disponibilidad(lista_disponibilidad, id_contador_disponibilidad,lista_doctores)
                     guardar_json("disponibilidad.json", lista_disponibilidad)
-                    print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
-                    mostrar_lista(lista_disponibilidad)
+                    mostrar_lista(lista_disponibilidad,encabezados_disponibilidad)
                 elif opcion == "2":
-                    print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')                    
-                    mostrar_lista(lista_disponibilidad)
+                    mostrar_lista(lista_disponibilidad,encabezados_disponibilidad)
                     disponibilidad.eliminar_disponibilidad(lista_disponibilidad)
                     guardar_json("disponibilidad.json", lista_disponibilidad)
-                    print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
-                    mostrar_lista(lista_disponibilidad)
+                    mostrar_lista(lista_disponibilidad,encabezados_disponibilidad)
                     break
                 elif opcion == "3":
                     disponibilidad.modificar_disponibilidad(lista_disponibilidad,lista_doctores)
                     guardar_json("disponibilidad.json", lista_disponibilidad)
-                    print(f'{encabezados_disponibilidad[0]:^5}\t{encabezados_disponibilidad[1]:^5}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
-                    mostrar_lista(lista_disponibilidad)
+                    mostrar_lista(lista_disponibilidad,encabezados_disponibilidad)
 
         elif opcion == "4":  # OPCIÓN 4
             while True:
@@ -435,18 +423,15 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                 elif opcion == "1":
                     turnos.agregar_turno(lista_turnos, lista_pacientes, lista_doctores, id_contador_turnos, lista_disponibilidad)
                     guardar_json("turnos.json", lista_turnos)
-                    print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
-                    mostrar_lista(lista_turnos)
+                    mostrar_lista(lista_turnos,encabezados_turnos)
                 elif opcion == "2":
                     turnos.eliminar_turno(lista_pacientes, lista_turnos)
                     guardar_json("turnos.json", lista_turnos)
-                    print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
-                    mostrar_lista(lista_turnos)
+                    mostrar_lista(lista_turnos,encabezados_turnos)
                 elif opcion == "3":
                     turnos.modificar_turno(lista_turnos, lista_doctores, lista_pacientes, lista_disponibilidad)
                     guardar_json("turnos.json", lista_turnos)
-                    print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
-                    mostrar_lista(lista_turnos)
+                    mostrar_lista(lista_turnos,encabezados_turnos)
 
         elif opcion == "5":
             while True:
@@ -480,18 +465,15 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     break
                 elif opcion == "2":
                     lista_ordenada = ordenar_lista_dicts(lista_doctores, claves_doctores, encabezados_doctores)
-                    print(f'{encabezados_doctores[0]:^15}\t{encabezados_doctores[1]:^15}\t{encabezados_doctores[2]:^15}\t{encabezados_doctores[3]:^15}\t{encabezados_doctores[4]:^15}\t{encabezados_doctores[5]:^15}\t{encabezados_doctores[6]:^15}')
-                    mostrar_lista(lista_ordenada)
+                    mostrar_lista(lista_ordenada,encabezados_doctores)
                     break
                 elif opcion == "3":
                     lista_ordenada = ordenar_lista_dicts(lista_disponibilidad, claves_disponibilidad, encabezados_disponibilidad)
-                    print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
-                    mostrar_lista(lista_ordenada)
+                    mostrar_lista(lista_ordenada,encabezados_disponibilidad)
                     break
                 elif opcion == "4":
                     lista_ordenada = ordenar_lista_dicts(lista_turnos, claves_turnos, encabezados_turnos)
-                    print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
-                    mostrar_lista(lista_ordenada)
+                    mostrar_lista(lista_ordenada,encabezados_turnos)
                     break
 
         elif opcion == "6":
@@ -585,10 +567,10 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
 
 # Función principal que carga los datos desde JSON, muestra las listas y lanza la ejecución del programa.
 def main():
-    encabezados_pacientes      = ['ID Paciente', 'DNI', 'Nombre', 'Apellido', 'Telefono', 'Correo']
-    encabezados_doctores       = ['ID Profesional', 'Matricula', 'Nombre', 'Apellido', 'Telefono', 'Especialidad', 'Activo/Inactivo']
-    encabezados_disponibilidad = ['ID Dispo.', 'Matricula', 'Día', 'Hora Inicio', 'Hora Fin']
-    encabezados_turnos         = ['ID Turno', 'Fecha', 'Hora', 'DNI Paciente', 'Especialidad', 'Matricula Doctor']
+    encabezados_pacientes      = ['ID', 'DNI', 'Nombre', 'Apellido', 'Teléfono', 'Correo']
+    encabezados_doctores       = ['ID', 'Matrícula', 'Nombre', 'Apellido', 'Teléfono', 'Especialidad', 'Estado']
+    encabezados_disponibilidad = ['ID', 'Matrícula', 'Día', 'Hora Inicio', 'Hora Fin']
+    encabezados_turnos         = ['ID', 'Fecha', 'Hora', 'DNI Paciente', 'Especialidad', 'Matrícula Doctor']
 
     claves_doctores       = ["id", "matricula", "nombre", "apellido", "telefono", "especialidad", "activo"]
     claves_disponibilidad = ["id", "matricula", "dia", "hora_inicio", "hora_fin"]
@@ -606,23 +588,7 @@ def main():
     id_contador_doctores       = max((d["id"] for d in lista_doctores),       default=0)
     id_contador_disponibilidad = max((d["id"] for d in lista_disponibilidad), default=0)
     id_contador_turnos         = max((t["id"] for t in lista_turnos),         default=0)
-
-    print("\n LISTA DE PACIENTES \n")
-    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
-    mostrar_pacientes(lista_pacientes)
-
-    print("\n LISTA DE DOCTORES \n")
-    print(f'{encabezados_doctores[0]:^15}\t{encabezados_doctores[1]:^15}\t{encabezados_doctores[2]:^15}\t{encabezados_doctores[3]:^15}\t{encabezados_doctores[4]:^15}\t{encabezados_doctores[5]:^15}\t{encabezados_doctores[6]:^15}')
-    mostrar_lista(lista_doctores)
-
-    print("\n LISTA DE DISPONIBILIDAD \n")
-    print(f'{encabezados_disponibilidad[0]:^15}\t{encabezados_disponibilidad[1]:^15}\t{encabezados_disponibilidad[2]:^15}\t{encabezados_disponibilidad[3]:^15}\t{encabezados_disponibilidad[4]:^15}')
-    mostrar_lista(lista_disponibilidad)
-
-    print("\n LISTA DE TURNOS \n")
-    print(f'{encabezados_turnos[0]:^15}\t{encabezados_turnos[1]:^15}\t{encabezados_turnos[2]:^15}\t{encabezados_turnos[3]:^15}\t{encabezados_turnos[4]:^15}\t{encabezados_turnos[5]:^15}')
-    mostrar_lista(lista_turnos)
-
+    
     # --- LOGIN ---
     print("\n" + "=" * 35)
     print("  INICIO DE SESIÓN - CLÍNICA")
@@ -642,27 +608,22 @@ def main():
             matricula_sesion = None
 
             if rol == "DOCTOR":
-                print("\n--- VALIDACIÓN DE IDENTIDAD MÉDICA ---")
-                matricula_sesion = input("Por favor, ingrese su numero de matricula de 5 digitos (-1 para cancelar): ")
+                print("\n--- VALIDACIÓN DE IDENTIDAD MÉDICA ---\n")
+                matricula_sesion = input("\nPor favor, ingrese su numero de matricula de 5 digitos (-1 para cancelar): ")
                 if matricula_sesion == "-1":
-                    print("Validacion medica cancelada.")
+                    print("\nValidacion médica cancelada.\n")
                     return
-
-                nombre_bienvenida = nombre_completo
-                for doc in lista_doctores:
-                    if str(doc["matricula"]) == str(matricula_sesion):
-                        nombre_bienvenida = f"{doc['nombre']} {doc['apellido']}"
-                        break
+                      
                 doctor_activo = False
                 for doc in lista_doctores:
                     if str(doc["matricula"]) == str(matricula_sesion) and doc["activo"] == "S":
                         doctor_activo = True
 
                 if not doctor_activo:
-                    print("Error: la matricula no existe o el medico no se encuentra activo.")
+                    print("\nError: la matricula no existe o el medico no se encuentra activo.\n")
                     return
             else:
-                print(f"\nBienvenido/a {nombre_completo}")
+                print(f"\nBienvenido/a {nombre_completo}\n")
 
             menu_principal(
                 rol, matricula_sesion,
@@ -673,9 +634,9 @@ def main():
                 usuarios_data
             )
         else:
-            print("\nError: Contraseña incorrecta.")
+            print("\nError: Contraseña incorrecta.\n")
     else:
-        print("\nError: El usuario no existe.")
+        print("\nError: El usuario no existe.\n")
 
 main()
 
