@@ -4,6 +4,64 @@
 # Usamos datetime para convertir días de la semana a fechas concretas al mostrar disponibilidades
 from datetime import date, timedelta
 
+def pedir_entero(mensaje):
+    while True:
+        try:
+            return int(input(mensaje))
+        except ValueError:
+            print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
+
+def clave_fecha_turno(turno):
+    partes = str(turno["fecha"]).split("/")
+    if len(partes) != 3:
+        return (99, 99, 9999)
+    dia = int(partes[0])
+    mes = int(partes[1])
+    anio = int(partes[2])
+    return (mes, dia, anio)
+
+def ordenar_turnos_por_fecha(lista_turnos):
+    return sorted(lista_turnos, key=clave_fecha_turno)
+
+def ordenar_turnos_por_campo(lista_turnos, campo):
+    if campo == "fecha":
+        return sorted(lista_turnos, key=clave_fecha_turno)
+    if campo in ["id", "hora", "dni", "matricula"]:
+        return sorted(lista_turnos, key=lambda turno: int(turno[campo]))
+    return sorted(lista_turnos, key=lambda turno: str(turno[campo]))
+
+def obtener_especialidades_activas(lista_doctores):
+    especialidades = []
+    for doc in lista_doctores:
+        if doc["activo"] == "S" and doc["especialidad"] not in especialidades:
+            especialidades.append(doc["especialidad"])
+    return sorted(especialidades)
+
+def calcular_porcentajes_turnos_por_medico(lista_turnos, lista_doctores):
+    total_turnos = len(lista_turnos)
+    cantidades = {}
+    for turno in lista_turnos:
+        matricula = str(turno["matricula"])
+        cantidades[matricula] = cantidades.get(matricula, 0) + 1
+
+    reporte = []
+    for matricula in sorted(cantidades):
+        nombre = buscarNombreDoctor(lista_doctores, matricula)
+        porcentaje = 0
+        if total_turnos > 0:
+            porcentaje = round(cantidades[matricula] * 100 / total_turnos, 2)
+        reporte.append({
+            "matricula": matricula,
+            "medico": nombre,
+            "turnos": cantidades[matricula],
+            "porcentaje": porcentaje
+        })
+    if reporte:
+        diferencia = round(100 - sum(fila["porcentaje"] for fila in reporte), 2)
+        # Test: se valida que los porcentajes calculados sumen 100
+        reporte[-1]["porcentaje"] = round(reporte[-1]["porcentaje"] + diferencia, 2)
+    return reporte
+
 # Recursividad: Verifica si un DNI existe dentro de la lista de pacientes.
 # ¿Por qué es válida esta función? Porque cada llamada recursiva reduce el tamaño de la lista de pacientes, 
 # acercándonos al caso base donde la lista está vacía o encontramos el DNI buscado. 
@@ -143,12 +201,14 @@ def turnos_disponibles(matricula, lista_disponibilidad, lista_turnos, especialid
         print(f"  {i+1} - Matrícula: {slot['matricula']} | Dr./Dra.: {slot['nombre_doctor']} | Fecha: {slot['fecha']} | Hora: {slot['hora']}:00 hs")
     print("  0  - Volver atrás")
 
-    seleccion = int(input("Seleccione un turno (número): "))
-    if seleccion == 0:
+    seleccion = pedir_entero("Seleccione un turno (numero, 0 para volver, -1 para cancelar): ")
+    if seleccion == 0 or seleccion == -1:
         return "volver"
     while seleccion < 1 or seleccion > len(slots):
-        print("Opción inválida.")
-        seleccion = int(input("Seleccione un turno (número): "))
+        print("Opcion invalida.")
+        seleccion = pedir_entero("Seleccione un turno (numero, 0 para volver, -1 para cancelar): ")
+        if seleccion == 0 or seleccion == -1:
+            return "volver"
 
     slot_elegido = slots[seleccion - 1]
     return [slot_elegido["fecha"], str(slot_elegido["hora"]), slot_elegido["matricula"], especialidad]
@@ -165,68 +225,57 @@ def agregar_turno(lista_turnos, lista_pacientes, lista_doctores, contador, lista
     try:
 
         # DNI del paciente
-        try:
-            dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
-        except ValueError:
-            print("Error: El DNI debe ser un número entero.")
-            return contador
+        dni = pedir_entero("Ingrese el DNI de 8 digitos del paciente (-1 para cancelar): ")
 
-        if dni == 0:
+        if dni == -1:
             return contador
 
         if not buscarDni(lista_pacientes, dni):
             print("Dato incorrecto o DNI no registrado.")
             return contador
 
-        # Selección de especialidad
-        especialidades = [
-            "CLÍNICA MÉDICA", "PEDIATRÍA", "GINECOLOGÍA",
-            "CARDIOLOGÍA", "OFTALMOLOGÍA", "ODONTOLOGÍA",
-            "DERMATOLOGÍA", "TRAUMATOLOGÍA"
-        ]
-        print("\nSeleccione una especialidad (0 para volver al menú): ")
+        especialidades = obtener_especialidades_activas(lista_doctores)
+        if not especialidades:
+            # Validacion: se evita continuar si no hay medicos cargados
+            print("Error: no hay especialidades disponibles con medicos activos.")
+            return contador
+        print("\nSeleccione una especialidad disponible (-1 para cancelar): ")
         for i, esp in enumerate(especialidades, start=1):
             print(i, "-", esp)
         
-        try:
-            opcion = int(input("Ingrese el número de la especialidad: "))
-        except ValueError:
-            print("Error: Debe ingresar un número válido.")
-            return contador
+        opcion = pedir_entero("Ingrese el numero de la especialidad (-1 para cancelar): ")
 
-        if opcion == 0:
+        if opcion == -1:
             return contador
         if opcion < 1 or opcion > len(especialidades):
-            print("Opción inválida. Debe estar dentro del rango.")
+            print("Opcion invalida. Debe estar dentro del rango.")
             return contador
 
         especialidad = especialidades[opcion - 1]
         especialistas = buscarDoctorPorEspecialidad(lista_doctores, especialidad)
-
-        # Selección de doctor
-        try:
-            seleccion = int(input("Seleccione una opción: "))
-        except ValueError:
-            print("Error: Debe ingresar un número válido.")
+        if len(especialistas) == 0:
             return contador
 
+        seleccion = pedir_entero("Seleccione una opcion (-1 para cancelar): ")
+
+        if seleccion == -1:
+            return contador
         if seleccion < 1 or seleccion > len(especialistas):
-            print("Opción inválida.")
+            print("Opcion invalida.")
             return contador
 
         matricula = doctor_seleccionado(especialistas, seleccion)
 
 
-        # Selección de turno disponible
+        # Seleccion de turno disponible
         turno = turnos_disponibles(matricula, lista_disponibilidad, lista_turnos, especialidad, lista_doctores)
         if turno == "volver":
             return contador
 
         if turno and not turno_ocupado(lista_turnos, turno[0], turno[1], turno[2]):
             contador += 1
-            nuevo_id = len(lista_turnos) + 1
             nuevo_turno = {
-                "id": nuevo_id,
+                "id": contador,
                 "fecha": turno[0],
                 "hora": turno[1],
                 "dni": str(dni),
@@ -234,7 +283,7 @@ def agregar_turno(lista_turnos, lista_pacientes, lista_doctores, contador, lista
                 "matricula": turno[2]
             }
             lista_turnos.append(nuevo_turno)
-            print("\nTurno agregado con éxito.\n")
+            print("\nTurno agregado con exito.\n")
         else:
             print("Ese turno ya fue tomado por otro paciente.")
 
@@ -246,23 +295,15 @@ def agregar_turno(lista_turnos, lista_pacientes, lista_doctores, contador, lista
 
 # Permite al usuario visualizar los turnos de un paciente por DNI y dar de baja el que seleccione del listado.
 def eliminar_turno(lista_pacientes, lista_turnos):
-    try:
-        dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
-    except ValueError:
-        print("Error: El DNI debe ser un número entero.")
-        return
+    dni = pedir_entero("Ingrese el DNI de 8 digitos del paciente (-1 para cancelar): ")
 
-    if dni == 0:
+    if dni == -1:
         return
 
     while not buscarDni(lista_pacientes, dni):
         print("Dato incorrecto o DNI no registrado.")
-        try:
-            dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
-        except ValueError:
-            print("Error: El DNI debe ser un número entero.")
-            return
-        if dni == 0:
+        dni = pedir_entero("Ingrese el DNI del paciente o -1 para cancelar: ")
+        if dni == -1:
             return
 
     cantidad_turnos = []
@@ -278,56 +319,43 @@ def eliminar_turno(lista_pacientes, lista_turnos):
         print("El DNI no tiene turnos asociados.")
         return
 
-    try:
-        turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar o 0 para salir: "))
-    except ValueError:
-        print("Error: Debe ingresar un número entero.")
-        return
+    turno_para_eliminar = pedir_entero("Ingrese el numero de turno a eliminar o -1 para cancelar: ")
 
-    if turno_para_eliminar == 0:
+    if turno_para_eliminar == -1:
         return
 
     while turno_para_eliminar < 1 or turno_para_eliminar > len(cantidad_turnos):
         print("Opcion Invalida")
-        try:
-            turno_para_eliminar = int(input("Ingrese el numero de turno a eliminar o 0 para salir: "))
-        except ValueError:
-            print("Error: Debe ingresar un número entero.")
-            return
-        if turno_para_eliminar == 0:
+        turno_para_eliminar = pedir_entero("Ingrese el numero de turno a eliminar o -1 para cancelar: ")
+        if turno_para_eliminar == -1:
             return
 
     indice_eliminado = cantidad_turnos[turno_para_eliminar - 1]
     lista_turnos.pop(indice_eliminado)
-    print("\nTurno eliminado con éxito.\n")
+    print("\nTurno eliminado con exito.\n")
 
 
 # Permite cambiar la fecha, hora o médico de un turno ya existente manteniendo la misma especialidad original.
 def modificar_turno(lista_turnos, lista_doctores, lista_pacientes, lista_disponibilidad):
-    try:
-        dni = int(input("Ingrese el DNI del paciente (0 para volver): "))
-    except ValueError:
-        print("Error: El DNI debe ser un número entero.")
-        return
+    dni = pedir_entero("Ingrese el DNI de 8 digitos del paciente (-1 para cancelar): ")
 
-    if dni == 0:
+    if dni == -1:
         return
 
     while not buscarDni(lista_pacientes, dni):
         print("Dato incorrecto o DNI no registrado.")
-        try:
-            dni = int(input("Ingrese el DNI del paciente o 0 para volver atrás: "))
-        except ValueError:
-            print("Error: El DNI debe ser un número entero.")
-            return
-        if dni == 0:
+        dni = pedir_entero("Ingrese el DNI del paciente o -1 para cancelar: ")
+        if dni == -1:
             return
 
     turnos_reservados = []
+    posiciones_reservadas = []
     for i in range(len(lista_turnos)):
         if int(lista_turnos[i]["dni"]) == dni:
-            print(lista_turnos[i])
+            turno = lista_turnos[i]
+            print(f"{len(turnos_reservados) + 1} - ID {turno['id']} | Fecha: {turno['fecha']} | Hora: {turno['hora']}:00 | Especialidad: {turno['especialidad']} | Matricula: {turno['matricula']}")
             turnos_reservados.append(lista_turnos[i])
+            posiciones_reservadas.append(i)
 
     if len(turnos_reservados) == 0:
         print("El DNI no tiene turnos asociados.")

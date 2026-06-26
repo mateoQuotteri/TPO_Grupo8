@@ -21,7 +21,7 @@ def cargar_json(nombre_archivo):
   
     try:
         ruta = os.path.join(BASE_DIR, nombre_archivo)
-        with open(ruta, "r", encoding="utf-8") as f:
+        with open(ruta, "r", encoding="utf-8-sig") as f:
             return json.load(f)
     except FileNotFoundError:
         print("ERROR: ARCHIVO NO ENCONTRADO. VERIFIQUE ARCHIVOS ASOCIADOS.") 
@@ -74,6 +74,13 @@ def guardar_txt(nombre_archivo, usuarios):
 #----------------------------------------------------------------------------------------------
 # FUNCIONES
 #---------------------------------------
+def pedir_entero(mensaje):
+    while True:
+        try:
+            return int(input(mensaje))
+        except ValueError:
+            print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
+
 def ordenar_pacientes_dic(lista, encabezado):
     claves = ["id", "dni", "nombre", "apellido", "telefono", "correo"]
 
@@ -87,18 +94,20 @@ def ordenar_pacientes_dic(lista, encabezado):
 
     while opcion_valida == False:
         try:    
-            opcion = int(input("Seleccione una opción: "))
+            opcion = pedir_entero("Seleccione una opcion (-1 para cancelar): ")
+            if opcion == -1:
+                return lista
             if 1 <= opcion <= len(claves):
                 clave_elegida = claves[opcion - 1]
                 opcion_valida = True
             else:
-                print("Opción inválida. Intente nuevamente.")
+                print("Opcion invalida. Intente nuevamente.")
         except ValueError:
-            print ("Debe ingresar un número entero válido. Intente nuevamente.")
+            print ("Debe ingresar un numero entero valido. Intente nuevamente.")
         except:
             print("Error. Intente nuevamente.")
 
-    lista.sort(key=lambda p: p[clave_elegida])
+    lista.sort(key=lambda p: str(p[clave_elegida]))
     return lista
 
 # Permite al usuario elegir una clave de un dict y ordena la lista de forma ascendente usando una función lambda.
@@ -111,12 +120,14 @@ def ordenar_lista_dicts(lista, claves, encabezado):
     columna_a_ordenar = 0
     while continuar == False:
         try:
-            opcion = int(input("Ingrese la opcion: "))
+            opcion = pedir_entero("Ingrese la opcion (-1 para cancelar): ")
+            if opcion == -1:
+                return lista
             if 1 <= opcion <= len(claves):
                 columna_a_ordenar = opcion - 1
                 continuar = True
             else:
-                print("Opcion inválida.\n")
+                print("Opcion invalida.\n")
         except ValueError:
             print ("Debe ingresar un número entero válido. Intente nuevamente.\n")
         except:
@@ -138,43 +149,69 @@ def filtrar_por_especialidad(lista_doctores, especialidad):
 def mostrar_reporte(encabezados, datos):
     print()
     if not datos:
-        print("  No se encontraron resultados para esa especialidad.")
+        print("  No se encontraron datos para mostrar.")
         print()
         return
 
-    # Ancho de cada columna: máximo entre el encabezado y el valor más largo + padding
     anchos = [len(str(h)) for h in encabezados]
     for item in datos:
         for j, v in enumerate(item.values()):
             anchos[j] = max(anchos[j], len(str(v)))
     anchos = [a + 2 for a in anchos]
 
-    def fila_sep(izq, mid, der, relleno):
-        return izq + mid.join(relleno * a for a in anchos) + der
+    def fila_sep():
+        return "+" + "+".join("-" * a for a in anchos) + "+"
 
-    print(fila_sep("╔", "╦", "╗", "═"))
-    print("║" + "║".join(f"{str(h):^{a}}" for h, a in zip(encabezados, anchos)) + "║")
-    print(fila_sep("╠", "╬", "╣", "═"))
-    for i, item in enumerate(datos):
-        print("║" + "║".join(f"{str(v):^{a}}" for v, a in zip(item.values(), anchos)) + "║")
-        if i < len(datos) - 1:
-            print(fila_sep("╟", "╫", "╢", "─"))
-    print(fila_sep("╚", "╩", "╝", "═"))
+    print(fila_sep())
+    print("|" + "|".join(f"{str(h):^{a}}" for h, a in zip(encabezados, anchos)) + "|")
+    print(fila_sep())
+    for item in datos:
+        print("|" + "|".join(f"{str(v):^{a}}" for v, a in zip(item.values(), anchos)) + "|")
+    print(fila_sep())
     print(f"\n  Total: {len(datos)} resultado(s).\n")
+
+def datos_reporte_cobertura_medica(lista_doctores, lista_disponibilidad):
+    doctores_con_horario = []
+    for disp in lista_disponibilidad:
+        if disp["matricula"] not in doctores_con_horario:
+            doctores_con_horario.append(disp["matricula"])
+
+    datos = []
+    for doc in lista_doctores:
+        estado = "Con disponibilidad"
+        if doc["matricula"] not in doctores_con_horario:
+            estado = "Sin disponibilidad"
+        datos.append({
+            "matricula": doc["matricula"],
+            "medico": f"{doc['nombre']} {doc['apellido']}",
+            "especialidad": doc["especialidad"],
+            "estado": estado
+        })
+    return datos
+
+def datos_reporte_porcentual_turnos(lista_turnos, lista_doctores):
+    datos = []
+    porcentajes = turnos.calcular_porcentajes_turnos_por_medico(lista_turnos, lista_doctores)
+    for fila in porcentajes:
+        datos.append({
+            "matricula": fila["matricula"],
+            "medico": fila["medico"],
+            "turnos": fila["turnos"],
+            "porcentaje": f"{fila['porcentaje']}%"
+        })
+    return datos
 
 # Recorre y muestra en consola cualquier lista de dicts con un formato de columnas alineadas.
 def mostrar_lista(lista):
-    print('-' * 115)
-    for item in lista:
-        for valor in item.values():
-            print(f'{str(valor):^15}', end="\t")
-        print()
+    if not lista:
+        mostrar_reporte([], [])
+        return
+    encabezados = list(lista[0].keys())
+    mostrar_reporte(encabezados, lista)
 
 # Muestra la lista de diccionarios de pacientes con un formato tabular específico, accediendo a cada campo por su clave.
 def mostrar_pacientes(lista_pacientes):
-    print('-' * 115)
-    for p in lista_pacientes:
-        print(f"{p['id']:^15}\t{p['dni']:^15}\t{p['nombre']:^15}\t{p['apellido']:^15}\t{p['telefono']:^15}\t{p['correo']:^15}")
+    mostrar_reporte(['id', 'dni', 'nombre', 'apellido', 'telefono', 'correo'], lista_pacientes)
 
 # Punto central del programa que gestiona la navegación entre los submenús.
 def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista_disponibilidad, lista_turnos,
@@ -467,7 +504,7 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     print("---------------------------")
                     print("[1] Reporte de Especialidades.")
                     print("[2] Reporte de Disponibilidad horaria de Doctores.")
-                    print("[3] Promedio de turnos por doctor.")
+                    print("[3] Reporte porcentual de turnos por medico.")
                     print("[4] Porcentaje de doctores activos.")   
                     print("[5] Máximo y mínimo de turnos asignados.")
                     print("[6] Reporte de horas semanales de un doctor.")
@@ -491,7 +528,8 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     doctores.reporte_cobertura_medica(lista_doctores, lista_disponibilidad)
                     input("\nPresione ENTER para continuar...")
                 elif opcion == "3":
-                    turnos.reporte_promedio_turnos(lista_turnos, lista_doctores)
+                    datos = datos_reporte_porcentual_turnos(lista_turnos, lista_doctores)
+                    mostrar_reporte(["Matricula", "Medico", "Turnos", "Porcentaje"], datos)
                     input("\nPresione ENTER para continuar...")
                 elif opcion == "4":
                     doctores.reporte_doctores_activos(lista_doctores)
@@ -605,14 +643,24 @@ def main():
 
             if rol == "DOCTOR":
                 print("\n--- VALIDACIÓN DE IDENTIDAD MÉDICA ---")
-                matricula_sesion = input("Por favor, ingrese su número de matrícula: ")
+                matricula_sesion = input("Por favor, ingrese su numero de matricula de 5 digitos (-1 para cancelar): ")
+                if matricula_sesion == "-1":
+                    print("Validacion medica cancelada.")
+                    return
 
                 nombre_bienvenida = nombre_completo
                 for doc in lista_doctores:
                     if str(doc["matricula"]) == str(matricula_sesion):
                         nombre_bienvenida = f"{doc['nombre']} {doc['apellido']}"
                         break
-                print(f"\nBienvenido/a Dr/a. {nombre_bienvenida}")
+                doctor_activo = False
+                for doc in lista_doctores:
+                    if str(doc["matricula"]) == str(matricula_sesion) and doc["activo"] == "S":
+                        doctor_activo = True
+
+                if not doctor_activo:
+                    print("Error: la matricula no existe o el medico no se encuentra activo.")
+                    return
             else:
                 print(f"\nBienvenido/a {nombre_completo}")
 

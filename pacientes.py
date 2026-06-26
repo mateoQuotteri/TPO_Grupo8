@@ -3,6 +3,13 @@
 
 import re
 
+def pedir_entero(mensaje):
+    while True:
+        try:
+            return int(input(mensaje))
+        except ValueError:
+            print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
+
 # Valida que el nombre solo contenga letras y espacios NO permite números ni caracteres especiales
 def validar_nombre(nombre):
     return bool(re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$', nombre)) and nombre.strip() != ""

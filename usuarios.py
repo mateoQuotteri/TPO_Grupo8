@@ -1,6 +1,12 @@
 # Módulo
 # usuarios.py
 
+def pedir_entero(mensaje):
+    while True:
+        try:
+            return int(input(mensaje))
+        except ValueError:
+            print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
 
 def ingresar_clave():
     """
@@ -68,62 +74,63 @@ def modificar_usuario(usuarios):
     print("[1] Modificar clave.")
     print("[2] Modificar perfil.")
     print("[0] Volver al menú anterior")
+    print("[-1] Cancelar")
 
     opcion = input("Ingrese una opción: ")
-    opciones=["1","2","0"]
+    opciones=["1","2","0","-1"]
     while opcion not in opciones:
         print("Opción inválida.\n")
         opcion = input("Ingrese una opción: ")
 
-    if opcion == "0":
+    if opcion == "0" or opcion == "-1":
         print("\nOperación cancelada.\n")
+        return
 
-    elif opcion =="1" or opcion == "2":
-        user = input("Ingrese el nombre del usuario o 0 para salir: ")   
-        buscando=True
-        while buscando:
-            while user not in usuarios:
-                print("\nUsuario no encontrado.\n")
-                user = input("Ingrese el nombre del usuario o 0 para salir: ")
-            buscando=False
+    user = input("Ingrese el nombre del usuario o -1 para cancelar: ")
+    while user not in usuarios:
+        if user == "-1":
+            print("\nOperacion cancelada.\n")
+            return
+        print("\nUsuario no encontrado.\n")
+        user = input("Ingrese el nombre del usuario o -1 para cancelar: ")
 
-        if opcion == "1": 
-            print("\n---MODIFICAR CLAVE---\n")
-            clave=ingresar_clave()
-            usuarios[user]["clave"]=clave
-            print("\nClave modificada de forma correcta.\n")
+    if opcion == "1":
+        print("\n---MODIFICAR CLAVE---\n")
+        clave = ingresar_clave()
+        if clave is None:
+            print("\nOperacion cancelada.\n")
+            return
+        usuarios[user]["clave"] = clave
+        print("\nClave modificada de forma correcta.\n")
 
-        elif opcion=="2":
-            print("\n---MODIFICAR PERFIL---\n")
-            perfil=seleccion_perfil()
-            if perfil != 0:
-                perfil = perfiles[perfil - 1]
-                print("\nPerfil seleccionado: ", perfil)
-                usuarios[user]["rol"]=perfil
-    
-    else: 
-        print("Opción inválida.")
+    elif opcion == "2":
+        print("\n---MODIFICAR PERFIL---\n")
+        perfil = seleccion_perfil()
+        if perfil is None:
+            print("\nOperacion cancelada.\n")
+            return
+        print("\nPerfil seleccionado: ", perfil)
+        usuarios[user]["rol"] = perfil
 
 def eliminar_usuario(usuarios):
     print("ELIMINAR UN USUARIO")
     print()
-    user = input("Ingrese el nombre del usuario a eliminar o 0 para salir: ")
+    user = input("Ingrese el nombre del usuario a eliminar o -1 para cancelar: ")
 
-    if user == "0":
+    if user == "-1":
         return
     elif user in usuarios:
         try:
             print("\nUsuario seleccionado: ", user)
-            aux = int(input("\nSe va a eliminar el usuario seleccionado. Para confirmar ingrese 1. Para cancelar ingrese 0. "))
-            while aux < 0 or aux > 1:
-                print("\nOpción inválida. Vuelva a intentar.\n")
-                aux = int(input("\nSe va a eliminar el usuario seleccionado. Para confirmar ingrese 1. Para cancelar ingrese 0. "))
-            if aux == 0:
+            aux = pedir_entero("\nSe va a eliminar el usuario seleccionado. Para confirmar ingrese 1. Para cancelar ingrese 0 o -1: ")
+            while aux not in [1, 0, -1]:
+                print("\nOpcion invalida. Vuelva a intentar.\n")
+                aux = pedir_entero("\nPara confirmar ingrese 1. Para cancelar ingrese 0 o -1: ")
+            if aux == 0 or aux == -1:
                 return
-            else:
-                eliminado = usuarios.pop(user)
-                print("\nSe eliminó el usuario: ", eliminado["nombre"])
-                print()
+            eliminado = usuarios.pop(user)
+            print("\nSe elimino el usuario: ", eliminado["nombre"])
+            print()
         except ValueError:
             print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
         except:

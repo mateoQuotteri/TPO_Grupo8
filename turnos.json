@@ -41,8 +41,8 @@
   },
   {
     "id": 6,
-    "fecha": "04/05/2026",
-    "hora": "14",
+    "fecha": "01/07/2026",
+    "hora": "9",
     "dni": "40123789",
     "especialidad": "ODONTOLOGÍA",
     "matricula": "67891"
@@ -129,8 +129,8 @@
   },
   {
     "id": 17,
-    "fecha": "27/04/2026",
-    "hora": "10",
+    "fecha": "01/07/2026",
+    "hora": "12",
     "dni": "30547891",
     "especialidad": "CLÍNICA MÉDICA",
     "matricula": "36789"

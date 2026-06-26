@@ -150,5 +150,13 @@
     "apellido": "QUOTTERI",
     "telefono": 1139569894,
     "correo": "QUOTTERI@GMAIL.COM"
+  },
+  {
+    "id": 22,
+    "dni": "40070706",
+    "nombre": "JOSE MARIA",
+    "apellido": "SANCHEZ",
+    "telefono": "1166148065",
+    "correo": "JOSEMARIA@GMAIL.COM"
   }
 ]

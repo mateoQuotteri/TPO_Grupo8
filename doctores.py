@@ -1,6 +1,29 @@
 # Modulo
 # doctores.py
 
+ESPECIALIDADES = ["CLINICA MEDICA", "PEDIATRIA", "GINECOLOGIA", "GINECOLOGIA Y OBSTETRICIA", "CARDIOLOGIA", "OFTALMOLOGIA", "ODONTOLOGIA", "DERMATOLOGIA", "TRAUMATOLOGIA"]
+
+def pedir_entero(mensaje):
+    while True:
+        try:
+            return int(input(mensaje))
+        except ValueError:
+            print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
+
+def mostrar_especialidades():
+    for i in range(len(ESPECIALIDADES)):
+        print(i + 1, "-", ESPECIALIDADES[i])
+
+def elegir_especialidad():
+    mostrar_especialidades()
+    opcion = pedir_entero("Ingrese el numero de especialidad (-1 para cancelar): ")
+    while opcion != -1 and (opcion < 1 or opcion > len(ESPECIALIDADES)):
+        print("Opcion invalida, seleccione una de las disponibles.")
+        opcion = pedir_entero("Ingrese el numero de especialidad (-1 para cancelar): ")
+    if opcion == -1:
+        return None
+    return ESPECIALIDADES[opcion - 1]
+
 # Valida matrícula única, datos de contacto y especialidad para sumar un nuevo doctor.
 def agregar_doctor(lista, contador):
     try:

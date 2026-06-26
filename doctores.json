@@ -99,15 +99,6 @@
     "activo": "S"
   },
   {
-    "id": 13,
-    "matricula": "72345",
-    "nombre": "PAULA",
-    "apellido": "MORALES",
-    "telefono": "1177890123",
-    "especialidad": "OFTALMOLOGÍA",
-    "activo": "N"
-  },
-  {
     "id": 14,
     "matricula": "63456",
     "nombre": "RICARDO",
@@ -168,6 +159,15 @@
     "apellido": "LAI",
     "telefono": "1234568997",
     "especialidad": "CLÍNICA MÉDICA",
+    "activo": "S"
+  },
+  {
+    "id": 21,
+    "matricula": "12345",
+    "nombre": "JOSE MARIA",
+    "apellido": "SANCHEZ",
+    "telefono": "1166148065",
+    "especialidad": "OFTALMOLOGÍA",
     "activo": "S"
   }
 ]
