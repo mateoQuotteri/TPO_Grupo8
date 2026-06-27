@@ -4,7 +4,6 @@
 
 import json
 import os
-import datetime
 import pacientes
 import doctores
 import disponibilidad
@@ -18,7 +17,9 @@ import usuarios
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def cargar_json(nombre_archivo):
-  
+    """
+    Permite abrir un archivo json y devuelve los datos.
+    """
     try:
         ruta = os.path.join(BASE_DIR, nombre_archivo)
         with open(ruta, "r", encoding="utf-8-sig") as f:
@@ -31,6 +32,9 @@ def cargar_json(nombre_archivo):
         raise SystemExit("ERROR CRITICO. SALIENDO DEL SISTEMA.")
 
 def guardar_json(nombre_archivo, datos):
+    """
+    Permite guardar los datos nuevos en los archivos json.
+    """
     try:
         ruta = os.path.join(BASE_DIR, nombre_archivo)
         with open(ruta, "w", encoding="utf-8") as f:
@@ -41,6 +45,9 @@ def guardar_json(nombre_archivo, datos):
         print("ERROR DE SISTEMA.")
 
 def cargar_txt(nombre_archivo):
+    """
+    Permite abrir un archivo txt y devuelve los datos.
+    """
    
     try:
         ruta = os.path.join(BASE_DIR, nombre_archivo)
@@ -60,6 +67,9 @@ def cargar_txt(nombre_archivo):
         raise SystemExit("ERROR CRITICO. SALIENDO DEL SISTEMA.")
 
 def guardar_txt(nombre_archivo, usuarios):
+    """
+    Permite guardar los datos nuevos en los archivos txt.
+    """
     
     try:
         ruta = os.path.join(BASE_DIR, nombre_archivo)
@@ -75,6 +85,10 @@ def guardar_txt(nombre_archivo, usuarios):
 # FUNCIONES
 #---------------------------------------
 def pedir_entero(mensaje):
+    """
+    Solicita el ingreso de un número entero por pantalla. 
+    Evita errores si el usuario ingresa una letra o símbolo.
+    """
     while True:
         try:
             return int(input(mensaje))
@@ -82,6 +96,9 @@ def pedir_entero(mensaje):
             print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
 
 def ordenar_pacientes_dic(lista, encabezado):
+    """
+    Ordena los pacientes de acuerdo a la clave seleccionada por teclado.
+    """
     claves = ["id", "dni", "nombre", "apellido", "telefono", "correo"]
 
     print("Ingrese la opción por la cual ordenar los pacientes: ")
@@ -112,6 +129,9 @@ def ordenar_pacientes_dic(lista, encabezado):
 
 # Permite al usuario elegir una clave de un dict y ordena la lista de forma ascendente usando una función lambda.
 def ordenar_lista_dicts(lista, claves, encabezado):
+    """
+    Ordena los pacientes de acuerdo a la clave seleccionada por teclado.
+    """
     print("Ingrese la opción por la cual ordenar: ")
     for i in range(len(encabezado)):
         print(i + 1, "-", encabezado[i])
@@ -137,16 +157,28 @@ def ordenar_lista_dicts(lista, claves, encabezado):
     return lista
 
 def quitar_tildes(texto):
+    """
+    Remueve los tildes de una variable str para evitar errores.
+    """
     reemplazos = {"Á":"A","É":"E","Í":"I","Ó":"O","Ú":"U","á":"a","é":"e","í":"i","ó":"o","ú":"u"}
     return "".join(reemplazos.get(c, c) for c in texto)
 
 def pedir_especialidad():
+    """
+    Solicita el ingreso de la especialidad por teclado, remueve espacios adicionales y lo devuelve en mayúsuculas.
+    """
     return input("Ingrese especialidad: ").strip().upper()
 
 def filtrar_por_especialidad(lista_doctores, especialidad):
+    """
+    Recibe la lista de doctores y la especialidad seleccionada, filtra los doctores con esa especialidad (sin considerar los tildes).
+    """
     return list(filter(lambda doc: quitar_tildes(especialidad) in quitar_tildes(doc["especialidad"]), lista_doctores))
 
 def mostrar_reporte(encabezados, datos):
+    """
+    Imprime los reportes de manera ordenada.
+    """
     print()
     if not datos:
         print("  No se encontraron datos para mostrar.")
@@ -171,6 +203,9 @@ def mostrar_reporte(encabezados, datos):
     print(f"\n  Total: {len(datos)} resultado(s).\n")
 
 def datos_reporte_cobertura_medica(lista_doctores, lista_disponibilidad):
+    """
+    Genera una lista con los datos solicitados por el reporte de cobertura médica.
+    """
     doctores_con_horario = []
     for disp in lista_disponibilidad:
         if disp["matricula"] not in doctores_con_horario:
@@ -190,6 +225,9 @@ def datos_reporte_cobertura_medica(lista_doctores, lista_disponibilidad):
     return datos
 
 def datos_reporte_porcentual_turnos(lista_turnos, lista_doctores):
+    """
+    Genera una lista con los datos solicitados por el reporte de porcentajes de turnos.
+    """
     datos = []
     porcentajes = turnos.calcular_porcentajes_turnos_por_medico(lista_turnos, lista_doctores)
     for fila in porcentajes:
@@ -201,24 +239,33 @@ def datos_reporte_porcentual_turnos(lista_turnos, lista_doctores):
         })
     return datos
 
-# Recorre y muestra en consola cualquier lista de dicts con un formato de columnas alineadas.
+
 def mostrar_lista(lista,encabezados):
+    """
+    Recorre y muestra en consola cualquier lista de dicts con un formato de columnas alineadas.
+    """
     if not lista:
         mostrar_reporte([], [])
         return
     #encabezados = list(lista[0].keys())
     mostrar_reporte(encabezados, lista)
 
-# Muestra la lista de diccionarios de pacientes con un formato tabular específico, accediendo a cada campo por su clave.
+
 def mostrar_pacientes(lista_pacientes):
+    """
+    Muestra la lista de diccionarios de pacientes con un formato tabular específico, accediendo a cada campo por su clave.
+    """
     mostrar_reporte(['ID', 'DNI', 'NOMBRE', 'APELLIDO', 'TELÉFONO', 'CORREO'], lista_pacientes)
 
-# Punto central del programa que gestiona la navegación entre los submenús.
+
 def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista_disponibilidad, lista_turnos,
                    encabezados_pacientes, encabezados_doctores, encabezados_disponibilidad, encabezados_turnos,
                    claves_doctores, claves_disponibilidad, claves_turnos,
                    id_contador_pacientes, id_contador_doctores, id_contador_disponibilidad, id_contador_turnos,
                    usuarios_data):
+    """
+    Punto central del programa que gestiona la navegación entre los submenús.
+    """
     while True:
         while True:
             print()
@@ -564,6 +611,10 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
 
 # Función principal que carga los datos desde JSON, muestra las listas y lanza la ejecución del programa.
 def main():
+    """
+    Main del programa. Se llaman a las funciones principales para su ejecución y se inicializan las listas de datos.
+    """
+
     encabezados_pacientes      = ['ID', 'DNI', 'Nombre', 'Apellido', 'Teléfono', 'Correo']
     encabezados_doctores       = ['ID', 'Matrícula', 'Nombre', 'Apellido', 'Teléfono', 'Especialidad', 'Estado']
     encabezados_disponibilidad = ['ID', 'Matrícula', 'Día', 'Hora Inicio', 'Hora Fin']

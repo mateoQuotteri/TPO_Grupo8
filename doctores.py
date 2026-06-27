@@ -4,6 +4,10 @@
 ESPECIALIDADES = ["CLINICA MEDICA", "PEDIATRIA", "GINECOLOGIA", "CARDIOLOGIA", "OFTALMOLOGIA", "ODONTOLOGIA", "DERMATOLOGIA", "TRAUMATOLOGIA"]
 
 def pedir_entero(mensaje):
+    '''
+    Solicita el ingreso de un número entero por pantalla. 
+    Evita errores si el usuario ingresa una letra o símbolo.
+    '''
     while True:
         try:
             return int(input(mensaje))
@@ -11,10 +15,16 @@ def pedir_entero(mensaje):
             print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
 
 def mostrar_especialidades():
+    """
+    Muestra la lista de especialidades.
+    """
     for i in range(len(ESPECIALIDADES)):
         print(i + 1, "-", ESPECIALIDADES[i])
 
 def elegir_especialidad():
+    """
+    Permite elegir una disponibilidad de la lista de disponibilidades.
+    """
     mostrar_especialidades()
     opcion = pedir_entero("Ingrese el numero de especialidad (-1 para cancelar): ")
     while opcion != -1 and (opcion < 1 or opcion > len(ESPECIALIDADES)):
@@ -26,6 +36,10 @@ def elegir_especialidad():
 
 # Valida matrícula única, datos de contacto y especialidad para sumar un nuevo doctor.
 def agregar_doctor(lista, contador):
+    """
+    Permite agregar un doctor a la lista de doctores. 
+    Se solicita el ingreso manual de todos los campos.
+    """
     try:
         matricula = input("Ingrese el número de matricula: ")
         while not matricula.isdigit() or not (10000 <= int(matricula) <= 99999):
@@ -84,7 +98,11 @@ def agregar_doctor(lista, contador):
 
 # Elimina el doctor correspondiente a la matrícula ingresada.
 def eliminar_doctor(lista):
-    matricula_buscada = input("Ingrese la matricula a eliminar: ")
+    """
+    Permite la baja lógica de un doctor filtrado con la matrícula ingresada por teclado.
+    """
+
+    matricula_buscada = input("Ingrese la matricula a deshabilitar: ")
 
     for i in range(len(lista)):
         if lista[i]["matricula"] == matricula_buscada:
@@ -99,6 +117,9 @@ def eliminar_doctor(lista):
 
 # Permite editar campos individuales de un doctor mediante un menú de opciones.
 def modificar_doctor(lista):
+    """
+    Permite modificar por pantalla los campos asociados a un doctor. 
+    """
     try:
         matricula_buscada = input("Ingrese la matricula del doctor que desea modificar: ")
         while not matricula_buscada.isdigit() or not (10000 <= int(matricula_buscada) <= 99999):
@@ -170,8 +191,11 @@ def modificar_doctor(lista):
     except:
         print("\nError. Intente nuevamente.")
 
-# Genera un reporte comparando doctores registrados vs doctores con disponibilidad cargada.
+
 def reporte_cobertura_medica(lista_doctores, lista_disponibilidad):
+    """
+    Genera un reporte comparando doctores registrados vs doctores con disponibilidad cargada.
+    """
     todos_los_doctores = set()
     for doc in lista_doctores:
         todos_los_doctores.add(doc["matricula"])
@@ -203,8 +227,11 @@ def reporte_cobertura_medica(lista_doctores, lista_disponibilidad):
     print("╚" + "═" * ancho + "╝")
     print()
 
-#Porcentaje de doctores activos
+
 def reporte_doctores_activos(lista_doctores):
+    """
+    Porcentaje de doctores activos
+    """
     activos = sum(1 for d in lista_doctores if d["activo"] == "S")
     inactivos = sum(1 for d in lista_doctores if d["activo"] == "N")
     total = activos + inactivos

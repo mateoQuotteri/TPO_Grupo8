@@ -5,6 +5,10 @@
 from datetime import date, timedelta
 
 def pedir_entero(mensaje):
+    """
+    Solicita el ingreso de un número entero por pantalla. 
+    Evita errores si el usuario ingresa una letra o símbolo.
+    """
     while True:
         try:
             return int(input(mensaje))
@@ -12,6 +16,9 @@ def pedir_entero(mensaje):
             print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
 
 def clave_fecha_turno(turno):
+    """
+    Permite convertir una fecha en string a tres variables diferentes en int para poder trabajar con los números en los ordenamientos.
+    """
     partes = str(turno["fecha"]).split("/")
     if len(partes) != 3:
         return (99, 99, 9999)
@@ -21,9 +28,15 @@ def clave_fecha_turno(turno):
     return (mes, dia, anio)
 
 def ordenar_turnos_por_fecha(lista_turnos):
+    """
+    Permite ordenar turnos por fecha.
+    """
     return sorted(lista_turnos, key=clave_fecha_turno)
 
 def ordenar_turnos_por_campo(lista_turnos, campo):
+    """
+    Permite ordenar turnos por un campo que se pasa como parámetro.
+    """
     if campo == "fecha":
         return sorted(lista_turnos, key=clave_fecha_turno)
     if campo in ["id", "hora", "dni", "matricula"]:
@@ -31,6 +44,9 @@ def ordenar_turnos_por_campo(lista_turnos, campo):
     return sorted(lista_turnos, key=lambda turno: str(turno[campo]))
 
 def obtener_especialidades_activas(lista_doctores):
+    """
+    Permite obtener las especialidades activas.
+    """
     especialidades = []
     for doc in lista_doctores:
         if doc["activo"] == "S" and doc["especialidad"] not in especialidades:
@@ -38,6 +54,9 @@ def obtener_especialidades_activas(lista_doctores):
     return sorted(especialidades)
 
 def calcular_porcentajes_turnos_por_medico(lista_turnos, lista_doctores):
+    """
+    Permite calcular porcentajes de turnos por médico.
+    """
     total_turnos = len(lista_turnos)
     cantidades = {}
     for turno in lista_turnos:
@@ -62,11 +81,15 @@ def calcular_porcentajes_turnos_por_medico(lista_turnos, lista_doctores):
         reporte[-1]["porcentaje"] = round(reporte[-1]["porcentaje"] + diferencia, 2)
     return reporte
 
-# Recursividad: Verifica si un DNI existe dentro de la lista de pacientes.
-# ¿Por qué es válida esta función? Porque cada llamada recursiva reduce el tamaño de la lista de pacientes, 
-# acercándonos al caso base donde la lista está vacía o encontramos el DNI buscado. 
-# Esto garantiza que lleguemos a una conclusión sobre la existencia del DNI en la lista.
+
+    #Recursividad: Verifica si un DNI existe dentro de la lista de pacientes.
+    #¿Por qué es válida esta función? Porque cada llamada recursiva reduce el tamaño de la lista de pacientes, 
+    #acercándonos al caso base donde la lista está vacía o encontramos el DNI buscado. 
+    #Esto garantiza que lleguemos a una conclusión sobre la existencia del DNI en la lista.
 def buscarDni(lista_pacientes, dni_buscado):
+    """
+    Permite buscar un paciente con el DNI pasado como parámetro.
+    """
     # Caso base: si la lista está vacía, el DNI no se encontró.
     if not lista_pacientes:
         return False
@@ -78,9 +101,12 @@ def buscarDni(lista_pacientes, dni_buscado):
     #Caso recursivo y reducción del dominio.
     return buscarDni(lista_pacientes[1:], dni_buscado)
 
-# Convierte un nombre de día de la semana (ej: "LUNES") a la próxima fecha concreta (ej: "21/04/2026")
-# Usa la librería datetime para calcular cuántos días faltan hasta ese día de la semana
 def proximo_dia_semana(nombre_dia):
+    """
+    Convierte un nombre de día de la semana (ej: "LUNES") a la próxima fecha concreta (ej: "21/04/2026")
+    Usa la librería datetime para calcular cuántos días faltan hasta ese día de la semana
+    """
+
     dias = {
         "LUNES": 0,
         "MARTES": 1, "MIÉRCOLES": 2, "MIERCOLES": 2,
@@ -103,6 +129,10 @@ def proximo_dia_semana(nombre_dia):
 # podamos devolver el nombre del doctor o un mensaje de desconocido.
 
 def buscarNombreDoctor(lista_doctores, matricula):
+    """
+    Permite buscar el nombre de un doctor con la matricula pasada como parámetro.
+    """
+
     # Caso base: lista vacía, el médico no está registrado.
     if not lista_doctores:
         return "Dr. o Dra. desconocid@"
@@ -120,6 +150,9 @@ def buscarNombreDoctor(lista_doctores, matricula):
 # Esto garantiza que procesemos todos los doctores y devolvamos solo aquellos que cumplen con los criterios de especialidad y si está activo.
 
 def filtrarDoctoresRecursivo(lista_doctores, especialidad_seleccionada):
+    """
+    Permite filtrar la lista de doctores por la especialidad pasada como parámetro.
+    """
     # Caso base: si no hay doctores, devolvemos una lista vacía.
     if not lista_doctores:
         return []
@@ -135,6 +168,10 @@ def filtrarDoctoresRecursivo(lista_doctores, especialidad_seleccionada):
 
 
 def buscarDoctorPorEspecialidad(lista_doctores, especialidad_seleccionada):
+    """
+    Permite buscar los todos médicos por la especialidad seleccionada.
+    """
+
     # Filtramos usando la función recursiva que devuelve solo los doctores activos de la especialidad seleccionada por el usuario.
     doctores_encontrados = filtrarDoctoresRecursivo(lista_doctores, especialidad_seleccionada)
 
@@ -149,8 +186,10 @@ def buscarDoctorPorEspecialidad(lista_doctores, especialidad_seleccionada):
     return doctores_ordenados
 
 
-# Retorna la matrícula del médico elegido o una lista de matrículas si se seleccionan todos los de la especialidad.
 def doctor_seleccionado(especialistas, seleccion):
+    """
+    Retorna la matrícula del médico elegido o una lista de matrículas si se seleccionan todos los de la especialidad.
+    """
     if seleccion == 0:
         # map con lambda - extrae la matrícula de cada especialista de la especialidad elegida por usuario
         matricula = list(map(lambda e: e["matricula"], especialistas))
@@ -158,8 +197,10 @@ def doctor_seleccionado(especialistas, seleccion):
         matricula = especialistas[seleccion - 1]["matricula"]
     return matricula
 
-# Genera, filtra y muestra los horarios libres de un médico comparando su disponibilidad con los turnos ya reservados.
 def turnos_disponibles(matricula, lista_disponibilidad, lista_turnos, especialidad, lista_doctores):
+    '''
+    Genera, filtra y muestra los horarios libres de un médico comparando su disponibilidad con los turnos ya reservados.
+    '''
     # filter con lambda: filtra disponibilidades del doctor puntual o de todos los de la especialidad seleccionada
     if isinstance(matricula, list):
         dispo = list(filter(lambda fila: fila["matricula"] in matricula, lista_disponibilidad))
@@ -213,15 +254,20 @@ def turnos_disponibles(matricula, lista_disponibilidad, lista_turnos, especialid
     slot_elegido = slots[seleccion - 1]
     return [slot_elegido["fecha"], str(slot_elegido["hora"]), slot_elegido["matricula"], especialidad]
 
-# Verifica si un turno para esa fecha, hora y médico ya está tomado.
+
 def turno_ocupado(lista_turnos, fecha, hora, matricula):
+    '''
+    # Verifica si un turno para esa fecha, hora y médico ya está tomado.
+    '''
     for turno in lista_turnos:
         if turno["fecha"] == fecha and turno["hora"] == str(hora) and turno["matricula"] == matricula:
             return True
     return False
 
-# Gestiona el flujo completo para registrar un nuevo turno: valida el paciente, elige especialidad, médico y horario.
 def agregar_turno(lista_turnos, lista_pacientes, lista_doctores, contador, lista_disponibilidad):
+    '''
+    Gestiona el flujo completo para registrar un nuevo turno: valida el paciente, elige especialidad, médico y horario.
+    '''
     try:
 
         # DNI del paciente
@@ -293,8 +339,12 @@ def agregar_turno(lista_turnos, lista_pacientes, lista_doctores, contador, lista
         print(f"Error inesperado: {e}")
         return contador
 
-# Permite al usuario visualizar los turnos de un paciente por DNI y dar de baja el que seleccione del listado.
+
 def eliminar_turno(lista_pacientes, lista_turnos):
+    '''
+    Permite al usuario visualizar los turnos de un paciente por DNI y dar de baja el que seleccione del listado.
+    '''
+
     dni = pedir_entero("Ingrese el DNI de 8 digitos del paciente (-1 para cancelar): ")
 
     if dni == -1:
@@ -335,8 +385,11 @@ def eliminar_turno(lista_pacientes, lista_turnos):
     print("\nTurno eliminado con exito.\n")
 
 
-# Permite cambiar la fecha, hora o médico de un turno ya existente manteniendo la misma especialidad original.
+
 def modificar_turno(lista_turnos, lista_doctores, lista_pacientes, lista_disponibilidad):
+    """
+    Permite cambiar la fecha, hora o médico de un turno ya existente manteniendo la misma especialidad original.
+    """
     dni = pedir_entero("Ingrese el DNI de 8 digitos del paciente (-1 para cancelar): ")
 
     if dni == -1:
@@ -416,6 +469,9 @@ def modificar_turno(lista_turnos, lista_doctores, lista_pacientes, lista_disponi
         print("\nTurno modificado con éxito.\n")
 
 def reporte_promedio_turnos(lista_turnos, lista_doctores):
+    """
+    Imprime el reporte de promedios de turnos.
+    """
     if not lista_turnos or not lista_doctores:
         print("No hay datos suficientes.")
         return
@@ -429,6 +485,9 @@ def reporte_promedio_turnos(lista_turnos, lista_doctores):
 
 
 def reporte_max_min_turnos(lista_turnos):
+    """
+    Imprime el reporte de estadísticas máximas y mínimas de turnos por doctor.
+    """
     if not lista_turnos:
         print("No hay turnos registrados.")
         return

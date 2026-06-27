@@ -120,6 +120,9 @@ def modificar_usuario(usuarios):
         usuarios[user]["rol"] = perfil
 
 def eliminar_usuario(usuarios):
+    """
+    Permite ingresar por teclado un usuario y solicita confirmación para eliminar.
+    """
     print("ELIMINAR UN USUARIO")
     print()
     user = input("Ingrese el nombre del usuario a eliminar o -1 para cancelar: ").strip().lower()

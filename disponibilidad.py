@@ -65,6 +65,10 @@ def buscar_id_disponibilidad(lista_disponibilidad):
 
 # Agregar una nueva disponibilidad a la lista de disponibilidad
 def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
+    """
+    Permite agregar una disponibilidad pidiendo todos los datos por teclado. Verifica que la matrícula del médico exista.
+    Verifica que los datos sean concordantes con el sistema.
+    """
     print("\n--- AGREGAR DISPONIBILIDAD ---\n")
 
     dias = ["LUNES","MARTES", "MIÉRCOLES", "MIERCOLES",
@@ -104,6 +108,9 @@ def agregar_disponibilidad(lista_disponibilidad, id_contador,lista_doctores):
 
 # Eliminar una disponibilidad de la lista de disponibilidad
 def eliminar_disponibilidad(lista_disponibilidad):
+    '''
+    Permite eliminar una disponibilidad ingresando el ID. Pide confirmación.
+    '''
     print("\n--- ELIMINAR DISPONIBILIDAD ---\n")
 
     ids=[d["id"] for d in lista_disponibilidad]
@@ -122,7 +129,10 @@ def eliminar_disponibilidad(lista_disponibilidad):
 
 # Modificar una disponibilidad de la lista de disponibilidad
 def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
-    #Falta sumar la verificación de que no este duplicada la nueva disponibilidad
+    '''
+    Permite modificar los campos de una disponibilidad selecciona por ID y verifica que no exista una igual.
+    Si hay una igual, deshace los cambios volviendo a dejar la información original guardada en el respaldo hecho al principio.
+    '''
     print("\n--- MODIFICAR DISPONIBILIDAD ---\n")
 
     dias = ["LUNES","MARTES", "MIÉRCOLES", "MIERCOLES",
@@ -146,7 +156,7 @@ def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
 
         opcion = input("Ingrese una opción: ")
 
-        if opcion == "0":#MODIFICAR FORMA UN BUCLE INFINITO
+        if opcion == "0":
             print("\nEdición terminada.\n")
             editando = False
 
@@ -216,15 +226,17 @@ def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
 
 #Horas semanales por doctor
 def reporte_horas_doctor(lista_disponibilidad, matricula):
-    # Lista de horas trabajadas por cada disponibilidad del doctor
+    """
+    Reporte de horas trabajadas según la disponibilidad del doctor, filtrado por la matricula que recibe de parámetro.
+    """
     horas = [int(d["hora_fin"]) - int(d["hora_inicio"]) for d in lista_disponibilidad if d["matricula"] == matricula]
 
     if not horas:
-        print(f"No hay disponibilidad cargada para el doctor {matricula}.")
+        print(f"\nNo hay disponibilidad cargada para el doctor {matricula}.")
         return
 
     # Usamos reduce para sumar todas las horas
     total = reduce(lambda x, y: x + y, horas, 0)
 
-    print("\n--- REPORTE DE HORAS SEMANALES ---")
-    print(f"Doctor {matricula} trabaja {total} horas semanales.")
+    print("\n--- REPORTE DE HORAS SEMANALES ---\n")
+    print(f"Doctor {matricula} trabaja {total} horas semanales.\n")

@@ -4,30 +4,46 @@
 import re
 
 def pedir_entero(mensaje):
+    '''
+    Solicita el ingreso de un número entero por pantalla. 
+    Evita errores si el usuario ingresa una letra o símbolo.
+    '''
     while True:
         try:
             return int(input(mensaje))
         except ValueError:
             print("Debe ingresar un numero entero valido. Use -1 para cancelar.")
 
-# Valida que el nombre solo contenga letras y espacios NO permite números ni caracteres especiales
+
 def validar_nombre(nombre):
+    """
+    Valida que el nombre solo contenga letras y espacios NO permite números ni caracteres especiales
+    """
     return bool(re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$', nombre)) and nombre.strip() != ""
 
-# Valida que el apellido solo permita letras y espacios
+
 def validar_apellido(apellido):
+    """
+    Valida que el apellido solo permita letras y espacios
+    """
     return bool(re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$', apellido)) and apellido.strip() != ""
 
-# El DNI debe tener exactamente 8 dígitos y no contenga letras
 def validar_dni(dni):
+    """
+    El DNI debe tener exactamente 8 dígitos y no contenga letras
+    """
     return bool(re.match(r'^\d{8}$', dni))
 
-# Telefono tenga exactamente 10 dígitos y no contenga letras
 def validar_telefono(telefono):
+    """
+    Telefono tenga exactamente 10 dígitos y no contenga letras
+    """
     return bool(re.match(r'^\d{10}$', telefono))
 
-# Valida que el correo tenga formato válido La validacion : usuario@dominio.ext
 def validar_correo(correo):
+    """
+    Valida que el correo tenga formato válido La validacion : usuario@dominio.ext
+    """
     return bool(re.match(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$', correo))
 
 def buscar_dni(lista_pacientes):
@@ -47,16 +63,25 @@ def buscar_dni(lista_pacientes):
     except:
         print("Error. Vuelva a intentar.")
 
-# Solicita datos, valida el formato y añade un nuevo paciente a la lista
 def agregar_paciente(lista, contador):
+    """
+    # Solicita datos, valida el formato y añade un nuevo paciente a la lista
+    """
     print("\n---AGREGAR PACIENTE---\n")
+    dnis=[d["dni"] for d in lista]
+    
     try:
         dni = input("Ingrese el DNI o 0 para salir: ")
         if dni !="0":
-            contador+=1
+            
             while not validar_dni(dni):
                 print("Dato incorrecto")
                 dni = input("DNI: ")
+            
+            if dni in dnis:
+                print("\nEl DNI ya se encuentra asociado a un paciente.\n")
+                return contador
+
             
             nombre = input("Ingrese el nombre: ").upper()
             while not validar_nombre(nombre):
@@ -79,6 +104,7 @@ def agregar_paciente(lista, contador):
                 correo = input("Correo: ")
             correo = correo.upper()
 
+            contador+=1
             nuevo_paciente = {
                 "id": contador,
                 "dni": dni,
@@ -99,8 +125,10 @@ def agregar_paciente(lista, contador):
     except:
         print("\nError. Intente nuevamente.")
 
-# Busca un paciente por DNI y lo elimina de la lista si es encontrado
 def eliminar_paciente(lista):
+    """
+    Busca un paciente por DNI y lo elimina de la lista si es encontrado. Pide confirmar la operación.
+    """
     print("\n---ELIMINAR PACIENTE---\n")
     try:
         dnis=[d["dni"] for d in lista]
@@ -125,8 +153,10 @@ def eliminar_paciente(lista):
     except:
         print("Error. Intente nuevamente.")
 
-# Busca un paciente por DNI y permite actualizar sus datos personales
 def modificar_paciente(lista):
+    """
+    Busca un paciente por DNI y permite actualizar sus datos personales
+    """
     print("\n---MODIFICAR PACIENTE---\n")
     try:
         dnis=[d["dni"] for d in lista]
@@ -188,15 +218,3 @@ def modificar_paciente(lista):
         print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
     except:
         print("\nError. Intente nuevamente.")
-
-lista_prueba = [
-    {"dni": "12345678"},
-    {"dni": "28756432"},
-    {"dni": "99001122"}
-]
-
-lista_prueba = [
-    {"dni": "12345678"},
-    {"dni": "28756432"},
-    {"dni": "99001122"}
-]
