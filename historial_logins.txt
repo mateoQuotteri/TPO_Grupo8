@@ -1,1 +1,2 @@
 [26/06/2026 20:51:45] Usuario: admin        | Rol: ADMINISTRATIVO  | Estado: INICIO DE SESIÓN EXITOSO
+[26/06/2026 21:27:07] Usuario: admin        | Rol: ADMINISTRATIVO  | Estado: INICIO DE SESIÓN EXITOSO

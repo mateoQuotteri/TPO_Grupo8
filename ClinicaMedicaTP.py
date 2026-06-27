@@ -458,7 +458,6 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     break
                 elif opcion == "1":
                     lista_ordenada = ordenar_pacientes_dic(lista_pacientes, encabezados_pacientes)
-                    print(f'{encabezados_pacientes[0]:^15}{encabezados_pacientes[1]:^15}{encabezados_pacientes[2]:^15}{encabezados_pacientes[3]:^15}{encabezados_pacientes[4]:^15}{encabezados_pacientes[5]:^15}')
                     mostrar_pacientes(lista_ordenada)
                     break
                 elif opcion == "2":

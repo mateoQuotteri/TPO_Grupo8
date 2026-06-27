@@ -88,8 +88,12 @@ def eliminar_doctor(lista):
 
     for i in range(len(lista)):
         if lista[i]["matricula"] == matricula_buscada:
-            lista.pop(i)
-            print("\nDoctor eliminado correctamente.\n")
+            if lista[i]["activo"] == "N":
+                print("\nEl doctor ya se encuentra INACTIVO en el sistema.\n")
+                return
+            # BAJA LOGICA DEL MEDICO
+            lista[i]["activo"] = "N"
+            print(f"\nDoctor {lista[i]['nombre']} {lista[i]['apellido']} dado de baja lógicamente (Estado: INACTIVO).\n")
             return
     print("\nNo se encontró la matricula\n")
 
@@ -137,11 +141,20 @@ def modificar_doctor(lista):
                         print("Seleccione una especialidad: ")
                         for j in range(len(especialidades)):
                             print(j + 1, "-", especialidades[j])
-                        opcion_esp = int(input("Ingrese el número de su especialidad: "))
+
+                        opcion_esp = pedir_entero("Ingrese el número de su especialidad (-1 para cancelar): ")
+                        if opcion_esp == -1:
+                            print("\nModificación de especialidad cancelada.\n")
+                            continue
+
                         while opcion_esp < 1 or opcion_esp > len(especialidades):
                             print("Opcion invalida, seleccione una de las disponibles")
-                            opcion_esp = int(input("Ingrese el número de su especialidad: "))
-                        doctor["especialidad"] = especialidades[opcion_esp - 1]
+                            opcion_esp = pedir_entero("Ingrese el número de su especialidad (-1 para cancelar): ")
+                            if opcion_esp == -1:
+                                break
+                        
+                        if opcion_esp != -1:
+                            doctor["especialidad"] = especialidades[opcion_esp - 1]
 
                     elif opcion == "5":
                         activo = input("Ingrese `S` para activo o `N` para inactivo: ").upper()
