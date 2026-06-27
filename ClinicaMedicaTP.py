@@ -351,7 +351,6 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     doctores.eliminar_doctor(lista_doctores)
                     guardar_json("doctores.json", lista_doctores)
                     mostrar_lista(lista_doctores,encabezados_doctores)
-                    break
                 elif opcion == "3":
                     doctores.modificar_doctor(lista_doctores)
                     guardar_json("doctores.json", lista_doctores)
@@ -390,7 +389,6 @@ def menu_principal(rol, matricula_sesion, lista_pacientes, lista_doctores, lista
                     disponibilidad.eliminar_disponibilidad(lista_disponibilidad)
                     guardar_json("disponibilidad.json", lista_disponibilidad)
                     mostrar_lista(lista_disponibilidad,encabezados_disponibilidad)
-                    break
                 elif opcion == "3":
                     disponibilidad.modificar_disponibilidad(lista_disponibilidad,lista_doctores)
                     guardar_json("disponibilidad.json", lista_disponibilidad)
@@ -605,6 +603,7 @@ def main():
         rol             = datos_usuario["rol"]
 
         if clave_ingresada == clave_correcta:
+            usuarios.registrar_login(usuario_ingresado, rol) # Llamada a registro de logins
             matricula_sesion = None
 
             if rol == "DOCTOR":

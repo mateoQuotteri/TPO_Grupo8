@@ -118,7 +118,7 @@ def eliminar_disponibilidad(lista_disponibilidad):
         lista_disponibilidad.pop(index_eliminar)
         print("\nDisponibilidad eliminada.\n")
     elif confirmar == "N":
-        "\nOperación cancelada.\n"
+        print("\nOperación cancelada.\n")
 
 # Modificar una disponibilidad de la lista de disponibilidad
 def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
@@ -135,6 +135,7 @@ def modificar_disponibilidad(lista_disponibilidad,lista_doctores):
 
     editando = True
     while editando:
+        cambios = False
         print("\nSeleccione el dato que desea modificar:")
         print("[1] Matrícula.")
         print("[2] Día.")

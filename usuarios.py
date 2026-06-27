@@ -120,16 +120,19 @@ def modificar_usuario(usuarios):
         usuarios[user]["rol"] = perfil
 
 def eliminar_usuario(usuarios):
-    """
-    Permite eliminar 
-    """
-    print("---ELIMINAR UN USUARIO---")
+    print("ELIMINAR UN USUARIO")
     print()
-    user = input("Ingrese el nombre del usuario a eliminar o -1 para cancelar: ")
+    user = input("Ingrese el nombre del usuario a eliminar o -1 para cancelar: ").strip().lower()
 
     if user == "-1":
         return
     elif user in usuarios:
+        if usuarios[user]["rol"] == "ADMINISTRATIVO":
+            cant_admins = sum(1 for u in usuarios.values() if u["rol"] == "ADMINISTRATIVO")
+            if cant_admins <= 1:
+                print("\nError denegado: No se puede eliminar al único ADMINISTRATIVO del sistema.")
+                return
+
         try:
             print("\nUsuario seleccionado: ", user)
             aux = pedir_entero("\nSe va a eliminar el usuario seleccionado. Para confirmar ingrese 1. Para cancelar ingrese 0 o -1: ")
@@ -137,13 +140,34 @@ def eliminar_usuario(usuarios):
                 print("\nOpcion invalida. Vuelva a intentar.\n")
                 aux = pedir_entero("\nPara confirmar ingrese 1. Para cancelar ingrese 0 o -1: ")
             if aux == 0 or aux == -1:
+                print("\nOperación cancelada.\n")
                 return
             eliminado = usuarios.pop(user)
             print("\nSe elimino el usuario: ", eliminado["nombre"])
             print()
         except ValueError:
-            print ("\nDebe ingresar un número entero válido. Intente nuevamente.")
+            print("\nDebe ingresar un número entero válido. Intente nuevamente.")
         except:
             print("\nError. Intente nuevamente.")
     else:
         print("\nUsuario no encontrado.")
+
+def registrar_login(usuario, rol):
+    """
+    Registra el historial de inicios de sesión en un archivo de texto independiente,
+    guardando el usuario, su rol y la fecha/hora exacta del evento.
+    """
+    import os
+    from datetime import datetime
+    
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        ruta_auditoria = os.path.join(base_dir, "historial_logins.txt")
+        
+        fecha_hora_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        
+        with open(ruta_auditoria, "a", encoding="utf-8") as f:
+            f.write(f"[{fecha_hora_actual}] Usuario: {usuario:<12} | Rol: {rol:<15} | Estado: INICIO DE SESIÓN EXITOSO\n")
+            
+    except OSError:
+        print("ERROR DE SISTEMA: No se pudo registrar el evento en el historial de logins.")
